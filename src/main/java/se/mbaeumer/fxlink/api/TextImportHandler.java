@@ -29,27 +29,26 @@ public class TextImportHandler {
 
 	public void importFromTextFile(File textFile) throws IOException{
 		String fileName = textFile.getCanonicalPath();
+		String fileNameOnly = textFile.getName();
 
-        // This will reference one line at a time
         String line = null;
 
         FileReader fileReader = 
             new FileReader(fileName);
 
-        // Always wrap FileReader in BufferedReader.
-        BufferedReader bufferedReader = 
+        BufferedReader bufferedReader =
             new BufferedReader(fileReader);
 
         while((line = bufferedReader.readLine()) != null) {
-            createLink(line);
+            createLink(line, fileNameOnly);
         }   
 
-        // Always close files.
-        bufferedReader.close();         
+        bufferedReader.close();
 	}
 	
-	private void createLink(String line){
-		Link link = new Link(null, line, null);
+	private void createLink(String line, String fileName){
+
+		Link link = new Link(null, line, createDescription(fileName));
 		link.setCategory(null);
 		
 		FailedLink fl = null;
@@ -66,5 +65,11 @@ public class TextImportHandler {
 			fl = new FailedLink(link, e.getMessage());
 			failedLinks.add(fl);
 		}
+	}
+
+	private String createDescription(String fileName){
+		String description = null;
+		description = "Imported from " + fileName;
+		return  description;
 	}
 }
