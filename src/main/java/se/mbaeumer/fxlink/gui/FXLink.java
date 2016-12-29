@@ -298,7 +298,6 @@ public class FXLink extends Application{
 					ImportResultReportStage reportStage = new ImportResultReportStage(report);
 					reportStage.showAndWait();
 					cmbItems.setValue("Links");
-					//refreshLinkTable(null);
 					refreshLinkTable();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -306,8 +305,6 @@ public class FXLink extends Application{
 			}
 		});
 		this.flowFilter.getChildren().add(this.btnImportTextFile);
-		
-		
 	}
 	
 	private void createWriteBackupButton(){
@@ -389,8 +386,6 @@ public class FXLink extends Application{
 					arg0.consume();
 					return;
 				}
-				
-				
 			}
 		});
 		this.flowFilter.getChildren().add(this.btnReadBackup);
@@ -404,7 +399,6 @@ public class FXLink extends Application{
 			public void handle(ActionEvent arg0) {
 				if (isSearchPaneVisible()){
 					removeSearchPane();
-					//refreshLinkTable(null);
 					refreshLinkTable();
 				}else{
 					createSearchPane();
@@ -433,9 +427,6 @@ public class FXLink extends Application{
 		this.showSearchPane();
 		FlowPane.setMargin(flowSearch, new Insets(5));
 		
-		/*
-	private ComboBox<Category> cmbSearchCategory;
-		 */
 		this.createSearchTermLabel();
 		this.createSearchTermTextField();
 		this.createURLSearchCheckBox();
@@ -485,21 +476,12 @@ public class FXLink extends Application{
 								chkSearchTitle.isSelected(), chkSearchDescription.isSelected());
 						refreshSearchResult(links);
 					} catch (SQLException e) {
-						Alert alert = new Alert(Alert.AlertType.ERROR, "Database error occured", ButtonType.OK);
+						Alert alert = new Alert(Alert.AlertType.ERROR, "Database error occurred", ButtonType.OK);
 						alert.showAndWait();
-						//Dialog d = new Dialog();
-						//d.showError("Error", "Database error occured!\n");
-						// TODO Auto-generated catch block
-						//MessageBox mb = new MessageBox("Database error occured!\n" + e.getMessage(), MessageBoxType.OK_ONLY);
-						//mb.show();
 					}
 				}else{
 					Alert alert = new Alert(Alert.AlertType.ERROR, "Please write a search term and select at least one criteria", ButtonType.OK);
 					alert.showAndWait();
-					//Dialog d = new Dialog();
-					//d.showError("Error", "Please write a search term and select at least one criteria");
-					//MessageBox mb = new MessageBox("Please write a search term and select at least one criteria", MessageBoxType.OK_ONLY);
-					//mb.show();
 				}
 			}
 		});
@@ -585,7 +567,6 @@ public class FXLink extends Application{
 		urlCol.setOnEditCommit(
 		    new EventHandler<CellEditEvent<Link, String>>() {
 		        public void handle(CellEditEvent<Link, String> t) {
-		        	// TODO: Finish refactoring
 					if (isLinkInformationCorrect(t.getNewValue()) && isURLCorrect(t.getNewValue())){
 						((Link) t.getTableView().getItems().get(
 								t.getTablePosition().getRow())
@@ -595,20 +576,6 @@ public class FXLink extends Application{
 							refreshLinkTable();
 						}
 					}
-					/*
-		        	if (isLinkURLCorrect(t.getNewValue())){
-		        		((Link) t.getTableView().getItems().get(
-				                t.getTablePosition().getRow())
-				                ).setURL(t.getNewValue());
-		        		
-		        		refreshLinkTable(t.getRowValue());
-		        	}else{
-		        		((Link) t.getTableView().getItems().get(
-				                t.getTablePosition().getRow())
-				                ).setURL(t.getOldValue());
-		        		refreshLinkTable(t.getRowValue());
-		        	}
-		        	*/
 		        }
 		    }
 		);
@@ -620,16 +587,13 @@ public class FXLink extends Application{
 		titleCol.setOnEditCommit(
 		    new EventHandler<CellEditEvent<Link, String>>() {
 		        public void handle(CellEditEvent<Link, String> t) {
-		        	/*
-					if (isLinkInformationCorrect(t.getRowValue())){
-		        		((Link) t.getTableView().getItems().get(
-				                t.getTablePosition().getRow())
-				                ).setTitle(t.getNewValue());
-		        		if (insertOrUpdateLink(t.getRowValue())){
+		        	Link link = t.getRowValue();
+					link.setTitle(t.getNewValue());
+					if (isLinkInformationCorrect(link.getURL())){
+		        		if (insertOrUpdateLink(link)){
 				            refreshLinkTable();
 		        		}
 		        	}
-		        	*/
 		        }
 		    }
 		);
@@ -641,16 +605,13 @@ public class FXLink extends Application{
 		descriptionCol.setOnEditCommit(
 		    new EventHandler<CellEditEvent<Link, String>>() {
 		        public void handle(CellEditEvent<Link, String> t) {
-					/*
-		        	if (isLinkInformationCorrect(t.getRowValue())){		        		
-		        		((Link) t.getTableView().getItems().get(
-				                t.getTablePosition().getRow())
-				                ).setDescription(t.getNewValue());
-				        if (insertOrUpdateLink(t.getRowValue())){    
-				        	refreshLinkTable();		 
-				        }
-		        	}
-		        	*/
+					Link link = t.getRowValue();
+					link.setDescription(t.getNewValue());
+					if (isLinkInformationCorrect(link.getURL())){
+						if (insertOrUpdateLink(link)){
+							refreshLinkTable();
+						}
+					}
 		        }
 		    }
 		);
@@ -707,63 +668,6 @@ public class FXLink extends Application{
 	        }
 	    });
 
-		//create the dueDate column
-		//TableColumn dueDateCol = new TableColumn("Last updated");
-		//dueDateCol.setCellValueFactory(new PropertyValueFactory<Task, String>("dueDateString"));
-		
-		/*tblLinks.addEventHandler(MouseEvent.MOUSE_CLICKED, 
-				new EventHandler<MouseEvent>() {
-
-					@Override
-					public void handle(MouseEvent me) {
-						//contTask.hide();
-						if (me.getButton() == MouseButton.SECONDARY){
-							
-							selectedTask = tblTasks.getSelectionModel().getSelectedItem();
-							if (selectedTask != null){
-								createTaskContextMenu();
-								contTask.show(tblTasks, me.getScreenX(), me.getSceneY());
-							}
-						}
-					}
-				});
-		*/
-		// create the status column
-		/*TableColumn statusCol = new TableColumn("Status");
-		statusCol.setCellValueFactory(new PropertyValueFactory("status"));
-		statusCol.setCellFactory(ComboBoxTableCell.forTableColumn(this.createStatuses()));
-		statusCol.setOnEditCommit(
-			    new EventHandler<CellEditEvent<Task,EnumTaskStatus>>() {
-			        public void handle(CellEditEvent<Task,EnumTaskStatus> t) {
-			            ((Task) t.getTableView().getItems().get(
-			                t.getTablePosition().getRow())
-			                ).setStatus(t.getNewValue());
-			            refreshTaskTable(t.getRowValue());
-			            resetTaskSorting(tblTasks);
-			        }
-			    }
-			);
-		
-		TableColumn priorityCol = new TableColumn("Priority");
-		priorityCol.setCellValueFactory(new PropertyValueFactory("priority"));
-		priorityCol.setCellFactory(ComboBoxTableCell.forTableColumn(this.createPriorities()));
-		priorityCol.setOnEditCommit(
-			    new EventHandler<CellEditEvent<Task,EnumPriority>>() {
-			        public void handle(CellEditEvent<Task,EnumPriority> t) {
-			            ((Task) t.getTableView().getItems().get(
-			                t.getTablePosition().getRow())
-			                ).setPriority(t.getNewValue());
-			            refreshTaskTable(t.getRowValue());
-			            resetTaskSorting(tblTasks);
-			        }
-			    }
-			);
-			*/
-		/*TODO: The column taskType is used in the next release*/
-		// create the task type column
-		/*TableColumn typeCol = new TableColumn("Type");
-		typeCol.setCellValueFactory(new PropertyValueFactory("taskType"));
-	*/
 		// add all columns to the table view
 		this.tblLinks.getColumns().addAll(urlCol, titleCol, descriptionCol, createdCol, lastUpdatedCol, categoryCol);
 	}
@@ -815,11 +719,6 @@ public class FXLink extends Application{
 						}
 					}
 				});
-
-		
-
-		
-		//this.flowGeneral.getChildren().add(this.tblCategories);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -1027,7 +926,6 @@ public class FXLink extends Application{
 			public void handle(ActionEvent e) {
 				LinkViewDetailStage linkDetail = new LinkViewDetailStage(selectedLink);
 				linkDetail.showAndWait();			
-				//refreshLinkTable(null);
 				refreshLinkTable();
 			}
 		});
@@ -1054,7 +952,7 @@ public class FXLink extends Application{
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-					Alert alert = new Alert(Alert.AlertType.WARNING, "The current content will be overwritten. Continue?", ButtonType.YES, ButtonType.NO);
+					Alert alert = new Alert(Alert.AlertType.WARNING, "The selected link will be deleted. Continue?", ButtonType.YES, ButtonType.NO);
 					Optional<ButtonType> result = alert.showAndWait();
 
 					if (result.isPresent() && result.get() == ButtonType.YES){
@@ -1364,7 +1262,7 @@ public class FXLink extends Application{
 		System.out.println("Checking url...");
 		System.out.println(link);
 		if (!URLValidator.isValidURL(link)){
-			Alert alert = new Alert(Alert.AlertType.ERROR, "The URL MUST be unique!", ButtonType.OK);
+			Alert alert = new Alert(Alert.AlertType.ERROR, "The URL is incorrect!", ButtonType.OK);
 			alert.showAndWait();
     		return false;
 		}
