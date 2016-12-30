@@ -8,20 +8,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TagCreationDBHandler {
-	public static int createTag(Tag tag, GenericDBHandler dbh) throws SQLException{
+
+	public static final String BASE_INSERT = "INSERT INTO Tag VALUES(DEFAULT, ?, ?, DEFAULT, DEFAULT)";
+
+	public static String constructSqlString(Tag tag){
+		if (tag == null){
+			return null;
+		}
+		String sql = BASE_INSERT;
+
+		sql = sql.replaceFirst("\\?", "'" + tag.getName() + "'");
+		sql = sql.replaceFirst("\\?", "'" + tag.getDescription() + "'");
+
+		return sql;
+	}
+
+	public static int createTag(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 		
-		String sql = "INSERT INTO Tag " + 
-		"VALUES(DEFAULT, ?, ?, DEFAULT, DEFAULT) ";
 		int tagId = -1;
-		
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-		stmt.setString(1, tag.getName());
-		stmt.setString(2, tag.getDescription());
-		
+
 		stmt.executeUpdate();
 		ResultSet rs = stmt.getGeneratedKeys();
-		
+
 		while (rs.next()){
 			tagId = rs.getInt("id");
 		}

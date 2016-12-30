@@ -16,7 +16,8 @@ public class TagHandler {
 	}
 	
 	public static void createTag(Tag tag) throws SQLException{
-		TagCreationDBHandler.createTag(tag, GenericDBHandler.getInstance());
+		String sql = TagCreationDBHandler.constructSqlString(tag);
+		TagCreationDBHandler.createTag(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void updateTag(Tag tag) throws ParseException, SQLException{
