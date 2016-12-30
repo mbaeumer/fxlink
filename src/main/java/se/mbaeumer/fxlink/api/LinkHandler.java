@@ -26,7 +26,8 @@ public class LinkHandler {
 	//public static List<Link> getLinksByCate
 	
 	public static void createLink(Link link) throws SQLException{
-		LinkCreationDBHandler.createLink(link, GenericDBHandler.getInstance());
+		String sql = LinkCreationDBHandler.constructSqlString(link);
+		LinkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void deleteLinksByCategory(Category category){
