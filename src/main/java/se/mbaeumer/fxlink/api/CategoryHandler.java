@@ -25,7 +25,8 @@ public class CategoryHandler {
 	}
 	
 	public static void createCategory(Category category) throws SQLException{
-		CategoryCreationDBHandler.createCategory(category, GenericDBHandler.getInstance());
+		String sql = CategoryCreationDBHandler.constructSqlString(category);
+		CategoryCreationDBHandler.createCategory(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void updateCategory(Category category) throws ParseException, SQLException{
