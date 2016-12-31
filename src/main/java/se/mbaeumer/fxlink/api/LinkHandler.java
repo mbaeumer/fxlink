@@ -39,7 +39,8 @@ public class LinkHandler {
 	}
 	
 	public static void updateLink(Link link) throws ParseException, SQLException{
-		LinkUpdateDBHandler.updateLink(link, GenericDBHandler.getInstance());
+		String sql = LinkUpdateDBHandler.constructSqlString(link);
+		LinkUpdateDBHandler.updateLink(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void deleteLink(Link link) throws SQLException{

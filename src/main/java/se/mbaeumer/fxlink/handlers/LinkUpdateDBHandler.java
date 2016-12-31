@@ -16,34 +16,43 @@ public class LinkUpdateDBHandler {
 	public static String SQL_UPDATE_CATEGORY = "categoryId=?,";
 	public static String SQL_UPDATE_DATE = "lastUpdated=? ";
 	public static String SQL_UPDATE_WHERE_CLAUSE = "WHERE id=?";
+
 	
-	public static void updateLink(Link link, GenericDBHandler dbh) throws ParseException, SQLException{
-		Connection connection = dbh.getConnection();
-		
-		String sql = SQL_BASE_UPDATE;
-		
+	public static String constructSqlString(Link link){
+		String  sql = SQL_BASE_UPDATE;
+
+		if (link == null){
+			return null;
+		}
+
 		if (link.getCategory() != null){
 			sql += SQL_UPDATE_CATEGORY;
 		}
-		
-		sql += SQL_UPDATE_DATE + SQL_UPDATE_WHERE_CLAUSE;	
-		
-		
+
+		sql += SQL_UPDATE_DATE + SQL_UPDATE_WHERE_CLAUSE;
+
+		sql = sql.replaceFirst("\\?", "'" + link.getTitle() + "'");
+		sql = sql.replaceFirst("\\?", "'" + link.getURL() + "'");
+		sql = sql.replaceFirst("\\?", "'" + link.getDescription() + "'");
+
+		if (link.getCategory() != null){
+			sql = sql.replaceFirst("\\?", new Integer(link.getCategory().getId()).toString() );
+		}
+
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
+		sql = sql.replaceFirst("\\?", "'" + tsLastUpdated + "'");
+
+		sql = sql.replaceFirst("\\?", new Integer(link.getId()).toString() );
+
+		return sql;
+	}
+
+	public static void updateLink(String sql, GenericDBHandler dbh) throws ParseException, SQLException{
+		Connection connection = dbh.getConnection();
+
+		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 		
-		PreparedStatement stmt = connection.prepareStatement(sql);
-		stmt.setString(1, link.getTitle());
-		stmt.setString(2, link.getURL());
-		stmt.setString(3, link.getDescription());
-		if (link.getCategory() != null){
-			stmt.setInt(4, link.getCategory().getId());
-			stmt.setTimestamp(5, tsLastUpdated);
-			stmt.setInt(6, link.getId());
-		}else{				
-			stmt.setTimestamp(4, tsLastUpdated);
-			stmt.setInt(5, link.getId());
-		}
 		stmt.executeUpdate();
 		stmt.close();
 	}
