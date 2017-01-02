@@ -30,7 +30,8 @@ public class CategoryHandler {
 	}
 	
 	public static void updateCategory(Category category) throws ParseException, SQLException{
-		CategoryUpdateDBHandler.updateCategory(category, GenericDBHandler.getInstance());
+		String sql = CategoryUpdateDBHandler.constructSqlString(category);
+		CategoryUpdateDBHandler.updateCategory(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void deleteCategory(Category category) throws SQLException{

@@ -13,20 +13,31 @@ import java.util.Date;
 public class CategoryUpdateDBHandler {
 	public static String SQL_BASE_UPDATE = "UPDATE Category SET name=?, description=?, lastUpdated=? WHERE id=?";
 
-	public static void updateCategory(Category link, GenericDBHandler dbh) throws ParseException, SQLException{
-		Connection connection = dbh.getConnection();
-		
+	public static String constructSqlString(Category category){
+		if (category == null){
+			return null;
+		}
+
 		String sql = SQL_BASE_UPDATE;
-		
+		sql = sql.replaceFirst("\\?", "'" + category.getName() + "'");
+		sql = sql.replaceFirst("\\?", "'" + category.getDescription() + "'");
+
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
+		sql = sql.replaceFirst("\\?", "'" + tsLastUpdated + "'");
 
-		PreparedStatement stmt = connection.prepareStatement(sql);
-		stmt.setString(1, link.getName());
-		stmt.setString(2, link.getDescription());
-		stmt.setTimestamp(3, tsLastUpdated);
-		stmt.setInt(4, link.getId());
+		sql = sql.replaceFirst("\\?", new Integer(category.getId()).toString() );
+
+		return sql;
+	}
+
+	public static void updateCategory(String sql, GenericDBHandler dbh) throws ParseException, SQLException{
+		Connection connection = dbh.getConnection();
+
+		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
 		stmt.executeUpdate();
 		stmt.close();
+
 	}
 }
