@@ -21,7 +21,8 @@ public class TagHandler {
 	}
 	
 	public static void updateTag(Tag tag) throws ParseException, SQLException{
-		TagUpdateDBHandler.updateCategory(tag, GenericDBHandler.getInstance());
+		String sql = TagUpdateDBHandler.constructSqlString(tag);
+		TagUpdateDBHandler.updateCategory(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void deleteTag(Tag tag) throws SQLException{
