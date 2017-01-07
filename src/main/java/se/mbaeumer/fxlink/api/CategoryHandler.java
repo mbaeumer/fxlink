@@ -39,7 +39,8 @@ public class CategoryHandler {
 	}
 
 	public static void moveCategory(Category source, Category target) throws SQLException{
-		LinkUpdateDBHandler.moveLinks(source, target, GenericDBHandler.getInstance());
+		String sql = LinkUpdateDBHandler.constructSqlStringMoveLink(source, target);
+		LinkUpdateDBHandler.moveLinks(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void deleteAllCateories() throws SQLException{

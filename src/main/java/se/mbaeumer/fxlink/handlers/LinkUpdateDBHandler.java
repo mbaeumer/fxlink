@@ -17,6 +17,8 @@ public class LinkUpdateDBHandler {
 	public static String SQL_UPDATE_DATE = "lastUpdated=? ";
 	public static String SQL_UPDATE_WHERE_CLAUSE = "WHERE id=?";
 
+	public static String SQL_BASE_MOVE = "UPDATE Link SET categoryId=? WHERE categoryId=?";
+
 	
 	public static String constructSqlString(Link link){
 		String  sql = SQL_BASE_UPDATE;
@@ -57,24 +59,26 @@ public class LinkUpdateDBHandler {
 		stmt.close();
 	}
 	
-	public static void nullifyLinksWithCategory(Category category, GenericDBHandler dbh) throws SQLException{
-		Connection connection = dbh.getConnection();
-		
-		String sql = "UPDATE Link SET categoryId=null WHERE categoryId=?";
-		PreparedStatement stmt = connection.prepareStatement(sql);
-		stmt.setInt(1, category.getId());
+	public static String constructSqlStringMoveLink(Category source, Category target){
 
-		stmt.executeUpdate();
-		stmt.close();
+		if (source == null || target == null ){
+			return null;
+		}
+
+		String sql = SQL_BASE_MOVE;
+
+		sql = sql.replaceFirst("\\?", new Integer(target.getId()).toString() );
+		sql = sql.replaceFirst("\\?", new Integer(source.getId()).toString() );
+
+
+		return sql;
+
 	}
 
-	public static void moveLinks(Category source, Category target, GenericDBHandler dbh) throws SQLException{
+	public static void moveLinks(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 
-		String sql = "UPDATE Link SET categoryId=? WHERE categoryId=?";
-		PreparedStatement stmt = connection.prepareStatement(sql);
-		stmt.setInt(1, target.getId());
-		stmt.setInt(2, source.getId());
+		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
 		stmt.executeUpdate();
 		stmt.close();

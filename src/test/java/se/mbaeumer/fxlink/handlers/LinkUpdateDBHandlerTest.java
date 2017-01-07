@@ -30,6 +30,27 @@ public class LinkUpdateDBHandlerTest extends TestCase {
     }
 
     @Test
+    public void testReturnNullIfSourceIsNull(){
+        assertNull("", LinkUpdateDBHandler.constructSqlStringMoveLink(null, createCategory()));
+    }
+
+    @Test
+    public void testReturnNullIfTargetIsNull(){
+        assertNull("", LinkUpdateDBHandler.constructSqlStringMoveLink(null, createCategory()));
+    }
+
+    @Test
+    public void testConstructSqlStringforMove(){
+        Category source = createCategory();
+        Category target = createCategory();
+        target.setId(6);
+        String expected = "UPDATE Link SET categoryId=6 WHERE categoryId=5";
+        String actual = LinkUpdateDBHandler.constructSqlStringMoveLink(source, target);
+        assertTrue("The strings do not match", expected.equalsIgnoreCase(actual));
+
+    }
+
+    @Test
     public void testConstructSqlStringWithoutCategory(){
         Link link = createLink();
         link.setCategory(null);
