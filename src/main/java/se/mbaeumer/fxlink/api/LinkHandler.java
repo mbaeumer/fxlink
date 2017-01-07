@@ -42,9 +42,11 @@ public class LinkHandler {
 		String sql = LinkUpdateDBHandler.constructSqlString(link);
 		LinkUpdateDBHandler.updateLink(sql, GenericDBHandler.getInstance());
 	}
-	
+
+
 	public static void deleteLink(Link link) throws SQLException{
-		LinkDeletionDBHandler.deleteLink(link, GenericDBHandler.getInstance());
+		String sql = LinkDeletionDBHandler.constructSqlString(link);
+		LinkDeletionDBHandler.deleteLink(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static Link createPseudoLink(){

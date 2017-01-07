@@ -8,23 +8,25 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class LinkDeletionDBHandler {
-	public static void deleteLink(Link link, GenericDBHandler dbh) throws SQLException{
-		Connection connection = dbh.getConnection();
-		
-		String sql = "DELETE FROM Link WHERE id=?";
-		PreparedStatement stmt = connection.prepareStatement(sql);
-		stmt.setInt(1, link.getId());
 
-		stmt.executeUpdate();
-		stmt.close();
+	public static final String SQL_BASE_DELETE = "DELETE FROM Link";
+	public static final String SQL_WHERE_CLAUSE = " WHERE id=?";
+
+	public static String constructSqlString(Link link){
+		if (link == null){
+			return null;
+		}
+
+		String sql = SQL_BASE_DELETE + SQL_WHERE_CLAUSE;
+		sql = sql.replaceFirst("\\?", new Integer(link.getId()).toString() );
+
+		return sql;
 	}
-	
-	public static void deleteLinksWithCategory(Category category, GenericDBHandler dbh) throws SQLException{
+
+	public static void deleteLink(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
-		
-		String sql = "DELETE FROM Link WHERE categoryId=?";
-		PreparedStatement stmt = connection.prepareStatement(sql);
-		stmt.setInt(1, category.getId());
+
+		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
 		stmt.executeUpdate();
 		stmt.close();
