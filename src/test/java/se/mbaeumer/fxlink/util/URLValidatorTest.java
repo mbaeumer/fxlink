@@ -14,14 +14,17 @@ public class URLValidatorTest extends TestCase {
 		assertTrue(URLValidator.isValidURL("http://www.java-forums.org/new-java"));
 		assertTrue(URLValidator.isValidURL("http://www.java-forums.org/new-java/71402-non-blocking-callback-method"));
 		assertTrue(URLValidator.isValidURL("http://www.java-forums.org/new-java/71402-non-blocking-callback-method.html"));
-		assertFalse(URLValidator.isValidURL("htpp://sport.com"));
-		assertFalse(URLValidator.isValidURL("lott:pe"));
 		assertTrue(URLValidator.isValidURL("lotto.co"));
 		assertTrue(URLValidator.isValidURL("example.com"));
-		assertFalse(URLValidator.isValidURL("www.ba"));
-		assertFalse(URLValidator.isValidURL("www.ba."));
-		assertFalse(URLValidator.isValidURL("www.ba.d"));
-		assertFalse(URLValidator.isValidURL("www.bald"));
+	}
 
+	@Test
+	public void testInvalidUrl(){
+		assertFalse("www.ba should fail", URLValidator.isValidURL("www.ba"));
+		assertFalse("www.ba. should fail", URLValidator.isValidURL("www.ba."));
+		assertFalse("www.ba.d should fail", URLValidator.isValidURL("www.ba.d"));
+		assertFalse("www.bald should fail", URLValidator.isValidURL("www.bald"));
+		assertFalse("htpp://sport.com. should fail", URLValidator.isValidURL("htpp://sport.com"));
+		assertFalse("lotto:pe should fail", URLValidator.isValidURL("lott:pe"));
 	}
 }
