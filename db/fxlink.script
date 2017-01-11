@@ -82,7 +82,7 @@ INSERT INTO LINK VALUES(59,'null','https://www.tutorialspoint.com/python/python_
 INSERT INTO LINK VALUES(60,'null','http://stackoverflow.com/questions/24924072/website-url-validation-regex-in-java','Imported from links_2016_52_mac.txt',NULL,'2016-12-30','2016-12-30 18:21:52.000000')
 INSERT INTO LINK VALUES(61,'null','https://docs.python.org/2/library/datetime.html','Imported from links_2016_52_mac.txt',NULL,'2016-12-30','2016-12-30 18:21:52.000000')
 INSERT INTO LINK VALUES(62,'<NEW>','www.newsite.se','<NEW>',NULL,'2016-12-30','2016-12-30 18:23:37.000000')
-INSERT INTO TAG VALUES(1,'Java 8','desc','2016-06-12','2016-06-12 02:14:36.848000')
+INSERT INTO TAG VALUES(1,'Java 8 and higher','desc','2016-06-12','2017-01-02 18:43:08.000000')
 INSERT INTO TAG VALUES(2,'Java 7','desc','2016-06-12','2016-06-12 02:14:36.853000')
 INSERT INTO TAG VALUES(3,'Europe','desc','2016-06-12','2016-06-12 02:14:36.853000')
 INSERT INTO TAG VALUES(4,'Australia','desc','2016-06-12','2016-06-12 02:14:36.854000')

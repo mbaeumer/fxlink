@@ -35,7 +35,8 @@ public class CategoryHandler {
 	}
 	
 	public static void deleteCategory(Category category) throws SQLException{
-		CategoryDeletionDBHandler.deleteCategory(category, GenericDBHandler.getInstance());
+		String sql = CategoryDeletionDBHandler.constructSqlString(category);
+		CategoryDeletionDBHandler.deleteCategory(sql, GenericDBHandler.getInstance());
 	}
 
 	public static void moveCategory(Category source, Category target) throws SQLException{
