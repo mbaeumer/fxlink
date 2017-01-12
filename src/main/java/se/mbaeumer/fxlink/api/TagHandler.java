@@ -26,7 +26,8 @@ public class TagHandler {
 	}
 	
 	public static void deleteTag(Tag tag) throws SQLException{
-		TagDeletionDBHandler.deleteLink(tag, GenericDBHandler.getInstance());
+		String sql = TagDeletionDBHandler.constructSqlString(tag);
+		TagDeletionDBHandler.deleteTag(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static Tag createPseudoTag(){

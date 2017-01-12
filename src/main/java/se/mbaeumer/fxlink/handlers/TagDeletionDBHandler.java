@@ -7,12 +7,24 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class TagDeletionDBHandler {
-	public static void deleteLink(Tag tag, GenericDBHandler dbh) throws SQLException{
+	public static final String SQL_BASE_DELETE = "DELETE FROM Tag ";
+	public static final String WHERE_CLAUSE = "WHERE ID=?";
+
+	public static String constructSqlString(Tag tag){
+		if (tag == null){
+			return null;
+		}
+
+		String sql = SQL_BASE_DELETE + WHERE_CLAUSE;
+		sql = sql.replaceFirst("\\?", new Integer(tag.getId()).toString() );
+
+		return sql;
+	}
+
+	public static void deleteTag(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 		
-		String sql = "DELETE FROM Tag WHERE id=?";
 		PreparedStatement stmt = connection.prepareStatement(sql);
-		stmt.setInt(1, tag.getId());
 
 		stmt.executeUpdate();
 		stmt.close();
