@@ -67,7 +67,6 @@ INSERT INTO LINK VALUES(1,'The code project','www.codeproject.com','description'
 INSERT INTO LINK VALUES(2,'Der Spiegel','www.spiegel.de','description',2,'2016-06-12','2016-06-12 02:14:36.862000')
 INSERT INTO LINK VALUES(3,'Linkedin','www.linkedin.com','description',3,'2016-06-12','2016-06-12 02:14:36.863000')
 INSERT INTO LINK VALUES(18,'','http://spring.io/guides/gs/spring-boot/','a getting started guide for spring boot',NULL,'2016-02-27','2016-03-27 18:12:18.000000')
-INSERT INTO LINK VALUES(19,'<NEW>','www.kicker.de','<NEW>',NULL,'2016-12-27','2016-12-27 11:19:08.000000')
 INSERT INTO LINK VALUES(20,'the UX expert site','www.ux.com','<NEW>',4,'2016-12-27','2016-12-29 14:59:42.000000')
 INSERT INTO LINK VALUES(50,'null','https://www.java.com/de/download/help/mac_controlpanel.xml','Imported from links_2016_52_mac.txt',NULL,'2016-12-30','2016-12-30 18:21:52.000000')
 INSERT INTO LINK VALUES(51,'null','https://softwarecave.org/2014/06/14/adding-external-jars-into-maven-project/','Imported from links_2016_52_mac.txt',NULL,'2016-12-30','2016-12-30 18:21:52.000000')

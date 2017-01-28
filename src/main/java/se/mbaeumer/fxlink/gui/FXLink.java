@@ -1081,6 +1081,8 @@ public class FXLink extends Application{
 		
 		if (id == -1){
 			try {
+				Category category = cmbCategories.getValue();
+				link.setCategory(category);
 				LinkHandler.createLink(link);
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
