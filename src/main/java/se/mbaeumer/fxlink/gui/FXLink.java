@@ -87,15 +87,10 @@ public class FXLink extends Application{
 	
 	public void start(Stage stage) {
 		this.scene = new Scene(this.root, 1000, 700, Color.WHITESMOKE);
-
-		// set the stage
 		stage.setTitle("FX Link");
 		stage.setScene(this.scene);
 		stage.show();
 		this.initLayout();
-		
-		
-		
 	}
 
 	public static void main(String[] args) {
@@ -155,34 +150,11 @@ public class FXLink extends Application{
 					@Override
 					public void changed(ObservableValue ov, String s1, String s2){
 						switchTableView(cmbItems.getValue());
-						//cmbCategories.setDisable(true);
-						//btnResetFilter.setDisable(true);
-						
-						/*
-						 * cmbContexts.setDisable(true);
-						cmbTaskViews.setDisable(true);
-						cmbStatuses.setDisable(true);
-						cmbPriorities.setDisable(true);
-						btnResetFilter.setDisable(true);
-						if (cmbItems.getValue().equals("Task")){
-							cmbContexts.setDisable(false);
-							cmbTaskViews.setDisable(false);
-							cmbStatuses.setDisable(false);
-							cmbPriorities.setDisable(false);
-							btnResetFilter.setDisable(false);
-							resetTaskSorting(tblLinks);
-						}else{
-							resetTaskSorting(tblContexts);
-						}
-						switchTableView(cmbItems.getValue());
-						*/
 					}
 				});
 		
 		this.cmbItems.getSelectionModel().selectFirst();
-
 		this.flowFilter.getChildren().add(this.cmbItems);
-
 	}
 	
 	private void createCategoryLabel(){
@@ -258,14 +230,6 @@ public class FXLink extends Application{
 			@Override
 			public void handle(ActionEvent arg0) {
 				cmbCategories.getSelectionModel().selectFirst();
-				/*
-				cmbContexts.setValue(ContextConstants.CONTEXT_ALL);
-				cmbTaskViews.setValue(FilterConstants.FILTER_NONE);
-				cmbStatuses.setValue(FilterConstants.FILTER_NONE);
-				cmbPriorities.setValue(FilterConstants.FILTER_NONE);
-				tblLinks.setItems(FXCollections.observableList(fxtodoMain.getAllTasks()));
-				tblLinks.getItems().add(fxtodoMain.getDummyTask());
-				*/
 			}
 		
 		});
@@ -511,9 +475,7 @@ public class FXLink extends Application{
 	private boolean isSearchPaneVisible(){
 		return this.flowGeneral.getChildren().contains(this.flowSearch);
 	}
-	
-	
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createLinkTableView(){
 		// create the table view itself
@@ -657,8 +619,6 @@ public class FXLink extends Application{
 	                protected void updateItem(Category item, boolean empty) {
 	                    if (item != null) {
 	                    	setText(item.getName());
-	                        //Label categoryLabel = new Label(item.getName());
-	                        //setGraphic(categoryLabel);
 	                    }else{
 	                    	setText(null);
 	                    }
@@ -981,7 +941,6 @@ public class FXLink extends Application{
 			public void handle(ActionEvent e) {
 				LinkViewDetailStage linkDetail = new LinkViewDetailStage(selectedLink);
 				linkDetail.showAndWait();			
-				//refreshLinkTable(null);
 				refreshLinkTable();
 			}
 		});
@@ -1103,42 +1062,10 @@ public class FXLink extends Application{
 	}
 	
 	private void refreshLinkTable(){
-		tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
+		tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
     	tblLinks.getItems().add(LinkHandler.createPseudoLink());        
 	}
 
-
-	private void refreshLinkTable(Link link){
-		boolean isCorrect = true;
-		if (link != null){
-			int id = link.getId(); 
-
-			if (id == -1){
-				try {
-					LinkHandler.createLink(link);
-				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					Alert alert = new Alert(Alert.AlertType.ERROR, "The URL MUST be unique!", ButtonType.OK);
-					alert.showAndWait();
-					isCorrect = false;
-				}
-			}else{
-				try {
-					LinkHandler.updateLink(link);
-				} catch (ParseException | SQLException e) {
-					Alert alert = new Alert(Alert.AlertType.ERROR, "The URL MUST be unique!", ButtonType.OK);
-					alert.showAndWait();
-					isCorrect = false;
-				}
-			}
-		}
-		
-		if (isCorrect){
-			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
-	    	tblLinks.getItems().add(LinkHandler.createPseudoLink());        
-		}        
-	}
-	
 	private void refreshSearchResult(List<Link> links){
 		tblLinks.setItems(FXCollections.observableList(links));
 	}
