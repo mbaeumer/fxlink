@@ -5,6 +5,7 @@ import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
 import se.mbaeumer.fxlink.models.FailedLink;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.URLValidator;
+import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -48,9 +49,9 @@ public class TextImportHandler {
 	
 	private void createLink(String line, String fileName){
 
-		Link link = new Link(null, line, createDescription(fileName));
+		Link link = new Link(ValueConstants.VALUE_NEW, line, createDescription(fileName));
 		link.setCategory(null);
-		
+
 		FailedLink fl = null;
 		if (!URLValidator.isValidURL(line)){
 			fl = new FailedLink(link, "The URL seems to be incorrect");
@@ -69,8 +70,7 @@ public class TextImportHandler {
 	}
 
 	private String createDescription(String fileName){
-		String description = null;
-		description = "Imported from " + fileName;
+		String description = "Imported from " + fileName;
 		return  description;
 	}
 }
