@@ -14,6 +14,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
@@ -58,6 +59,7 @@ public class FXLink extends Application{
 	private Button btnResetFilter;
 	private Button btnImportTextFile;
 	private Button btnShowSearchPane;
+	private Button btnDeleteLinks;
 	
 	private FlowPane flowSearch;
 	private Button btnSearch;
@@ -86,7 +88,7 @@ public class FXLink extends Application{
 	private Category selectedCategory = null;
 	
 	public void start(Stage stage) {
-		this.scene = new Scene(this.root, 1000, 700, Color.WHITESMOKE);
+		this.scene = new Scene(this.root, 1100, 700, Color.WHITESMOKE);
 		stage.setTitle("FX Link");
 		stage.setScene(this.scene);
 		stage.show();
@@ -132,6 +134,7 @@ public class FXLink extends Application{
 		this.createWriteBackupButton();
 		this.createReadBackupButton();
 		this.createShowSearchPaneButton();
+		this.createDeleLinksButton();
 	}
 	
 	public void createItemLabel(){
@@ -230,6 +233,8 @@ public class FXLink extends Application{
 			@Override
 			public void handle(ActionEvent arg0) {
 				cmbCategories.getSelectionModel().selectFirst();
+				ObservableList<Link> links = tblLinks.getItems();
+				String test = null;
 			}
 		
 		});
@@ -368,11 +373,42 @@ public class FXLink extends Application{
 					createSearchPane();
 				}
 				btnShowSearchPane.setText(getSearchPaneTitle());
-				
 			}
 		});
 		this.flowFilter.getChildren().add(this.btnShowSearchPane);
-		
+	}
+
+	private void createDeleLinksButton(){
+		this.btnDeleteLinks = new Button("Delete");
+		this.btnDeleteLinks.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				List<Link> selectedLinks = new ArrayList<Link>();
+				for (Link link : tblLinks.getItems()){
+					if (link.isSelected()){
+						selectedLinks.add(link);
+
+					}
+				}
+
+				if (selectedLinks.size() > 0) {
+					Alert alert = new Alert(Alert.AlertType.WARNING, "The selected links will be deleted. Continue?", ButtonType.YES, ButtonType.NO);
+					Optional<ButtonType> result = alert.showAndWait();
+					boolean deletedSuccess = true;
+					if (result.isPresent() && result.get() == ButtonType.YES) {
+						for (Link link : selectedLinks) {
+							try {
+								LinkHandler.deleteLink(link);
+							} catch (SQLException sqle) {
+								deletedSuccess = false;
+							}
+						}
+					}
+					refreshLinkTable();
+				}
+			}
+		});
+		this.flowFilter.getChildren().add(this.btnDeleteLinks);
 	}
 	
 	private String getSearchPaneTitle(){
@@ -522,6 +558,11 @@ public class FXLink extends Application{
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createLinkTableColumns(){
+		// selected column
+		TableColumn<Link, Boolean> selectedCol = new TableColumn<Link, Boolean>("Selected");
+		selectedCol.setCellValueFactory(c -> c.getValue().selectedProperty());
+		selectedCol.setCellFactory( tc -> new CheckBoxTableCell<>());
+
 		// create the url column
 		TableColumn urlCol = new TableColumn("Url");
 		urlCol.setCellValueFactory(new PropertyValueFactory("url"));
@@ -629,15 +670,16 @@ public class FXLink extends Application{
 	    });
 
 		// add all columns to the table view
-		this.tblLinks.getColumns().addAll(urlCol, titleCol, descriptionCol, createdCol, lastUpdatedCol, categoryCol);
+		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, createdCol, lastUpdatedCol, categoryCol);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	private void setLinkTableLayout(){
 		for (Object o : this.tblLinks.getColumns()){
 			TableColumn tc = (TableColumn) o;
-			tc.setPrefWidth((this.tblLinks.getPrefWidth()*17)/100);
+			tc.setPrefWidth((this.tblLinks.getPrefWidth()*15)/100);
 		}
+		this.tblLinks.getColumns().get(0).setPrefWidth((this.tblLinks.getPrefWidth()*10)/100);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -1147,6 +1189,7 @@ public class FXLink extends Application{
 		}
 		
 		this.btnShowSearchPane.setText(this.getSearchPaneTitle());
+		this.btnDeleteLinks.setDisable(true);
 		if (item.equals("Links")){
 			this.flowGeneral.getChildren().remove(this.tblCategories);
 			this.flowGeneral.getChildren().remove(this.tblTags);
@@ -1154,6 +1197,7 @@ public class FXLink extends Application{
 			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.btnShowSearchPane.setDisable(false);
+			this.btnDeleteLinks.setDisable(false);
 		}else if (item.equals("Categories")){
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblTags);
