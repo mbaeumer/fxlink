@@ -60,7 +60,9 @@ public class FXLink extends Application{
 	private Button btnImportTextFile;
 	private Button btnShowSearchPane;
 	private Button btnDeleteLinks;
-	
+	private ComboBox<Category> cmbMoveToCategory;
+	private Button btnMoveToCategory;
+
 	private FlowPane flowSearch;
 	private Button btnSearch;
 	private Label lblSearchTerm;
@@ -135,6 +137,8 @@ public class FXLink extends Application{
 		this.createReadBackupButton();
 		this.createShowSearchPaneButton();
 		this.createDeleLinksButton();
+		this.createMoveToCateoryComboBox();
+		this.createMoveToCategoryButton();
 	}
 	
 	public void createItemLabel(){
@@ -383,13 +387,7 @@ public class FXLink extends Application{
 		this.btnDeleteLinks.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				List<Link> selectedLinks = new ArrayList<Link>();
-				for (Link link : tblLinks.getItems()){
-					if (link.isSelected()){
-						selectedLinks.add(link);
-
-					}
-				}
+				List<Link> selectedLinks = getSelectedLinks();
 
 				if (selectedLinks.size() > 0) {
 					Alert alert = new Alert(Alert.AlertType.WARNING, "The selected links will be deleted. Continue?", ButtonType.YES, ButtonType.NO);
@@ -409,6 +407,88 @@ public class FXLink extends Application{
 			}
 		});
 		this.flowFilter.getChildren().add(this.btnDeleteLinks);
+	}
+
+	private void createMoveToCateoryComboBox(){
+		this.cmbMoveToCategory = new ComboBox<Category>();
+
+		// get the categories
+		ObservableList<Category> categoryList =
+				FXCollections.observableArrayList(CategoryHandler.getCategories());
+		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
+
+		this.cmbMoveToCategory.setItems(categoryList);
+
+		this.cmbMoveToCategory.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
+
+			@Override
+			public ListCell<Category> call(ListView<Category> p) {
+
+				final ListCell<Category> cell = new ListCell<Category>(){
+
+					@Override
+					protected void updateItem(Category t, boolean bln) {
+						super.updateItem(t, bln);
+
+						if(t != null){
+							setText(t.getName());
+						}else{
+							setText(null);
+						}
+					}
+				};
+
+				return cell;
+			}
+		});
+
+		this.cmbMoveToCategory.setButtonCell(new ListCell<Category>() {
+			@Override
+			protected void updateItem(Category t, boolean bln) {
+				super.updateItem(t, bln);
+				if (t != null) {
+					setText(t.nameProperty().getValue());
+				} else {
+					setText(null);
+				}
+			}
+		});
+
+
+		this.cmbMoveToCategory.getSelectionModel().selectFirst();
+		this.flowFilter.getChildren().add(this.cmbMoveToCategory);
+	}
+
+	private void createMoveToCategoryButton(){
+		this.btnMoveToCategory = new Button("Move to category");
+
+		this.btnMoveToCategory.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				Category category = cmbMoveToCategory.getValue();
+				for (Link link : getSelectedLinks()){
+					link.setCategory(category);
+					try {
+						LinkHandler.updateLink(link);
+					}catch(SQLException | ParseException pe){
+						Alert alert = new Alert(Alert.AlertType.ERROR, "The link could not be updated", ButtonType.OK);
+						alert.showAndWait();
+					}
+				}
+
+			}
+		});
+		this.flowFilter.getChildren().add(this.btnMoveToCategory);
+	}
+
+	private List<Link> getSelectedLinks(){
+		List<Link> selectedLinks = new ArrayList<>();
+		for (Link link : tblLinks.getItems()){
+			if (link.isSelected() && link.getId() > 0){
+				selectedLinks.add(link);
+			}
+		}
+		return selectedLinks;
 	}
 	
 	private String getSearchPaneTitle(){
@@ -1190,6 +1270,8 @@ public class FXLink extends Application{
 		
 		this.btnShowSearchPane.setText(this.getSearchPaneTitle());
 		this.btnDeleteLinks.setDisable(true);
+		this.cmbMoveToCategory.setDisable(true);
+		this.btnMoveToCategory.setDisable(true);
 		if (item.equals("Links")){
 			this.flowGeneral.getChildren().remove(this.tblCategories);
 			this.flowGeneral.getChildren().remove(this.tblTags);
@@ -1198,6 +1280,8 @@ public class FXLink extends Application{
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.btnShowSearchPane.setDisable(false);
 			this.btnDeleteLinks.setDisable(false);
+			this.cmbMoveToCategory.setDisable(false);
+			this.btnMoveToCategory.setDisable(false);
 		}else if (item.equals("Categories")){
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblTags);

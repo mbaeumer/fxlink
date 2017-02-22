@@ -89,7 +89,7 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void initScene(){
 		int width = 250;
-		int height = 630;
+		int height = 670;
 		this.scene = new Scene(this.root, width, height, Color.WHITESMOKE);
 		this.setTitle("Link details");
 		this.setScene(this.scene);
