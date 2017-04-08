@@ -1,9 +1,14 @@
 package se.mbaeumer.fxlink.gui;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import se.mbaeumer.fxlink.api.CategoryHandler;
+import se.mbaeumer.fxlink.api.LinkHandler;
+import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.FailedLink;
 import se.mbaeumer.fxlink.models.ImportResultReport;
 import se.mbaeumer.fxlink.models.Link;
@@ -21,9 +26,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import se.mbaeumer.fxlink.util.ValueConstants;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImportResultReportStage extends Stage {
 	private Scene scene;
@@ -35,10 +45,12 @@ public class ImportResultReportStage extends Stage {
 	private Label lblSuccessfulImportsValue = new Label();
 	private Label lblFailedImportsText = new Label("Failed imports");
 	private Label lblFailedImportsValue = new Label();
+	private ComboBox<Category> cmbMoveToCategory;
+	private Button btnMoveToCategory;
 	private TabPane tabPane;
 	private Tab tabSuccess;
 	private Tab tabFailed;
-	private TableView tvSuccessfulLinks;
+	private TableView<Link> tvSuccessfulLinks;
 	private TableView tvFailedLinks;
 	private Button btnClose;
 	private ImportResultReport importReport;
@@ -55,8 +67,8 @@ public class ImportResultReportStage extends Stage {
 	}
 	
 	private void initScene(){
-		int width = 500;
-		int height = 750;
+		int width = 600;
+		int height = 800;
 		this.scene = new Scene(this.flowGeneral, width, height);
 		this.scene.setFill(Color.WHITESMOKE);
 		
@@ -84,6 +96,8 @@ public class ImportResultReportStage extends Stage {
 	public void initLayout(){
 		this.initPanes();
 		this.initImportInfoLabels();
+		this.createMoveToCateoryComboBox();
+		this.createMoveToCategoryButton();
 		this.initTabPane();
 		this.initSuccessLinkTableView();
 		this.initFailedLinksTableView();
@@ -110,6 +124,88 @@ public class ImportResultReportStage extends Stage {
 				this.lblSuccessfulImportsValue, this.lblFailedImportsText, this.lblFailedImportsValue);
 	}
 
+	private void createMoveToCateoryComboBox(){
+		this.cmbMoveToCategory = new ComboBox<>();
+
+		ObservableList<Category> categoryList =
+				FXCollections.observableArrayList(CategoryHandler.getCategories());
+		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
+
+		this.cmbMoveToCategory.setItems(categoryList);
+
+		this.cmbMoveToCategory.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
+
+			@Override
+			public ListCell<Category> call(ListView<Category> p) {
+
+				final ListCell<Category> cell = new ListCell<Category>(){
+
+					@Override
+					protected void updateItem(Category t, boolean bln) {
+						super.updateItem(t, bln);
+
+						if(t != null){
+							setText(t.getName());
+						}else{
+							setText(null);
+						}
+					}
+				};
+
+				return cell;
+			}
+		});
+
+		this.cmbMoveToCategory.setButtonCell(new ListCell<Category>() {
+			@Override
+			protected void updateItem(Category t, boolean bln) {
+				super.updateItem(t, bln);
+				if (t != null) {
+					setText(t.nameProperty().getValue());
+				} else {
+					setText(null);
+				}
+			}
+		});
+
+
+		this.cmbMoveToCategory.getSelectionModel().selectFirst();
+		this.flowGeneral.getChildren().add(this.cmbMoveToCategory);
+	}
+
+	private void createMoveToCategoryButton(){
+		this.btnMoveToCategory = new Button("Move to category");
+
+		this.btnMoveToCategory.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				Category category = cmbMoveToCategory.getValue();
+				for (Link link : getSelectedLinks()){
+					link.setCategory(category);
+					try {
+						LinkHandler.updateLink(link);
+					}catch(SQLException | ParseException pe){
+						Alert alert = new Alert(Alert.AlertType.ERROR, "The link could not be updated", ButtonType.OK);
+						alert.showAndWait();
+					}
+				}
+
+			}
+		});
+		this.flowGeneral.getChildren().add(this.btnMoveToCategory);
+	}
+
+	private List<Link> getSelectedLinks(){
+		List<Link> selectedLinks = new ArrayList<>();
+		for (Link link : tvSuccessfulLinks.getItems()){
+			if (link.isSelected() && link.getId() > 0){
+				selectedLinks.add(link);
+			}
+		}
+
+		return selectedLinks;
+	}
+
 	private void initTabPane(){
 		this.createTabPane();
 		this.createTabs();
@@ -118,6 +214,20 @@ public class ImportResultReportStage extends Stage {
 
 	private void createTabPane(){
 		this.tabPane = new TabPane();
+		this.tabPane.getSelectionModel().selectedItemProperty().addListener(
+				new ChangeListener<Tab>() {
+					@Override
+					public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+						cmbMoveToCategory.setDisable(true);
+						btnMoveToCategory.setDisable(true);
+						if (tabPane.getSelectionModel().isSelected(0)){
+							cmbMoveToCategory.setDisable(false);
+							btnMoveToCategory.setDisable(false);
+						}
+					}
+				}
+		);
+
 	}
 
 	private void createTabs(){

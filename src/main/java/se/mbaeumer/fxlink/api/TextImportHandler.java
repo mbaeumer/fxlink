@@ -61,7 +61,8 @@ public class TextImportHandler {
 		
 		try {
 			String sql = LinkCreationDBHandler.constructSqlString(link);
-			LinkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
+			int newId = LinkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
+			link.setId(newId);
 			importedLinks.add(link);
 		} catch (SQLException e) {
 			fl = new FailedLink(link, e.getMessage());
