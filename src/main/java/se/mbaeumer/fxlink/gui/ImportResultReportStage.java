@@ -290,6 +290,9 @@ public class ImportResultReportStage extends Stage {
 					public void handle(TableColumn.CellEditEvent<Link, String> t) {
 						Link link = t.getRowValue();
 						link.setTitle(t.getNewValue());
+
+						updateLink(link);
+						tvSuccessfulLinks.setItems(FXCollections.observableList(importReport.getSuccessfulLinks()));
 						/*
 						if (isLinkInformationCorrect(link.getURL())){
 							if (insertOrUpdateLink(link)){
@@ -310,6 +313,8 @@ public class ImportResultReportStage extends Stage {
 					public void handle(TableColumn.CellEditEvent<Link, String> t) {
 						Link link = t.getRowValue();
 						link.setDescription(t.getNewValue());
+						updateLink(link);
+						tvSuccessfulLinks.setItems(FXCollections.observableList(importReport.getSuccessfulLinks()));
 						/*
 						if (isLinkInformationCorrect(link.getURL())){
 							if (insertOrUpdateLink(link)){
@@ -337,6 +342,16 @@ public class ImportResultReportStage extends Stage {
 
 
 		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, titleCol, urlCol, descriptionCol, createdCol);
+	}
+
+	private void updateLink(Link link){
+		try {
+			LinkHandler.updateLink(link);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initSuccessLinksTableLayout(){
