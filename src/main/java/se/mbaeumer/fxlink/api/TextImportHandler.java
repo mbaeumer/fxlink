@@ -4,6 +4,7 @@ import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
 import se.mbaeumer.fxlink.models.FailedLink;
 import se.mbaeumer.fxlink.models.Link;
+import se.mbaeumer.fxlink.util.SqlExceptionMapper;
 import se.mbaeumer.fxlink.util.URLValidator;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
@@ -65,7 +66,7 @@ public class TextImportHandler {
 			link.setId(newId);
 			importedLinks.add(link);
 		} catch (SQLException e) {
-			fl = new FailedLink(link, e.getMessage());
+			fl = new FailedLink(link, SqlExceptionMapper.constructErrorMessage(e.getMessage()));
 			failedLinks.add(fl);
 		}
 	}
