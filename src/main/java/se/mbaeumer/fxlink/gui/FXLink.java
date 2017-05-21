@@ -19,6 +19,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -84,6 +86,12 @@ public class FXLink extends Application{
 	private Link selectedLink = null;
 	
 	private ContextMenu contTags;
+
+	private AnchorPane anchorPane;
+	private FlowPane flowStatus;
+	private Label lblStatusItemCountText;
+	private Label lblStatusItemCount;
+
 	private Tag selectedTag = null;
 	
 	private ContextMenu contCategories;
@@ -111,6 +119,11 @@ public class FXLink extends Application{
 		this.createLinkTableView();
 		this.createCategoryTableView();
 		this.createTagTableView();
+
+		/**TODO: add the stuff for the status bar **/
+		this.createAnchorPane();
+		this.createStatusPane();
+		this.createStatusLabels();
 	}
 	
 	public void createGeneralFlowPane() {
@@ -1154,7 +1167,43 @@ public class FXLink extends Application{
 
 		this.contCategories.getItems().addAll(miMove, miDelete);
 	}
-	
+
+	private void createAnchorPane(){
+		this.anchorPane = new AnchorPane();
+		//this.anchorPane.setBackground(Background.);
+		this.flowGeneral.getChildren().add(this.anchorPane);
+	}
+
+	private void createStatusPane(){
+		this.flowStatus = new FlowPane();
+		this.flowStatus.setOrientation(Orientation.HORIZONTAL);
+		this.flowStatus.setHgap(10);
+		this.anchorPane.getChildren().add(this.flowStatus);
+		this.anchorPane.setBottomAnchor(this.flowStatus, 8.0);
+	}
+
+	private void createStatusLabels(){
+		this.lblStatusItemCountText = new Label(cmbItems.getValue());
+		this.lblStatusItemCount = new Label();
+		this.updateStatusBar();
+		this.flowStatus.getChildren().add(this.lblStatusItemCountText);
+		this.flowStatus.getChildren().add(this.lblStatusItemCount);
+	}
+
+	private TableView getSelectedTableView(){
+		if (cmbItems.getValue().equalsIgnoreCase("Links")){
+			return this.tblLinks;
+		}else if (cmbItems.getValue().equalsIgnoreCase("Categories")){
+			return this.tblCategories;
+		}
+		return this.tblTags;
+	}
+
+	private void updateStatusBar(){
+		this.lblStatusItemCountText.setText(cmbItems.getValue());
+		this.lblStatusItemCount.setText(Integer.toString(getSelectedTableView().getItems().size() - 1));
+	}
+
 	private boolean insertOrUpdateLink(Link link){
 		boolean isCorrect = true;
 		
@@ -1272,10 +1321,16 @@ public class FXLink extends Application{
 		this.btnDeleteLinks.setDisable(true);
 		this.cmbMoveToCategory.setDisable(true);
 		this.btnMoveToCategory.setDisable(true);
+		this.updateStatusBar();
 		if (item.equals("Links")){
 			this.flowGeneral.getChildren().remove(this.tblCategories);
 			this.flowGeneral.getChildren().remove(this.tblTags);
-			this.flowGeneral.getChildren().add(this.tblLinks);
+			if (this.isSearchPaneVisible()){
+				this.flowGeneral.getChildren().add(2, this.tblLinks);
+			}else{
+				this.flowGeneral.getChildren().add(1, this.tblLinks);
+			}
+
 			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.btnShowSearchPane.setDisable(false);
@@ -1285,7 +1340,7 @@ public class FXLink extends Application{
 		}else if (item.equals("Categories")){
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblTags);
-			this.flowGeneral.getChildren().add(this.tblCategories);
+			this.flowGeneral.getChildren().add(1, this.tblCategories);
 			tblCategories.setItems(FXCollections.observableList(CategoryHandler.getCategories()));
 			tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
 			this.removeSearchPane();
@@ -1294,7 +1349,7 @@ public class FXLink extends Application{
 		}else if (item.equals("Tags")){
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblCategories);
-			this.flowGeneral.getChildren().add(this.tblTags);
+			this.flowGeneral.getChildren().add(1, this.tblTags);
 			tblTags.setItems(FXCollections.observableList(TagHandler.getTags()));
 			tblTags.getItems().add(TagHandler.createPseudoTag());
 			this.removeSearchPane();
