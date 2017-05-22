@@ -1310,6 +1310,7 @@ public class FXLink extends Application{
 	private void filterCategories(Category category){
 		tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(category)));
     	tblLinks.getItems().add(LinkHandler.createPseudoLink());
+		this.updateStatusBar();
 	}
 	
 	public void switchTableView(String item){
@@ -1331,7 +1332,7 @@ public class FXLink extends Application{
 				this.flowGeneral.getChildren().add(1, this.tblLinks);
 			}
 
-			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
+			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.btnShowSearchPane.setDisable(false);
 			this.btnDeleteLinks.setDisable(false);
