@@ -715,7 +715,30 @@ public class FXLink extends Application{
 		        }
 		    }
 		);
-		
+
+		TableColumn categoryCol = new TableColumn("Category");
+		categoryCol.setCellValueFactory(new PropertyValueFactory<Link, Category>("category"));
+		categoryCol.setCellFactory(new Callback<TableColumn<Link, Category>, TableCell<Link, Category>>(){
+
+			@Override
+			public TableCell<Link, Category> call(TableColumn<Link, Category> param) {
+
+				TableCell<Link, Category> categoryCell = new TableCell<Link, Category>(){
+
+					@Override
+					protected void updateItem(Category item, boolean empty) {
+						if (item != null) {
+							setText(item.getName());
+						}else{
+							setText(null);
+						}
+					}
+				};
+				return categoryCell;
+			}
+		});
+
+
 		// create the created column
 		TableColumn createdCol = new TableColumn("Created");
 		createdCol.setCellValueFactory(new PropertyValueFactory("created"));
@@ -744,30 +767,9 @@ public class FXLink extends Application{
 					   });
 
 		
-		TableColumn categoryCol = new TableColumn("Category");
-		categoryCol.setCellValueFactory(new PropertyValueFactory<Link, Category>("category"));
-		categoryCol.setCellFactory(new Callback<TableColumn<Link, Category>, TableCell<Link, Category>>(){
-
-	        @Override
-	        public TableCell<Link, Category> call(TableColumn<Link, Category> param) {
-
-	            TableCell<Link, Category> categoryCell = new TableCell<Link, Category>(){
-
-	                @Override
-	                protected void updateItem(Category item, boolean empty) {
-	                    if (item != null) {
-	                    	setText(item.getName());
-	                    }else{
-	                    	setText(null);
-	                    }
-	                }                    
-	            };               
-	            return categoryCell;                
-	        }
-	    });
 
 		// add all columns to the table view
-		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, createdCol, lastUpdatedCol, categoryCol);
+		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, categoryCol, createdCol, lastUpdatedCol);
 	}
 	
 	@SuppressWarnings("rawtypes")
