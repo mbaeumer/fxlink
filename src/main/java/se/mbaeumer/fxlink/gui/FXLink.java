@@ -184,14 +184,8 @@ public class FXLink extends Application{
 	
 	private void createCategoryComboBox(){
 		this.cmbCategories = new ComboBox<Category>();
-		
-		// get the categories
-		ObservableList<Category> categoryList =
-	            FXCollections.observableArrayList(CategoryHandler.getCategories());
-		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_ALL));
-		categoryList.add(1, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
-		
-		this.cmbCategories.setItems(categoryList);
+
+		loadCategories();
 		
 		this.cmbCategories.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
  
@@ -242,7 +236,17 @@ public class FXLink extends Application{
 		 
 		this.flowFilter.getChildren().add(this.cmbCategories);
 	}
-	
+
+	private void loadCategories() {
+		ObservableList<Category> categoryList =
+	            FXCollections.observableArrayList(CategoryHandler.getCategories());
+		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_ALL));
+		categoryList.add(1, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
+
+		this.cmbCategories.setItems(categoryList);
+		this.cmbCategories.getSelectionModel().selectFirst(); //select the first element
+	}
+
 	private void createResetButton(){
 		btnResetFilter = new Button("Reset");
 		this.btnResetFilter.setOnAction(new EventHandler<ActionEvent>() {
@@ -1278,6 +1282,7 @@ public class FXLink extends Application{
 			tblCategories.setItems(FXCollections.observableList(CategoryHandler.getCategories()));
 	    	tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
 			this.updateStatusBar(false);
+			this.loadCategories();
 		}
 	}
 	
@@ -1318,9 +1323,11 @@ public class FXLink extends Application{
 	}
 	
 	private void filterCategories(Category category){
-		tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(category)));
-    	tblLinks.getItems().add(LinkHandler.createPseudoLink());
-		this.updateStatusBar(false);
+		if (!cmbCategories.isDisabled()) {
+			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(category)));
+			tblLinks.getItems().add(LinkHandler.createPseudoLink());
+			this.updateStatusBar(false);
+		}
 	}
 	
 	public void switchTableView(String item){
@@ -1332,6 +1339,7 @@ public class FXLink extends Application{
 		this.btnDeleteLinks.setDisable(true);
 		this.cmbMoveToCategory.setDisable(true);
 		this.btnMoveToCategory.setDisable(true);
+		this.cmbCategories.setDisable(true);
 		this.updateStatusBar(false);
 		if (item.equals("Links")){
 			this.flowGeneral.getChildren().remove(this.tblCategories);
@@ -1347,7 +1355,7 @@ public class FXLink extends Application{
 			this.btnShowSearchPane.setDisable(false);
 			this.btnDeleteLinks.setDisable(false);
 			this.cmbMoveToCategory.setDisable(false);
-			this.btnMoveToCategory.setDisable(false);
+			this.cmbCategories.setDisable(false);
 		}else if (item.equals("Categories")){
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblTags);
