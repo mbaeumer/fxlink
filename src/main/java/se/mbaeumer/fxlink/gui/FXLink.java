@@ -1359,21 +1359,21 @@ public class FXLink extends Application{
 			this.cmbMoveToCategory.setDisable(false);
 			this.cmbCategories.setDisable(false);
 		}else if (item.equals("Categories")){
+			this.removeSearchPane();
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblTags);
 			this.flowGeneral.getChildren().add(1, this.tblCategories);
 			tblCategories.setItems(FXCollections.observableList(CategoryHandler.getCategories()));
 			tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
-			this.removeSearchPane();
 			this.btnShowSearchPane.setText(this.getSearchPaneTitle());
 			this.btnShowSearchPane.setDisable(true);
 		}else if (item.equals("Tags")){
+			this.removeSearchPane();
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblCategories);
 			this.flowGeneral.getChildren().add(1, this.tblTags);
 			tblTags.setItems(FXCollections.observableList(TagHandler.getTags()));
 			tblTags.getItems().add(TagHandler.createPseudoTag());
-			this.removeSearchPane();
 			this.btnShowSearchPane.setText(this.getSearchPaneTitle());
 			this.btnShowSearchPane.setDisable(true);
 		}
