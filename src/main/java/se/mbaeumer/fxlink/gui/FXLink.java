@@ -1185,7 +1185,7 @@ public class FXLink extends Application{
 	private void createStatusLabels(){
 		this.lblStatusItemCountText = new Label(cmbItems.getValue());
 		this.lblStatusItemCount = new Label();
-		this.updateStatusBar();
+		this.updateStatusBar(false);
 		this.flowStatus.getChildren().add(this.lblStatusItemCountText);
 		this.flowStatus.getChildren().add(this.lblStatusItemCount);
 	}
@@ -1199,9 +1199,15 @@ public class FXLink extends Application{
 		return this.tblTags;
 	}
 
-	private void updateStatusBar(){
+	private void updateStatusBar(boolean isSearch){
 		this.lblStatusItemCountText.setText(cmbItems.getValue());
-		this.lblStatusItemCount.setText(Integer.toString(getSelectedTableView().getItems().size() - 1));
+		int itemSize = 0;
+		if (isSearch){
+			itemSize = getSelectedTableView().getItems().size();
+		}else{
+			itemSize = getSelectedTableView().getItems().size() - 1;
+		}
+		this.lblStatusItemCount.setText(Integer.toString(itemSize));
 	}
 
 	private boolean insertOrUpdateLink(Link link){
@@ -1235,11 +1241,12 @@ public class FXLink extends Application{
 	private void refreshLinkTable(){
 		tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
     	tblLinks.getItems().add(LinkHandler.createPseudoLink());
-		this.updateStatusBar();
+		this.updateStatusBar(false);
 	}
 
 	private void refreshSearchResult(List<Link> links){
 		tblLinks.setItems(FXCollections.observableList(links));
+		this.updateStatusBar(true);
 	}
 	
 	private void refreshCategoryTable(Category category){
@@ -1270,7 +1277,7 @@ public class FXLink extends Application{
 		if (isCorrect){
 			tblCategories.setItems(FXCollections.observableList(CategoryHandler.getCategories()));
 	    	tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
-			this.updateStatusBar();
+			this.updateStatusBar(false);
 		}
 	}
 	
@@ -1306,14 +1313,14 @@ public class FXLink extends Application{
 		if (isCorrect){
 			tblTags.setItems(FXCollections.observableList(TagHandler.getTags()));
 	    	tblTags.getItems().add(TagHandler.createPseudoTag());
-			this.updateStatusBar();
+			this.updateStatusBar(false);
 		}
 	}
 	
 	private void filterCategories(Category category){
 		tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(category)));
     	tblLinks.getItems().add(LinkHandler.createPseudoLink());
-		this.updateStatusBar();
+		this.updateStatusBar(false);
 	}
 	
 	public void switchTableView(String item){
@@ -1325,7 +1332,7 @@ public class FXLink extends Application{
 		this.btnDeleteLinks.setDisable(true);
 		this.cmbMoveToCategory.setDisable(true);
 		this.btnMoveToCategory.setDisable(true);
-		this.updateStatusBar();
+		this.updateStatusBar(false);
 		if (item.equals("Links")){
 			this.flowGeneral.getChildren().remove(this.tblCategories);
 			this.flowGeneral.getChildren().remove(this.tblTags);
