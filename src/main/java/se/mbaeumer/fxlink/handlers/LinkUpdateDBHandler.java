@@ -10,14 +10,15 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class LinkUpdateDBHandler {
-	public static String SQL_BASE_UPDATE = "UPDATE Link SET title=?, url=?, description=?,";
-	public static String SQL_UPDATE_CATEGORY = "categoryId=?,";
-	public static String SQL_UPDATE_DATE = "lastUpdated=? ";
-	public static String SQL_UPDATE_WHERE_CLAUSE = "WHERE id=?";
+	public static String SQL_BASE_UPDATE = "UPDATE Link SET title=TITLE_PLACEHOLDER, url=URL_PLACEHOLDER, description=DESCRIPTION_PLACEHOLDER,";
+	public static String SQL_UPDATE_CATEGORY = "categoryId=CATEGORY_ID_PLACEHOLDER,";
+	public static String SQL_UPDATE_DATE = "lastUpdated=DATE_PLACEHOLDER ";
+	public static String SQL_UPDATE_WHERE_CLAUSE = "WHERE id=ID_PLACEHOLDER";
 
-	public static String SQL_BASE_MOVE = "UPDATE Link SET categoryId=? WHERE categoryId=?";
+	public static String SQL_BASE_MOVE = "UPDATE Link SET categoryId=CATEGORY_ID_PLACEHOLDER WHERE categoryId=CATEGORY_ID_PLACEHOLDER";
 
 	
 	public static String constructSqlString(Link link){
@@ -33,19 +34,20 @@ public class LinkUpdateDBHandler {
 
 		sql += SQL_UPDATE_DATE + SQL_UPDATE_WHERE_CLAUSE;
 
-		sql = sql.replaceFirst("\\?", "'" + link.getTitle() + "'");
-		sql = sql.replaceFirst("\\?", "'" + link.getURL() + "'");
-		sql = sql.replaceFirst("\\?", "'" + link.getDescription() + "'");
+
+		sql = sql.replaceFirst(Pattern.quote("TITLE_PLACEHOLDER"), "'" + link.getTitle() + "'");
+		sql = sql.replaceFirst(Pattern.quote("URL_PLACEHOLDER"), "'" + link.getURL() + "'");
+		sql = sql.replaceFirst(Pattern.quote("DESCRIPTION_PLACEHOLDER"), "'" + link.getDescription() + "'");
 
 		if (link.getCategory() != null){
-			sql = sql.replaceFirst("\\?", new Integer(link.getCategory().getId()).toString() );
+			sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), new Integer(link.getCategory().getId()).toString() );
 		}
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
-		sql = sql.replaceFirst("\\?", "'" + tsLastUpdated + "'");
+		sql = sql.replaceFirst(Pattern.quote("DATE_PLACEHOLDER"), "'" + tsLastUpdated + "'");
 
-		sql = sql.replaceFirst("\\?", new Integer(link.getId()).toString() );
+		sql = sql.replaceFirst(Pattern.quote("ID_PLACEHOLDER"), new Integer(link.getId()).toString() );
 
 		return sql;
 	}
@@ -67,8 +69,8 @@ public class LinkUpdateDBHandler {
 
 		String sql = SQL_BASE_MOVE;
 
-		sql = sql.replaceFirst("\\?", new Integer(target.getId()).toString() );
-		sql = sql.replaceFirst("\\?", new Integer(source.getId()).toString() );
+		sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), new Integer(target.getId()).toString() );
+		sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), new Integer(source.getId()).toString() );
 
 
 		return sql;

@@ -30,6 +30,18 @@ public class LinkCreationDBHandlerTest extends TestCase {
     }
 
     @Test
+    public void testConstructSqlStringWithLinkThatContainsQuestionMark(){
+        Link link = createLinkWithoutCategory();
+        link.setURL("https://www.youtube.com/watch?v=HZyRQ8Uhhmk");
+        link.setTitle("Some youtube link");
+        link.setDescription("Some youtube link");
+        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Some youtube link', 'https://www.youtube.com/watch?v=HZyRQ8Uhhmk', 'Some youtube link', DEFAULT, DEFAULT,";
+        expected += " '" + link.getLastUpdated() + "')";
+        String actual = LinkCreationDBHandler.constructSqlString(link);
+        assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
+    }
+
+    @Test
     public void testConstructSqlStringWithCategory(){
         Link link = createLinkWithoutCategory();
         link.setCategory(createSportsCategory());
@@ -56,6 +68,8 @@ public class LinkCreationDBHandlerTest extends TestCase {
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
         expected += " '" + link.getLastUpdated() + "')";
         String actual = LinkCreationDBHandler.constructSqlString(link);
+        System.out.println("expected: " + expected);
+        System.out.println("actual:   " + actual);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
     }
 

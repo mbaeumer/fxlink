@@ -6,12 +6,13 @@ import se.mbaeumer.fxlink.util.ValueConstants;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class LinkCreationDBHandler {
-	public static final String BASE_INSERT = "INSERT INTO Link VALUES(DEFAULT, ?, ?, ?, ";
+	public static final String BASE_INSERT = "INSERT INTO Link VALUES(DEFAULT, TITLE_PLACEHOLDER, URL_PLACEHOLDER, DESCRIPTION_PLACEHOLDER, ";
 	public static final String DEFAULT_CATEGORY = "DEFAULT, ";
-	public static final String CATEGORY_SET = "?, ";
-	public static final String QUERY_PART_DATE = "DEFAULT, ?)";
+	public static final String CATEGORY_SET = "CATEGORY_PLACEHOLDER, ";
+	public static final String QUERY_PART_DATE = "DEFAULT, DATE_PLACEHOLDER)";
 
 	public static String constructSqlString(Link link){
 		String sql = BASE_INSERT;
@@ -20,13 +21,13 @@ public class LinkCreationDBHandler {
 			return null;
 		}
 
-		sql = sql.replaceFirst("\\?", "'" + link.getTitle() + "'");
-		sql = sql.replaceFirst("\\?", "'" + link.getURL() + "'");
-		sql = sql.replaceFirst("\\?", "'" + link.getDescription() + "'");
+		sql = sql.replaceFirst(Pattern.quote("TITLE_PLACEHOLDER"), "'" + link.getTitle() + "'");
+		sql = sql.replaceFirst(Pattern.quote("URL_PLACEHOLDER"), "'" + link.getURL() + "'");
+		sql = sql.replaceFirst(Pattern.quote("DESCRIPTION_PLACEHOLDER"), "'" + link.getDescription() + "'");
 
 		if (LinkCreationDBHandler.isCategorySet(link)){
 			sql += CATEGORY_SET;
-			sql = sql.replaceFirst("\\?", new Integer(link.getCategory().getId()).toString() );
+			sql = sql.replaceFirst(Pattern.quote("CATEGORY_PLACEHOLDER"), new Integer(link.getCategory().getId()).toString() );
 		}else{
 			sql += DEFAULT_CATEGORY;
 		}
@@ -35,7 +36,7 @@ public class LinkCreationDBHandler {
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
-		sql = sql.replaceFirst("\\?", "'" + tsLastUpdated + "'");
+		sql = sql.replaceFirst(Pattern.quote("DATE_PLACEHOLDER"), "'" + tsLastUpdated + "'");
 
 		return sql;
 	}
