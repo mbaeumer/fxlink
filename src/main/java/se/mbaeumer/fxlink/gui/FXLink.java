@@ -33,6 +33,7 @@ import se.mbaeumer.fxlink.models.ImportResultReport;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.Tag;
 import se.mbaeumer.fxlink.util.BrowserLauncher;
+import se.mbaeumer.fxlink.util.DatabaseSystemCheckUtil;
 import se.mbaeumer.fxlink.util.URLValidator;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
@@ -98,11 +99,16 @@ public class FXLink extends Application{
 	private Category selectedCategory = null;
 	
 	public void start(Stage stage) {
-		this.scene = new Scene(this.root, 1100, 700, Color.WHITESMOKE);
-		stage.setTitle("FX Link");
-		stage.setScene(this.scene);
-		stage.show();
-		this.initLayout();
+		if (DatabaseSystemCheckUtil.databaseFolderExists()) {
+			this.scene = new Scene(this.root, 1100, 700, Color.WHITESMOKE);
+			stage.setTitle("FX Link");
+			stage.setScene(this.scene);
+			stage.show();
+			this.initLayout();
+		}else{
+			Alert alert = new Alert(Alert.AlertType.ERROR, "The database files do not exist!", ButtonType.OK);
+			alert.showAndWait();
+		}
 	}
 
 	public static void main(String[] args) {
