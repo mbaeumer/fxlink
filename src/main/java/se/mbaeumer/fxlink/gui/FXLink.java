@@ -32,10 +32,7 @@ import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.ImportResultReport;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.Tag;
-import se.mbaeumer.fxlink.util.BrowserLauncher;
-import se.mbaeumer.fxlink.util.DatabaseSystemCheckUtil;
-import se.mbaeumer.fxlink.util.URLValidator;
-import se.mbaeumer.fxlink.util.ValueConstants;
+import se.mbaeumer.fxlink.util.*;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
@@ -99,7 +96,9 @@ public class FXLink extends Application{
 	private Category selectedCategory = null;
 	
 	public void start(Stage stage) {
-		if (DatabaseSystemCheckUtil.databaseFolderExists()) {
+		DatabaseCheckUtil dbCheckUtil = new DatabaseCheckUtilImpl();
+		if (dbCheckUtil.checkDatabaseFolder() == DatabaseCheckResult.OK
+				&& dbCheckUtil.checkDatabaseFiles() == DatabaseCheckResult.OK){
 			this.scene = new Scene(this.root, 1100, 700, Color.WHITESMOKE);
 			stage.setTitle("FX Link");
 			stage.setScene(this.scene);
