@@ -750,10 +750,10 @@ public class FXLink extends Application{
 		createdCol.setCellValueFactory(
 				   new Callback<TableColumn.CellDataFeatures<Link, String>, ObservableValue<String>>() {
 					      @Override
-					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Link, String> film) {
+					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Link, String> link) {
 					         SimpleStringProperty property = new SimpleStringProperty();
 					         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-					         property.setValue(dateFormat.format(film.getValue().getCreated()));
+					         property.setValue(dateFormat.format(link.getValue().getCreated()));
 					         return property;
 					      }
 					   });
@@ -763,10 +763,10 @@ public class FXLink extends Application{
 		lastUpdatedCol.setCellValueFactory(
 				   new Callback<TableColumn.CellDataFeatures<Link, String>, ObservableValue<String>>() {
 					      @Override
-					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Link, String> film) {
+					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Link, String> link) {
 					         SimpleStringProperty property = new SimpleStringProperty();
 					         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					         property.setValue(dateFormat.format(film.getValue().getLastUpdated()));
+					         property.setValue(dateFormat.format(link.getValue().getLastUpdated()));
 					         return property;
 					      }
 					   });
@@ -869,10 +869,10 @@ public class FXLink extends Application{
 		createdCol.setCellValueFactory(
 				   new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
 					      @Override
-					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Category, String> film) {
+					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Category, String> category) {
 					         SimpleStringProperty property = new SimpleStringProperty();
 					         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-					         property.setValue(dateFormat.format(film.getValue().getCreated()));
+					         property.setValue(dateFormat.format(category.getValue().getCreated()));
 					         return property;
 					      }
 					   });
@@ -882,10 +882,10 @@ public class FXLink extends Application{
 		lastUpdatedCol.setCellValueFactory(
 				   new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
 					      @Override
-					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Category, String> film) {
+					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Category, String> category) {
 					         SimpleStringProperty property = new SimpleStringProperty();
 					         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					         property.setValue(dateFormat.format(film.getValue().getLastUpdated()));
+					         property.setValue(dateFormat.format(category.getValue().getLastUpdated()));
 					         return property;
 					      }
 					   });
@@ -987,10 +987,10 @@ public class FXLink extends Application{
 		createdCol.setCellValueFactory(
 				   new Callback<TableColumn.CellDataFeatures<Tag, String>, ObservableValue<String>>() {
 					      @Override
-					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Tag, String> film) {
+					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Tag, String> tag) {
 					         SimpleStringProperty property = new SimpleStringProperty();
 					         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-					         property.setValue(dateFormat.format(film.getValue().getCreated()));
+					         property.setValue(dateFormat.format(tag.getValue().getCreated()));
 					         return property;
 					      }
 					   });
@@ -1000,10 +1000,10 @@ public class FXLink extends Application{
 		lastUpdatedCol.setCellValueFactory(
 				   new Callback<TableColumn.CellDataFeatures<Tag, String>, ObservableValue<String>>() {
 					      @Override
-					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Tag, String> film) {
+					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Tag, String> tag) {
 					         SimpleStringProperty property = new SimpleStringProperty();
 					         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					         property.setValue(dateFormat.format(film.getValue().getLastUpdated()));
+					         property.setValue(dateFormat.format(tag.getValue().getLastUpdated()));
 					         return property;
 					      }
 					   });
