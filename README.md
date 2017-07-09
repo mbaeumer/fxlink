@@ -1,6 +1,6 @@
 
 # Project description
-FXLink is a little tool for handling URLs. Users can categorize and tag URLs based on topics of interest and enrich the data with further descriptions. \n
+FXLink is a little tool for handling URLs. Users can categorize and tag URLs based on topics of interest and enrich the data with further descriptions. </br>
 Apart from that, FXLink provides import of data as text files, a search filter and backup of data in XML. 
 
 ![](/docs/fxlink8.png) 
