@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
@@ -25,6 +26,7 @@ import java.sql.SQLException;
  * Created by martinbaumer on 23/03/16.
  */
 public class MoveCategoryStage extends Stage{
+    private Group root = new Group();
     private Scene scene;
     private FlowPane flowGeneral;
     private GridPane gridData;
@@ -40,12 +42,12 @@ public class MoveCategoryStage extends Stage{
         super();
         this.sourceCategory = sourceCategory;
         this.initLayout();
+        this.makeModal();
     }
 
     private void initLayout(){
-        this.initRootPane();
         this.initScene();
-        this.bindSizes();
+        this.initRootPane();
         this.initGridPane();
         this.initSourceLabel();
         this.initSourceCategories();
@@ -54,29 +56,28 @@ public class MoveCategoryStage extends Stage{
         this.initMoveButton();
     }
 
+    private void initScene(){
+        int width = 350;
+        int height = 150;
+        this.scene = new Scene(this.root, width, height, Color.WHITESMOKE);
+        this.setTitle("Move category");
+        this.setScene(this.scene);
+    }
+
     private void initRootPane(){
         this.flowGeneral = new FlowPane();
         this.flowGeneral.setOrientation(Orientation.HORIZONTAL);
         this.flowGeneral.setHgap(10);
         this.flowGeneral.setVgap(10);
         this.flowGeneral.setPadding(new Insets(5, 10, 5, 10));
+        this.root.getChildren().add(this.flowGeneral);
     }
 
-    private void initScene(){
-        int width = 350;
-        int height = 150;
-        this.scene = new Scene(this.flowGeneral, width, height);
-        this.scene.setFill(Color.WHITESMOKE);
-        this.setTitle("Move category");
-        this.makeModal();
-    }
-    
 	private void makeModal(){
 		this.initModality(Modality.APPLICATION_MODAL);
 		this.initStyle(StageStyle.UTILITY);
 		this.setResizable(false);
 	}
-
 
     private void bindSizes(){
         this.flowGeneral.prefHeightProperty().bind(this.scene.heightProperty());
@@ -85,13 +86,14 @@ public class MoveCategoryStage extends Stage{
 
     private void initGridPane(){
         this.gridData = new GridPane();
-        gridData.setHgap(5);
-        gridData.setVgap(5);
+        gridData.setHgap(10);
+        gridData.setVgap(10);
         this.flowGeneral.getChildren().add(this.gridData);
     }
 
     private void initSourceLabel(){
         this.lblSource = new Label("Move from category");
+        //this.flowGeneral.getChildren().add(this.lblSource);
         this.gridData.add(this.lblSource, 0, 0);
     }
 
@@ -140,6 +142,7 @@ public class MoveCategoryStage extends Stage{
             index++;
         }
         this.cmbSourceCategories.getSelectionModel().select(index);
+        //this.flowGeneral.getChildren().add(this.cmbSourceCategories);
         this.gridData.add(this.cmbSourceCategories, 1, 0);
     }
 
