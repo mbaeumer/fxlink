@@ -49,7 +49,7 @@ public class LinkViewDetailStage extends Stage {
 	private Label lblURL = new Label("URL");	
 	private TextField txtURL;
 	private Label lblDescription = new Label("Description");
-	private TextField txtDescription;
+	private TextArea taDescription;
 	private Label lblCategories = new Label("Categories");
 	private ComboBox<Category> cmbCategories;
 	private Label lblCreated = new Label("Created");
@@ -75,6 +75,7 @@ public class LinkViewDetailStage extends Stage {
 		
 		this.initLayout();
 		this.initTagging();
+		this.bindSizes();
 		this.initCommandGrid();
 		
 		this.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -88,12 +89,11 @@ public class LinkViewDetailStage extends Stage {
 	}
 	
 	private void initScene(){
-		int width = 250;
-		int height = 670;
+		int width = 600;
+		int height = 700;
 		this.scene = new Scene(this.root, width, height, Color.WHITESMOKE);
 		this.setTitle("Link details");
 		this.setScene(this.scene);
-		
 		this.makeModal();
 	}
 	
@@ -103,10 +103,8 @@ public class LinkViewDetailStage extends Stage {
 		this.setResizable(false);
 	}
 
-	
 	private void initLayout(){
 		this.initPanes();
-		// init the labels and text fields
 		this.initFormContent();
 	}
 	
@@ -119,7 +117,7 @@ public class LinkViewDetailStage extends Stage {
 		this.flowGeneral = new FlowPane(Orientation.HORIZONTAL);
 		this.flowGeneral.setHgap(10);
 		this.flowGeneral.setVgap(10);
-		this.flowGeneral.setPadding(new Insets(0, 5, 0, 5));		
+		this.flowGeneral.setPadding(new Insets(5, 5, 0, 5));
 		this.root.getChildren().add(this.flowGeneral);
 	}
 	
@@ -127,8 +125,6 @@ public class LinkViewDetailStage extends Stage {
 		this.gridData = new GridPane();
 		gridData.setHgap(10);
 	    gridData.setVgap(10);
-	    //gridData.setPadding(new Insets(0, 10, 0, 10));
-	    //this.gridData.prefWidthProperty().bind(this.scene.widthProperty());
 	    this.flowGeneral.getChildren().add(this.gridData);
 	}
 	
@@ -139,6 +135,12 @@ public class LinkViewDetailStage extends Stage {
 		this.initCategory();
 		this.initCreationDate();
 		this.initLastUpdated();
+	}
+
+	private void bindSizes(){
+		this.flowGeneral.prefWidthProperty().bind(this.scene.widthProperty());
+		this.gridData.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+		this.listAllSelectableTags.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 	}
 	
 	private void initURL(){
@@ -154,9 +156,10 @@ public class LinkViewDetailStage extends Stage {
 	}
 	
 	private void initDescription(){
-		this.gridData.add(this.lblDescription, 0, 2);		
-		this.txtDescription = new TextField(this.link.getDescription());
-		this.gridData.add(this.txtDescription, 1, 2);
+		this.gridData.add(this.lblDescription, 0, 2);
+		this.taDescription = new TextArea(this.link.getDescription());
+		this.taDescription.setPrefRowCount(3);
+		this.gridData.add(this.taDescription, 1, 2);
 	}
 	
 	private void initCategory(){
@@ -234,8 +237,6 @@ public class LinkViewDetailStage extends Stage {
 	}
 	
 	private void initTagging(){
-		//this.initTaggingPane();
-		//this.initTaggingCaption();
 		this.populateDataLists();
 		this.initTaggingListView();
 	}
@@ -316,7 +317,8 @@ public class LinkViewDetailStage extends Stage {
 				return arg0.getName();
 			}}));
 
-		this.listAllSelectableTags.setItems(this.observableSelectableTags);		
+		this.listAllSelectableTags.setItems(this.observableSelectableTags);
+
 		this.flowGeneral.getChildren().add(this.listAllSelectableTags);
 	}
 	
@@ -377,13 +379,14 @@ public class LinkViewDetailStage extends Stage {
 			isValidationError = true;
 			return false;
 		}
-		Link updatedLink = new Link(this.txtTitle.getText(), this.txtURL.getText(), this.txtDescription.getText());
+
+		Link updatedLink = new Link(this.txtTitle.getText(), this.txtURL.getText(), this.taDescription.getText());
 		updatedLink.setCreated(this.link.getCreated());		
 		updatedLink.setId(this.link.getId());
 		
 		if (this.cmbCategories.getSelectionModel().getSelectedIndex() == 0){
 			updatedLink.setCategory(null);			
-		}else{ // if (this.cmbCategories.getSelectionModel().getSelectedIndex() > 1){
+		}else{
 			updatedLink.setCategory(this.cmbCategories.getValue());
 		}
 		LinkHandler.updateLink(updatedLink);
