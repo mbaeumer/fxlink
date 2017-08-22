@@ -544,25 +544,53 @@ public class FXLink extends Application{
 	
 	private void createSearchTermTextField(){
 		this.tfSearchTerm = new TextField();
+		this.tfSearchTerm.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (newValue.length() > 0){
+					runSearch();
+				}else{
+					refreshLinkTable();
+					updateStatusBar(false);
+				}
+			}
+		});
 		this.flowSearch.getChildren().add(this.tfSearchTerm);
+
 	}
 	
 	private void createURLSearchCheckBox(){
 		this.chkSearchURL = new CheckBox("URL");
 		this.chkSearchURL.setSelected(true);
-		// TODO: add event handler
+		this.chkSearchURL.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				runSearch();
+			}
+		});
+
 		this.flowSearch.getChildren().add(this.chkSearchURL);
 	}
 	
 	private void createTitleSearchCheckBox(){
 		this.chkSearchTitle= new CheckBox("title");
-		// TODO: add event handler
+		this.chkSearchTitle.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				runSearch();
+			}
+		});
 		this.flowSearch.getChildren().add(this.chkSearchTitle);
 	}
 
 	private void createDescriptionSearchCheckBox(){
 		this.chkSearchDescription = new CheckBox("description");
-		// TODO: add event handler
+		this.chkSearchDescription.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				runSearch();
+			}
+		});
 		this.flowSearch.getChildren().add(this.chkSearchDescription);
 	}
 	
@@ -572,19 +600,7 @@ public class FXLink extends Application{
 		this.btnSearch.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (isSearchTermGiven() && isCriteriaSelected()){
-					try {
-						List<Link> links = SearchHandler.findLinks(tfSearchTerm.getText(), chkSearchURL.isSelected(),
-								chkSearchTitle.isSelected(), chkSearchDescription.isSelected());
-						refreshSearchResult(links);
-					} catch (SQLException e) {
-						Alert alert = new Alert(Alert.AlertType.ERROR, "Database error occurred", ButtonType.OK);
-						alert.showAndWait();
-					}
-				}else{
-					Alert alert = new Alert(Alert.AlertType.ERROR, "Please write a search term and select at least one criteria", ButtonType.OK);
-					alert.showAndWait();
-				}
+				runSearch();
 			}
 		});
 		this.flowSearch.getChildren().add(this.btnSearch);
@@ -614,6 +630,21 @@ public class FXLink extends Application{
 		return this.flowGeneral.getChildren().contains(this.flowSearch);
 	}
 
+	private void runSearch(){
+		if (isSearchTermGiven() && isCriteriaSelected()){
+			try {
+				List<Link> links = SearchHandler.findLinks(tfSearchTerm.getText(), chkSearchURL.isSelected(),
+						chkSearchTitle.isSelected(), chkSearchDescription.isSelected());
+				refreshSearchResult(links);
+			} catch (SQLException e) {
+				Alert alert = new Alert(Alert.AlertType.ERROR, "Database error occurred", ButtonType.OK);
+				alert.showAndWait();
+			}
+		}else{
+			Alert alert = new Alert(Alert.AlertType.ERROR, "Please write a search term and select at least one criteria", ButtonType.OK);
+			alert.showAndWait();
+		}
+	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createLinkTableView(){
 		// create the table view itself
