@@ -24,10 +24,10 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
 
 ## 0.7.1 - 2017-06-11
 
-* Minor changes regarding layout, update of combo boxes and column orderin TableView
+* Minor changes regarding layout, update of combo boxes and column order
 
 ## 0.7.0 - 2017-05-30 
 
 * First build published here on github
-* Provides the features that I originally considered as core, such as handling of urls, categiries and tags, simple search, text import, xml backup
+* Provides the features that I originally considered as core, such as handling of urls, categories and tags, simple search, text import, xml backup
 
