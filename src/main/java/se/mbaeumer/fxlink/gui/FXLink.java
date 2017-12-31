@@ -20,7 +20,6 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -155,7 +154,7 @@ public class FXLink extends Application{
 		this.createReadBackupButton();
 		this.createShowSearchPaneButton();
 		this.createDeleLinksButton();
-		this.createMoveToCateoryComboBox();
+		this.createMoveToCategoryComboBox();
 		this.createMoveToCategoryButton();
 	}
 	
@@ -190,7 +189,7 @@ public class FXLink extends Application{
 	private void createCategoryComboBox(){
 		this.cmbCategories = new ComboBox<Category>();
 
-		loadCategories();
+		loadCategoriesForFilter();
 		
 		this.cmbCategories.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
  
@@ -234,15 +233,14 @@ public class FXLink extends Application{
 					@SuppressWarnings("rawtypes")
 					@Override
 					public void changed(ObservableValue ov, Category c1, Category c2){
-						Category category = cmbCategories.getValue();
-                        filterCategories(category);             
+                        filterCategories();
 					}
 				});
 		 
 		this.flowFilter.getChildren().add(this.cmbCategories);
 	}
 
-	private void loadCategories() {
+	private void loadCategoriesForFilter() {
 		ObservableList<Category> categoryList =
 	            FXCollections.observableArrayList(CategoryHandler.getCategories());
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_ALL));
@@ -250,6 +248,15 @@ public class FXLink extends Application{
 
 		this.cmbCategories.setItems(categoryList);
 		this.cmbCategories.getSelectionModel().selectFirst(); //select the first element
+	}
+
+	private void loadCategoriesForMove() {
+		ObservableList<Category> categoryList =
+				FXCollections.observableArrayList(CategoryHandler.getCategories());
+		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
+
+		this.cmbMoveToCategory.setItems(categoryList);
+		this.cmbMoveToCategory.getSelectionModel().selectFirst(); //select the first element
 	}
 
 	private void createResetButton(){
@@ -369,6 +376,8 @@ public class FXLink extends Application{
 						xmlImportHandler.importData();
 						cmbItems.setValue("Links");
 						refreshLinkTable();
+						loadCategoriesForFilter();
+						loadCategoriesForMove();
 					} catch (FileNotFoundException | XMLStreamException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
@@ -431,7 +440,7 @@ public class FXLink extends Application{
 		this.flowFilter.getChildren().add(this.btnDeleteLinks);
 	}
 
-	private void createMoveToCateoryComboBox(){
+	private void createMoveToCategoryComboBox(){
 		this.cmbMoveToCategory = new ComboBox<Category>();
 
 		// get the categories
@@ -492,6 +501,7 @@ public class FXLink extends Application{
 					link.setCategory(category);
 					try {
 						LinkHandler.updateLink(link);
+						filterCategories();
 					}catch(SQLException | ParseException pe){
 						Alert alert = new Alert(Alert.AlertType.ERROR, "The link could not be updated", ButtonType.OK);
 						alert.showAndWait();
@@ -647,7 +657,6 @@ public class FXLink extends Application{
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createLinkTableView(){
-		// create the table view itself
 		this.tblLinks = new TableView();
 	
 		this.tblLinks.prefWidthProperty().bind(this.scene.widthProperty());
@@ -657,7 +666,7 @@ public class FXLink extends Application{
 				setLinkTableLayout();
 			}
 		});
-		// bind the tasks to the table view
+
 		this.tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
 		this.tblLinks.getItems().add(LinkHandler.createPseudoLink());
 		// create the columns
@@ -667,15 +676,12 @@ public class FXLink extends Application{
 		
 		tblLinks.addEventHandler(MouseEvent.MOUSE_CLICKED, 
 				new EventHandler<MouseEvent>() {
-
 					@Override
 					public void handle(MouseEvent me) {
 						if (contLinks != null){
 							contLinks.hide();
 						}
-						
 						if (me.getButton() == MouseButton.SECONDARY){
-							
 							selectedLink = tblLinks.getSelectionModel().getSelectedItem();
 							if (selectedLink != null){
 								createLinkContextMenu();
@@ -685,7 +691,6 @@ public class FXLink extends Application{
 					}
 				});
 
-		
 		this.flowGeneral.getChildren().add(this.tblLinks);
 	}
 	
@@ -829,25 +834,22 @@ public class FXLink extends Application{
 				setCategoryTableLayout();
 			}
 		});
-		// bind the tasks to the table view
+
 		this.tblCategories.setItems(FXCollections.observableList(CategoryHandler.getCategories()));
 		this.tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
-		// create the columns
+
 		this.createCategoryTableColumns();
 		this.tblCategories.setEditable(true);
 		this.setCategoryTableLayout();
 		
 		tblCategories.addEventHandler(MouseEvent.MOUSE_CLICKED, 
 				new EventHandler<MouseEvent>() {
-
 					@Override
 					public void handle(MouseEvent me) {
 						if (contCategories != null){
 							contCategories.hide();
 						}
-						
 						if (me.getButton() == MouseButton.SECONDARY){
-							
 							selectedCategory = tblCategories.getSelectionModel().getSelectedItem();
 							if (selectedCategory != null){
 								createCategoryContextMenu();
@@ -946,25 +948,22 @@ public class FXLink extends Application{
 				setTagTableLayout();
 			}
 		});
-		// bind the tasks to the table view
+
 		this.tblTags.setItems(FXCollections.observableList(TagHandler.getTags()));
 		this.tblTags.getItems().add(TagHandler.createPseudoTag());
-		// create the columns
+
 		this.createTagTableColumns();
 		this.tblTags.setEditable(true);
 		this.setTagTableLayout();
 		
 		tblTags.addEventHandler(MouseEvent.MOUSE_CLICKED, 
 				new EventHandler<MouseEvent>() {
-
 					@Override
 					public void handle(MouseEvent me) {
 						if (contTags != null){
 							contTags.hide();
 						}
-						
 						if (me.getButton() == MouseButton.SECONDARY){
-							
 							selectedTag = tblTags.getSelectionModel().getSelectedItem();
 							if (selectedTag != null){
 								createTagContextMenu();
@@ -973,7 +972,6 @@ public class FXLink extends Application{
 						}
 					}
 				});
-
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -1212,7 +1210,6 @@ public class FXLink extends Application{
 
 	private void createAnchorPane(){
 		this.anchorPane = new AnchorPane();
-		//this.anchorPane.setBackground(Background.);
 		this.flowGeneral.getChildren().add(this.anchorPane);
 	}
 
@@ -1323,7 +1320,8 @@ public class FXLink extends Application{
 			tblCategories.setItems(FXCollections.observableList(CategoryHandler.getCategories()));
 	    	tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
 			this.updateStatusBar(false);
-			this.loadCategories();
+			this.loadCategoriesForFilter();
+			this.loadCategoriesForMove();
 		}
 	}
 	
@@ -1334,8 +1332,7 @@ public class FXLink extends Application{
 			if (tag != null){
 				id = tag.getId(); 
 			}
-					
-			
+
 			if (id == -1){
 				try {
 					TagHandler.createTag(tag);
@@ -1354,8 +1351,7 @@ public class FXLink extends Application{
 				}
 			}
 		}
-		
-		
+
 		if (isCorrect){
 			tblTags.setItems(FXCollections.observableList(TagHandler.getTags()));
 	    	tblTags.getItems().add(TagHandler.createPseudoTag());
@@ -1363,9 +1359,9 @@ public class FXLink extends Application{
 		}
 	}
 	
-	private void filterCategories(Category category){
+	private void filterCategories(){
 		if (!cmbCategories.isDisabled()) {
-			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(category)));
+			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.updateStatusBar(false);
 		}
@@ -1396,6 +1392,7 @@ public class FXLink extends Application{
 			this.btnShowSearchPane.setDisable(false);
 			this.btnDeleteLinks.setDisable(false);
 			this.cmbMoveToCategory.setDisable(false);
+			this.btnMoveToCategory.setDisable(false);
 			this.cmbCategories.setDisable(false);
 		}else if (item.equals("Categories")){
 			this.removeSearchPane();
