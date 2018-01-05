@@ -721,23 +721,7 @@ public class FXLink extends Application{
 		    }
 		);
 		
-		// create title column
-		TableColumn titleCol = new TableColumn("Title");
-		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
-		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		titleCol.setOnEditCommit(
-		    new EventHandler<CellEditEvent<Link, String>>() {
-		        public void handle(CellEditEvent<Link, String> t) {
-		        	Link link = t.getRowValue();
-					link.setTitle(t.getNewValue());
-					if (isLinkInformationCorrect(link.getURL())){
-		        		if (insertOrUpdateLink(link)){
-				            refreshLinkTable();
-		        		}
-		        	}
-		        }
-		    }
-		);
+
 
 		// create description column
 		TableColumn descriptionCol = new TableColumn("Description");
@@ -779,6 +763,23 @@ public class FXLink extends Application{
 			}
 		});
 
+		// create title column
+		TableColumn titleCol = new TableColumn("Title");
+		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
+		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		titleCol.setOnEditCommit(
+				new EventHandler<CellEditEvent<Link, String>>() {
+					public void handle(CellEditEvent<Link, String> t) {
+						Link link = t.getRowValue();
+						link.setTitle(t.getNewValue());
+						if (isLinkInformationCorrect(link.getURL())){
+							if (insertOrUpdateLink(link)){
+								refreshLinkTable();
+							}
+						}
+					}
+				}
+		);
 
 		// create the created column
 		TableColumn createdCol = new TableColumn("Created");
@@ -810,7 +811,7 @@ public class FXLink extends Application{
 		
 
 		// add all columns to the table view
-		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, categoryCol, createdCol, lastUpdatedCol);
+		this.tblLinks.getColumns().addAll(selectedCol, urlCol, descriptionCol, categoryCol, titleCol, createdCol, lastUpdatedCol);
 	}
 	
 	@SuppressWarnings("rawtypes")
