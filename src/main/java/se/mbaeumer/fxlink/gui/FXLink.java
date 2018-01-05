@@ -81,16 +81,12 @@ public class FXLink extends Application{
 	
 	private ContextMenu contLinks;
 	private Link selectedLink = null;
-	
 	private ContextMenu contTags;
-
 	private AnchorPane anchorPane;
 	private FlowPane flowStatus;
 	private Label lblStatusItemCountText;
 	private Label lblStatusItemCount;
-
 	private Tag selectedTag = null;
-	
 	private ContextMenu contCategories;
 	private Category selectedCategory = null;
 	
@@ -114,17 +110,13 @@ public class FXLink extends Application{
 	}
 	
 	public void initLayout() {
-		// create the general flow pane
 		this.createGeneralFlowPane();
-		//this.createMenu();
 		this.createFilterFlowPane();
 		
-		// create the table views
 		this.createLinkTableView();
 		this.createCategoryTableView();
 		this.createTagTableView();
 
-		/**TODO: add the stuff for the status bar **/
 		this.createAnchorPane();
 		this.createStatusPane();
 		this.createStatusLabels();
@@ -188,28 +180,21 @@ public class FXLink extends Application{
 	
 	private void createCategoryComboBox(){
 		this.cmbCategories = new ComboBox<Category>();
-
 		loadCategoriesForFilter();
-		
 		this.cmbCategories.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
- 
             @Override
             public ListCell<Category> call(ListView<Category> p) {
-                 
                 final ListCell<Category> cell = new ListCell<Category>(){
- 
                     @Override
                     protected void updateItem(Category t, boolean bln) {
                         super.updateItem(t, bln);
-                         
-                        if(t != null){                        	 
+                        if(t != null){
                             setText(t.getName());                                      
                         }else{
                             setText(null);                            
                         }
                     }  
                 };
-                 
                 return cell;
             }
         });
@@ -262,14 +247,11 @@ public class FXLink extends Application{
 	private void createResetButton(){
 		btnResetFilter = new Button("Reset");
 		this.btnResetFilter.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
 				cmbCategories.getSelectionModel().selectFirst();
-				ObservableList<Link> links = tblLinks.getItems();
-				String test = null;
+				cmbItems.getSelectionModel().selectFirst();
 			}
-		
 		});
 		this.flowFilter.getChildren().add(this.btnResetFilter);
 	}
@@ -277,7 +259,6 @@ public class FXLink extends Application{
 	private void createImportButton(){
 		btnImportTextFile = new Button("Import text file");
 		this.btnImportTextFile.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
 				FileChooser fc = new FileChooser();
@@ -312,7 +293,6 @@ public class FXLink extends Application{
 	private void createWriteBackupButton(){
 		btnWriteBackup = new Button("Save backup");
 		this.btnWriteBackup.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
 				FileChooser fc = new FileChooser();
@@ -324,7 +304,6 @@ public class FXLink extends Application{
 					arg0.consume();
 					return;
 				}
-				
 
 				try {
 					String path = importFile.getCanonicalPath();
@@ -385,7 +364,6 @@ public class FXLink extends Application{
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-
 				}else{
 					arg0.consume();
 					return;
@@ -449,18 +427,13 @@ public class FXLink extends Application{
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
 
 		this.cmbMoveToCategory.setItems(categoryList);
-
 		this.cmbMoveToCategory.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
-
 			@Override
 			public ListCell<Category> call(ListView<Category> p) {
-
 				final ListCell<Category> cell = new ListCell<Category>(){
-
 					@Override
 					protected void updateItem(Category t, boolean bln) {
 						super.updateItem(t, bln);
-
 						if(t != null){
 							setText(t.getName());
 						}else{
@@ -468,7 +441,6 @@ public class FXLink extends Application{
 						}
 					}
 				};
-
 				return cell;
 			}
 		});
@@ -485,14 +457,12 @@ public class FXLink extends Application{
 			}
 		});
 
-
 		this.cmbMoveToCategory.getSelectionModel().selectFirst();
 		this.flowFilter.getChildren().add(this.cmbMoveToCategory);
 	}
 
 	private void createMoveToCategoryButton(){
 		this.btnMoveToCategory = new Button("Move to category");
-
 		this.btnMoveToCategory.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -507,7 +477,6 @@ public class FXLink extends Application{
 						alert.showAndWait();
 					}
 				}
-
 			}
 		});
 		this.flowFilter.getChildren().add(this.btnMoveToCategory);
@@ -606,7 +575,6 @@ public class FXLink extends Application{
 	
 	private void createSearchButton(){
 		this.btnSearch = new Button("Search");
-		// TODO: add event handler
 		this.btnSearch.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -720,8 +688,6 @@ public class FXLink extends Application{
 		        }
 		    }
 		);
-		
-
 
 		// create description column
 		TableColumn descriptionCol = new TableColumn("Description");
@@ -808,8 +774,6 @@ public class FXLink extends Application{
 					      }
 					   });
 
-		
-
 		// add all columns to the table view
 		this.tblLinks.getColumns().addAll(selectedCol, urlCol, descriptionCol, categoryCol, titleCol, createdCol, lastUpdatedCol);
 	}
@@ -825,9 +789,7 @@ public class FXLink extends Application{
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createCategoryTableView(){
-		// create the table view itself
 		this.tblCategories = new TableView<Category>();
-	
 		this.tblCategories.prefWidthProperty().bind(this.scene.widthProperty());
 		this.tblCategories.prefWidthProperty().addListener(new ChangeListener() {
 			@Override
@@ -1069,7 +1031,6 @@ public class FXLink extends Application{
 		// open URL
 		MenuItem miOpenURL = new MenuItem("Open link");
 		miOpenURL.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
 				try {					
@@ -1079,30 +1040,25 @@ public class FXLink extends Application{
 				}
 			}
 		});
-		
 
 		// delete
 		MenuItem miDelete = new MenuItem("Delete link");
 		miDelete.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
 				try {
 					Alert alert = new Alert(Alert.AlertType.WARNING, "The selected link will be deleted. Continue?", ButtonType.YES, ButtonType.NO);
 					Optional<ButtonType> result = alert.showAndWait();
-
 					if (result.isPresent() && result.get() == ButtonType.YES){
 						LinkHandler.deleteLink(selectedLink);
 						refreshLinkTable();
 					}
-
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
 
-		
 		this.contLinks.getItems().addAll(miEdit, miOpenURL, miDelete);
 	}
 
@@ -1112,7 +1068,6 @@ public class FXLink extends Application{
 		// edit
 		MenuItem miEdit = new MenuItem("Edit link");
 		miEdit.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
 				LinkViewDetailStage linkDetail = new LinkViewDetailStage(selectedLink);
@@ -1124,7 +1079,6 @@ public class FXLink extends Application{
 		// open URL
 		MenuItem miOpenURL = new MenuItem("Open link");
 		miOpenURL.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
 				try {					
@@ -1134,12 +1088,10 @@ public class FXLink extends Application{
 				}
 			}
 		});
-		
 
 		// delete
 		MenuItem miDelete = new MenuItem("Delete tag");
 		miDelete.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
 				try {
@@ -1171,7 +1123,6 @@ public class FXLink extends Application{
 		// move
 		MenuItem miMove = new MenuItem("Move to another category");
 		miMove.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
 				MoveCategoryStage mergeStage = new MoveCategoryStage(selectedCategory);
@@ -1183,7 +1134,6 @@ public class FXLink extends Application{
 		// delete
 		MenuItem miDelete = new MenuItem("Delete category");
 		miDelete.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
 				try {
@@ -1417,26 +1367,20 @@ public class FXLink extends Application{
 	}
 	
 	private boolean isLinkInformationCorrect(String url){
-		System.out.println("Base check for url...");
-		System.out.println(url);
 		if ((url.length() == 0) || (url.equalsIgnoreCase(ValueConstants.VALUE_NEW) || (url.equalsIgnoreCase(ValueConstants.VALUE_N_A)))){
 			Alert alert = new Alert(Alert.AlertType.ERROR, "The URL MUST be unique!", ButtonType.OK);
 			alert.showAndWait();
     		return false;
 		}
-		System.out.println("url is ok...");
 		return true;
 	}
 	
 	private boolean isURLCorrect(String link){
-		System.out.println("Checking url...");
-		System.out.println(link);
 		if (!URLValidator.isValidURL(link)){
 			Alert alert = new Alert(Alert.AlertType.ERROR, "The URL is incorrect!", ButtonType.OK);
 			alert.showAndWait();
     		return false;
 		}
-		System.out.println("Url is correct");
 		return true;
 	}	
 	
