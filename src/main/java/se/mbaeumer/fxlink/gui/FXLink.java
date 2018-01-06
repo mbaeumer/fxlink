@@ -47,6 +47,25 @@ import java.util.List;
 import java.util.Optional;
 
 public class FXLink extends Application{
+
+	public static final String IMPORT_BACKUP = "Import backup";
+	public static final String SAVE_BACKUP = "Save backup";
+	public static final String THE_CURRENT_CONTENT_WILL_BE_OVERWRITTEN_CONTINUE = "The current content will be overwritten. Continue?";
+	public static final String LINKS = "Links";
+	public static final String DELETE = "Delete";
+	public static final String THE_SELECTED_LINKS_WILL_BE_DELETED_CONTINUE = "The selected links will be deleted. Continue?";
+	public static final String MOVE_TO_CATEGORY = "Move to category";
+	public static final String THE_LINK_COULD_NOT_BE_UPDATED = "The link could not be updated";
+	public static final String SEARCH_TERM = "Search term";
+	public static final String URL = "URL";
+	public static final String DATABASE_ERROR_OCCURRED = "Database error occurred";
+	public static final String PLEASE_WRITE_A_SEARCH_TERM_AND_SELECT_AT_LEAST_ONE_CRITERIA = "Please write a search term and select at least one criteria";
+	private static String STAGE_TITLE = "FX Link";
+	private static String DATABASE_DOES_NOT_EXIST = "The database files do not exist!";
+	private static String ITEMS = "Items";
+	private static String CATEGORY = "Category";
+	private static String RESET = "Reset";
+	private static String IMPORT_TEXT_FILE = "Import text file";
 	private Group root = new Group();
 	private Scene scene;
 	private FlowPane flowGeneral;
@@ -69,14 +88,12 @@ public class FXLink extends Application{
 	private CheckBox chkSearchURL;
 	private CheckBox chkSearchTitle;
 	private CheckBox chkSearchDescription;
-	private ComboBox<Category> cmbSearchCategory;
-	
+
 	private TableView<Link> tblLinks;
 	private TableView<Category> tblCategories;
 	private TableView<Tag> tblTags;
 	
 	private Button btnWriteBackup;
-	
 	private Button btnReadBackup;
 	
 	private ContextMenu contLinks;
@@ -89,18 +106,18 @@ public class FXLink extends Application{
 	private Tag selectedTag = null;
 	private ContextMenu contCategories;
 	private Category selectedCategory = null;
-	
+
 	public void start(Stage stage) {
 		DatabaseCheckUtil dbCheckUtil = new DatabaseCheckUtilImpl();
 		if (dbCheckUtil.checkDatabaseFolder() == DatabaseCheckResult.OK
 				&& dbCheckUtil.checkDatabaseFiles() == DatabaseCheckResult.OK){
 			this.scene = new Scene(this.root, 1100, 700, Color.WHITESMOKE);
-			stage.setTitle("FX Link");
+			stage.setTitle(STAGE_TITLE);
 			stage.setScene(this.scene);
 			stage.show();
 			this.initLayout();
 		}else{
-			Alert alert = new Alert(Alert.AlertType.ERROR, "The database files do not exist!", ButtonType.OK);
+			Alert alert = new Alert(Alert.AlertType.ERROR, DATABASE_DOES_NOT_EXIST, ButtonType.OK);
 			alert.showAndWait();
 		}
 	}
@@ -151,7 +168,7 @@ public class FXLink extends Application{
 	}
 	
 	public void createItemLabel(){
-		this.lblItems = new Label("Items");
+		this.lblItems = new Label(ITEMS);
 		this.flowFilter.getChildren().add(this.lblItems);
 	}
 	
@@ -174,7 +191,7 @@ public class FXLink extends Application{
 	}
 	
 	private void createCategoryLabel(){
-		this.lblCategories = new Label("Categories");
+		this.lblCategories = new Label(CATEGORY);
 		this.flowFilter.getChildren().add(this.lblCategories);
 	}
 	
@@ -210,8 +227,7 @@ public class FXLink extends Application{
 		        }
 		    }
 		});
-        	
-		
+
 		this.cmbCategories.getSelectionModel().selectFirst(); //select the first element
 		this.cmbCategories.valueProperty().addListener(
 				new ChangeListener<Category>(){
@@ -232,7 +248,7 @@ public class FXLink extends Application{
 		categoryList.add(1, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
 
 		this.cmbCategories.setItems(categoryList);
-		this.cmbCategories.getSelectionModel().selectFirst(); //select the first element
+		this.cmbCategories.getSelectionModel().selectFirst();
 	}
 
 	private void loadCategoriesForMove() {
@@ -241,11 +257,11 @@ public class FXLink extends Application{
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
 
 		this.cmbMoveToCategory.setItems(categoryList);
-		this.cmbMoveToCategory.getSelectionModel().selectFirst(); //select the first element
+		this.cmbMoveToCategory.getSelectionModel().selectFirst();
 	}
 
 	private void createResetButton(){
-		btnResetFilter = new Button("Reset");
+		btnResetFilter = new Button(RESET);
 		this.btnResetFilter.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -257,7 +273,7 @@ public class FXLink extends Application{
 	}
 
 	private void createImportButton(){
-		btnImportTextFile = new Button("Import text file");
+		btnImportTextFile = new Button(IMPORT_TEXT_FILE);
 		this.btnImportTextFile.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -291,7 +307,7 @@ public class FXLink extends Application{
 	}
 	
 	private void createWriteBackupButton(){
-		btnWriteBackup = new Button("Save backup");
+		btnWriteBackup = new Button(SAVE_BACKUP);
 		this.btnWriteBackup.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -328,7 +344,7 @@ public class FXLink extends Application{
 	}
 	
 	private void createReadBackupButton(){
-		this.btnReadBackup = new Button("Import backup");
+		this.btnReadBackup = new Button(IMPORT_BACKUP);
 		this.btnReadBackup.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -344,7 +360,7 @@ public class FXLink extends Application{
 				
 				// ask the use to confirm that the database content 
 				// will be overwritten now
-				Alert alert = new Alert(Alert.AlertType.WARNING, "The current content will be overwritten. Continue?", ButtonType.YES, ButtonType.NO);
+				Alert alert = new Alert(Alert.AlertType.WARNING, THE_CURRENT_CONTENT_WILL_BE_OVERWRITTEN_CONTINUE, ButtonType.YES, ButtonType.NO);
 				Optional<ButtonType> result = alert.showAndWait();
 
 				XMLImportHandler xmlImportHandler = new XMLImportHandler();
@@ -353,7 +369,7 @@ public class FXLink extends Application{
 						xmlImportHandler.readData(importFile.getCanonicalPath());
 						xmlImportHandler.truncateDatabase();
 						xmlImportHandler.importData();
-						cmbItems.setValue("Links");
+						cmbItems.setValue(LINKS);
 						refreshLinkTable();
 						loadCategoriesForFilter();
 						loadCategoriesForMove();
@@ -392,14 +408,14 @@ public class FXLink extends Application{
 	}
 
 	private void createDeleLinksButton(){
-		this.btnDeleteLinks = new Button("Delete");
+		this.btnDeleteLinks = new Button(DELETE);
 		this.btnDeleteLinks.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				List<Link> selectedLinks = getSelectedLinks();
 
 				if (selectedLinks.size() > 0) {
-					Alert alert = new Alert(Alert.AlertType.WARNING, "The selected links will be deleted. Continue?", ButtonType.YES, ButtonType.NO);
+					Alert alert = new Alert(Alert.AlertType.WARNING, THE_SELECTED_LINKS_WILL_BE_DELETED_CONTINUE, ButtonType.YES, ButtonType.NO);
 					Optional<ButtonType> result = alert.showAndWait();
 					boolean deletedSuccess = true;
 					if (result.isPresent() && result.get() == ButtonType.YES) {
@@ -462,7 +478,7 @@ public class FXLink extends Application{
 	}
 
 	private void createMoveToCategoryButton(){
-		this.btnMoveToCategory = new Button("Move to category");
+		this.btnMoveToCategory = new Button(MOVE_TO_CATEGORY);
 		this.btnMoveToCategory.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -473,7 +489,7 @@ public class FXLink extends Application{
 						LinkHandler.updateLink(link);
 						filterCategories();
 					}catch(SQLException | ParseException pe){
-						Alert alert = new Alert(Alert.AlertType.ERROR, "The link could not be updated", ButtonType.OK);
+						Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
 						alert.showAndWait();
 					}
 				}
@@ -517,7 +533,7 @@ public class FXLink extends Application{
 	}
 	
 	private void createSearchTermLabel(){
-		this.lblSearchTerm = new Label("Search term");
+		this.lblSearchTerm = new Label(SEARCH_TERM);
 		this.flowSearch.getChildren().add(this.lblSearchTerm);
 	}
 	
@@ -539,7 +555,7 @@ public class FXLink extends Application{
 	}
 	
 	private void createURLSearchCheckBox(){
-		this.chkSearchURL = new CheckBox("URL");
+		this.chkSearchURL = new CheckBox(URL);
 		this.chkSearchURL.setSelected(true);
 		this.chkSearchURL.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
@@ -615,11 +631,11 @@ public class FXLink extends Application{
 						chkSearchTitle.isSelected(), chkSearchDescription.isSelected());
 				refreshSearchResult(links);
 			} catch (SQLException e) {
-				Alert alert = new Alert(Alert.AlertType.ERROR, "Database error occurred", ButtonType.OK);
+				Alert alert = new Alert(Alert.AlertType.ERROR, DATABASE_ERROR_OCCURRED, ButtonType.OK);
 				alert.showAndWait();
 			}
 		}else{
-			Alert alert = new Alert(Alert.AlertType.ERROR, "Please write a search term and select at least one criteria", ButtonType.OK);
+			Alert alert = new Alert(Alert.AlertType.ERROR, PLEASE_WRITE_A_SEARCH_TERM_AND_SELECT_AT_LEAST_ONE_CRITERIA, ButtonType.OK);
 			alert.showAndWait();
 		}
 	}
@@ -681,7 +697,6 @@ public class FXLink extends Application{
 								t.getTablePosition().getRow())
 						).setURL(t.getNewValue());
 						if (insertOrUpdateLink(t.getRowValue())){
-							System.out.println("Everything is ok...success!");
 							refreshLinkTable();
 						}
 					}
