@@ -38,7 +38,6 @@ import java.util.List;
 public class ImportResultReportStage extends Stage {
 	private Scene scene;
 	private FlowPane flowGeneral;
-	private FlowPane flowImportInfo;
 	private Label lblImportFileText = new Label("Imported from");
 	private Label lblImportFileName = new Label();
 	private Label lblSuccessfulImportsText = new Label("Successful imports");
@@ -54,6 +53,10 @@ public class ImportResultReportStage extends Stage {
 	private TableView tvFailedLinks;
 	private Button btnClose;
 	private ImportResultReport importReport;
+
+	private FlowPane flowSelection;
+	private Button btnSelectAll;
+	private Button btnDeselectAll;
 	
 	public ImportResultReportStage(ImportResultReport report){
 		super();
@@ -67,7 +70,7 @@ public class ImportResultReportStage extends Stage {
 	}
 	
 	private void initScene(){
-		int width = 600;
+		int width = 650;
 		int height = 800;
 		this.scene = new Scene(this.flowGeneral, width, height);
 		this.scene.setFill(Color.WHITESMOKE);
@@ -94,25 +97,16 @@ public class ImportResultReportStage extends Stage {
 	}
 	
 	public void initLayout(){
-		this.initPanes();
 		this.initImportInfoLabels();
 		this.createMoveToCateoryComboBox();
 		this.createMoveToCategoryButton();
+		this.initSelectionPane();
+		this.initSelectAllButton();
+		this.initDeselectAllButton();
 		this.initTabPane();
 		this.initSuccessLinkTableView();
 		this.initFailedLinksTableView();
 		this.initCloseButton();
-	}
-	
-	public void initPanes(){
-		this.initImportInfoPane();
-	}
-	
-	private void initImportInfoPane(){
-		this.flowImportInfo = new FlowPane(Orientation.VERTICAL);
-		this.flowImportInfo.setHgap(10);
-		this.flowImportInfo.setVgap(5);
-		this.flowImportInfo.setPadding(new Insets(0, 10, 0, 10));
 	}
 	
 	private void initImportInfoLabels(){
@@ -206,6 +200,41 @@ public class ImportResultReportStage extends Stage {
 		return selectedLinks;
 	}
 
+	private void initSelectionPane(){
+		this.flowSelection = new FlowPane(Orientation.HORIZONTAL);
+		this.flowSelection.setHgap(10);
+		this.flowSelection.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+		this.flowGeneral.getChildren().add(this.flowSelection);
+	}
+
+	private void initSelectAllButton(){
+		this.btnSelectAll = new Button("Select all");
+		this.btnSelectAll.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				for (Link link : importReport.getSuccessfulLinks()){
+					link.setSelected(true);
+				}
+			}
+		});
+
+		this.flowSelection.getChildren().add(this.btnSelectAll);
+	}
+
+	private void initDeselectAllButton(){
+		this.btnDeselectAll = new Button("Deselect all");
+		this.btnDeselectAll.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				for (Link link : importReport.getSuccessfulLinks()){
+					link.setSelected(false);
+				}
+			}
+		});
+
+		this.flowSelection.getChildren().add(this.btnDeselectAll);
+	}
+
 	private void initTabPane(){
 		this.createTabPane();
 		this.createTabs();
@@ -220,9 +249,13 @@ public class ImportResultReportStage extends Stage {
 					public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
 						cmbMoveToCategory.setDisable(true);
 						btnMoveToCategory.setDisable(true);
+						btnSelectAll.setDisable(true);
+						btnDeselectAll.setDisable(true);
 						if (tabPane.getSelectionModel().isSelected(0)){
 							cmbMoveToCategory.setDisable(false);
 							btnMoveToCategory.setDisable(false);
+							btnSelectAll.setDisable(false);
+							btnDeselectAll.setDisable(false);
 						}
 					}
 				}
