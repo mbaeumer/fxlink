@@ -12,7 +12,9 @@ import java.util.List;
 
 public class TagHandler {
 	public static List<Tag> getTags(){
-		return TagReadDBHandler.getAllTags(GenericDBHandler.getInstance());
+		TagDBHandler tagDBHandler = new TagDBHandler();
+		String sql = tagDBHandler.constructSqlString(null);
+		return tagDBHandler.getAllTags(sql, new HsqldbConnectionHandler());
 	}
 	
 	public static void createTag(Tag tag) throws SQLException{

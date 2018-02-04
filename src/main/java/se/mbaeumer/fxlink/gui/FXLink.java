@@ -27,6 +27,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.api.*;
+import se.mbaeumer.fxlink.handlers.ManagedItemDBHandler;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.ImportResultReport;
 import se.mbaeumer.fxlink.models.Link;
@@ -182,7 +183,7 @@ public class FXLink extends Application{
 	private void createItemComboBox(){
 		this.cmbItems = new ComboBox<String>();
 		List<String> items = new ArrayList<String>();
-		items = ManagedItemHandler.getManagedItems();		
+		items = ManagedItemHandler.getManagedItems(new ManagedItemDBHandler());
 		this.cmbItems.setItems(FXCollections.observableArrayList(items));
 		this.cmbItems.valueProperty().addListener(
 				new ChangeListener<String>(){

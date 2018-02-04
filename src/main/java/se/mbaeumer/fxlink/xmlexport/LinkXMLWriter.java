@@ -55,7 +55,9 @@ public class LinkXMLWriter {
 		// get all categories
 		this.categories = CategoryReadDBHandler.getAllCategories(GenericDBHandler.getInstance());
 		this.links = LinkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
-		this.tags = TagReadDBHandler.getAllTags(GenericDBHandler.getInstance());
+		TagDBHandler tagDBHandler = new TagDBHandler();
+
+		this.tags = tagDBHandler.getAllTags(tagDBHandler.constructSqlString(null), new HsqldbConnectionHandler());
 		this.linkTags = LinkTagReadDBHandler.getAllLinkTagEntries(GenericDBHandler.getInstance());
 	}
 	
