@@ -17,6 +17,7 @@ public class LinkUpdateDBHandler {
 	public static String SQL_UPDATE_CATEGORY = "categoryId=CATEGORY_ID_PLACEHOLDER,";
 	public static String SQL_UPDATE_DATE = "lastUpdated=DATE_PLACEHOLDER ";
 	public static String SQL_UPDATE_WHERE_CLAUSE = "WHERE id=ID_PLACEHOLDER";
+	public static final String DEFAULT_CATEGORY = "categoryId=null,";
 
 	public static String SQL_BASE_MOVE = "UPDATE Link SET categoryId=CATEGORY_ID_PLACEHOLDER WHERE categoryId=CATEGORY_ID_PLACEHOLDER";
 
@@ -30,6 +31,8 @@ public class LinkUpdateDBHandler {
 
 		if (link.getCategory() != null){
 			sql += SQL_UPDATE_CATEGORY;
+		}else{
+			sql += DEFAULT_CATEGORY;
 		}
 
 		sql += SQL_UPDATE_DATE + SQL_UPDATE_WHERE_CLAUSE;
@@ -72,16 +75,13 @@ public class LinkUpdateDBHandler {
 		sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), new Integer(target.getId()).toString() );
 		sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), new Integer(source.getId()).toString() );
 
-
 		return sql;
-
 	}
 
 	public static void moveLinks(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-
 		stmt.executeUpdate();
 		stmt.close();
 	}

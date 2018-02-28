@@ -96,10 +96,13 @@ public class LinkSearchDBHandler {
 			link.setId(rs.getInt("linkId"));
 			link.setCreated(rs.getTimestamp("linkCreated"));
 			link.setLastUpdated(rs.getTimestamp("linkLastUpdated"));
-			Category category = new Category();
-			category.setId(rs.getInt("categoryId"));
-			category.setName(rs.getString("category"));
-			link.setCategory(category);
+			int categoryId = rs.getInt("categoryId");
+			if (categoryId > 0) {
+				Category category = new Category();
+				category.setId(rs.getInt("categoryId"));
+				category.setName(rs.getString("category"));
+				link.setCategory(category);
+			}
 			links.add(link);
 		}
 		stmt.close();

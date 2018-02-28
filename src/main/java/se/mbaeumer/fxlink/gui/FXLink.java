@@ -1295,9 +1295,14 @@ public class FXLink extends Application{
 	}
 	
 	private void refreshLinkTable(){
-		tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
-    	tblLinks.getItems().add(LinkHandler.createPseudoLink());
-		this.updateStatusBar(false);
+
+		if (!isSearchPaneVisible()) {
+			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
+			tblLinks.getItems().add(LinkHandler.createPseudoLink());
+			this.updateStatusBar(false);
+		}else{
+			runSearch();
+		}
 	}
 
 	private void refreshSearchResult(List<Link> links){
