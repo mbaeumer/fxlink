@@ -82,6 +82,7 @@ public class FXLink extends Application{
 	private Button btnDeleteLinks;
 	private ComboBox<Category> cmbMoveToCategory;
 	private Button btnMoveToCategory;
+	private Button btnGenerateDescription;
 
 	private FlowPane flowSearch;
 	private Button btnSearch;
@@ -285,6 +286,7 @@ public class FXLink extends Application{
 		this.createDeleteLinksButton();
 		this.createMoveToCategoryComboBox();
 		this.createMoveToCategoryButton();
+		this.createGenerateDescriptionButton();
 	}
 
 	private void createImportButton(){
@@ -501,15 +503,36 @@ public class FXLink extends Application{
 					link.setCategory(category);
 					try {
 						LinkHandler.updateLink(link);
-						filterCategories();
 					}catch(SQLException | ParseException pe){
 						Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
 						alert.showAndWait();
 					}
 				}
+				filterCategories();
 			}
 		});
 		this.flowActions.getChildren().add(this.btnMoveToCategory);
+	}
+
+	private void createGenerateDescriptionButton(){
+		this.btnGenerateDescription = new Button("Generate description");
+		this.btnGenerateDescription.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				DescriptionUtil descriptionUtil = new DescriptionUtilImpl();
+				for (Link link : getSelectedLinks()){
+					link.setDescription(descriptionUtil.generateDescription(link));
+					try {
+						LinkHandler.updateLink(link);
+					}catch(SQLException | ParseException pe){
+						Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
+						alert.showAndWait();
+					}
+				}
+				filterCategories();
+			}
+		});
+		this.flowActions.getChildren().add(this.btnGenerateDescription);
 	}
 
 	private void createSelectionFlowPane(){
@@ -1395,6 +1418,7 @@ public class FXLink extends Application{
 		this.btnDeleteLinks.setDisable(true);
 		this.cmbMoveToCategory.setDisable(true);
 		this.btnMoveToCategory.setDisable(true);
+		this.btnGenerateDescription.setDisable(true);
 		this.cmbCategories.setDisable(true);
 		this.btnSelectAll.setDisable(true);
 		this.btnDeselectAll.setDisable(true);
@@ -1414,6 +1438,7 @@ public class FXLink extends Application{
 			this.btnDeleteLinks.setDisable(false);
 			this.cmbMoveToCategory.setDisable(false);
 			this.btnMoveToCategory.setDisable(false);
+			this.btnGenerateDescription.setDisable(false);
 			this.cmbCategories.setDisable(false);
 			this.btnSelectAll.setDisable(false);
 			this.btnDeselectAll.setDisable(false);
