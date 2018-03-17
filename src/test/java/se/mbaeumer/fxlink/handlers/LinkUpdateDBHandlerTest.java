@@ -54,7 +54,7 @@ public class LinkUpdateDBHandlerTest extends TestCase {
     public void testConstructSqlStringWithoutCategory(){
         Link link = createLink();
         link.setCategory(null);
-        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine',";
+        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine',categoryId=null,";
         expected += "lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
         String actual = LinkUpdateDBHandler.constructSqlString(link);
         assertTrue("The string values do not match", actual.equalsIgnoreCase(expected));

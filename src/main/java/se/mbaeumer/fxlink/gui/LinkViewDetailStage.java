@@ -168,7 +168,7 @@ public class LinkViewDetailStage extends Stage {
 	private void initCategory(){
 		this.gridData.add(this.lblCategories, 0, 3);
 		this.cmbCategories = new ComboBox<Category>();
-		// get the categories
+
 		ObservableList<Category> categoryList =
 	            FXCollections.observableArrayList(CategoryHandler.getCategories());
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
@@ -335,13 +335,13 @@ public class LinkViewDetailStage extends Stage {
 	}
 	
 	private void initButtons(){
-		this.initSubmitButton();
+		this.initSaveButton();
 		this.initCancelButton();
 		this.initGenerateDescriptionButton();
 	}
 	
-	private void initSubmitButton(){
-		this.btnSave = new Button("Submit");
+	private void initSaveButton(){
+		this.btnSave = new Button("Save");
 		this.btnSave.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
@@ -394,8 +394,7 @@ public class LinkViewDetailStage extends Stage {
 	
 	private boolean processInput() throws ParseException, SQLException{
 		if (!URLValidator.isValidURL(this.txtURL.getText())){
-			Alert alert = new Alert(Alert.AlertType.ERROR, "The URL is incorrect!", ButtonType.OK);
-			alert.showAndWait();
+			showAlert();
 			isValidationError = true;
 			return false;
 		}
@@ -403,14 +402,23 @@ public class LinkViewDetailStage extends Stage {
 		Link updatedLink = new Link(this.txtTitle.getText(), this.txtURL.getText(), this.taDescription.getText());
 		updatedLink.setCreated(this.link.getCreated());		
 		updatedLink.setId(this.link.getId());
-		
+
+		setCategory(updatedLink);
+		LinkHandler.updateLink(updatedLink);
+		return true;
+	}
+
+	private void showAlert() {
+		Alert alert = new Alert(Alert.AlertType.ERROR, "The URL is incorrect!", ButtonType.OK);
+		alert.showAndWait();
+	}
+
+	private void setCategory(Link updatedLink) {
 		if (this.cmbCategories.getSelectionModel().getSelectedIndex() == 0){
-			updatedLink.setCategory(null);			
+			updatedLink.setCategory(null);
 		}else{
 			updatedLink.setCategory(this.cmbCategories.getValue());
 		}
-		LinkHandler.updateLink(updatedLink);
-		return true;
 	}
 
 	public Link getLink() {
