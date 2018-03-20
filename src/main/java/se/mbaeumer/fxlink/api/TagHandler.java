@@ -57,9 +57,4 @@ public class TagHandler {
 	public static void deleteAllTags() throws SQLException{
 		TagDeletionDBHandler.deleteAllTags(GenericDBHandler.getInstance());
 	}
-	
-	public static void deleteAllLinkTags() throws SQLException{
-		LinkTagDeletionDBHandler.deleteAllLinkTags(GenericDBHandler.getInstance());
-	}
-
 }

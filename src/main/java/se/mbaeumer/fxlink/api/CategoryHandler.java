@@ -44,7 +44,7 @@ public class CategoryHandler {
 		LinkUpdateDBHandler.moveLinks(sql, GenericDBHandler.getInstance());
 	}
 	
-	public static void deleteAllCateories() throws SQLException{
+	public static void deleteAllCategories() throws SQLException{
 		CategoryDeletionDBHandler.deleteAllCategories(GenericDBHandler.getInstance());
 	}
 }

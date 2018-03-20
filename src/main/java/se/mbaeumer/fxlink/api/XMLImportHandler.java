@@ -33,7 +33,7 @@ public class XMLImportHandler {
 		//3. links
 		LinkHandler.deleteAllLinks();
 		//4. categories
-		CategoryHandler.deleteAllCateories();
+		CategoryHandler.deleteAllCategories();
 	}
 	
 	public void importData() throws SQLException{

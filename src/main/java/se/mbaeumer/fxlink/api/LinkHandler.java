@@ -23,26 +23,15 @@ public class LinkHandler {
 		return LinkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(), category.getId());	
 	}
 	
-	//public static List<Link> getLinksByCate
-	
 	public static void createLink(Link link) throws SQLException{
 		String sql = LinkCreationDBHandler.constructSqlString(link);
 		LinkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
-	}
-	
-	public static void deleteLinksByCategory(Category category){
-		
-	}
-	
-	public static void nullifyCategory(Category category){
-		
 	}
 	
 	public static void updateLink(Link link) throws ParseException, SQLException{
 		String sql = LinkUpdateDBHandler.constructSqlString(link);
 		LinkUpdateDBHandler.updateLink(sql, GenericDBHandler.getInstance());
 	}
-
 
 	public static void deleteLink(Link link) throws SQLException{
 		String sql = LinkDeletionDBHandler.constructSqlString(link);
@@ -62,25 +51,5 @@ public class LinkHandler {
 	
 	public static void deleteAllLinks() throws SQLException{
 		LinkDeletionDBHandler.deleteAllLinks(GenericDBHandler.getInstance());
-	}
-	
-	/*
-	 public static void updateLinkList(Link link){
-		if (link.getId() == -1){
-			LinkCreationDBHandler.createLink(link, GenericDBHandler.getInstance());
-		}else{
-			try {
-				LinkUpdateDBHandler.updateLink(link, GenericDBHandler.getInstance());
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	*/
-	
-	public static Link addCategoryToLink(Link link, Category category){
-		
-		return link;
 	}
 }

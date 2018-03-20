@@ -70,27 +70,9 @@ public class LinkSearchDBHandler {
 		Connection connection = dbh.getConnection();				
 		List<Link> links = new ArrayList<Link>();
 		
-		//PreparedStatement stmt = connection.prepareStatement(sql);
-		
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
-		/*
-		int parameterIndex = 1;
-		if (isUrl){
-			stmt.setString(parameterIndex, searchTerm);
-			parameterIndex++;
-		}
-		
-		if (isTitle){
-			stmt.setString(parameterIndex, searchTerm);
-			parameterIndex++;
-		}
-		
-		if (isDescription){
-			stmt.setString(parameterIndex, searchTerm);
-		}
-		*/
-		//ResultSet rs = stmt.executeQuery();
+
 		while (rs.next()) {
 			Link link = new Link(rs.getString("linkTitle"), rs.getString("URL"), rs.getString("linkDescription"));
 			link.setId(rs.getInt("linkId"));
@@ -110,7 +92,4 @@ public class LinkSearchDBHandler {
 
 		return links;
 	}
-	
-	
-
 }

@@ -1,8 +1,6 @@
 package se.mbaeumer.fxlink.api;
 
-import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.HsqldbConnectionHandler;
-import se.mbaeumer.fxlink.handlers.ManagedItemDBHandler;
 import se.mbaeumer.fxlink.handlers.ManagedItemDBOperationHandler;
 
 import java.util.List;
