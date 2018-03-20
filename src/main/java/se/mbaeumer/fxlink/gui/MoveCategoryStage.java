@@ -153,7 +153,6 @@ public class MoveCategoryStage extends Stage{
 
     private void initTargetCategories(){
         this.cmbTargetCategories = new ComboBox<Category>();
-        // get the categories
         ObservableList<Category> categoryList =
                 FXCollections.observableArrayList(CategoryHandler.getCategories());
         this.cmbTargetCategories.setItems(categoryList);
