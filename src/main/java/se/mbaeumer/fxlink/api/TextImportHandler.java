@@ -4,9 +4,7 @@ import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
 import se.mbaeumer.fxlink.models.FailedLink;
 import se.mbaeumer.fxlink.models.Link;
-import se.mbaeumer.fxlink.util.SqlExceptionMapper;
-import se.mbaeumer.fxlink.util.URLValidator;
-import se.mbaeumer.fxlink.util.ValueConstants;
+import se.mbaeumer.fxlink.util.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -42,15 +40,17 @@ public class TextImportHandler {
             new BufferedReader(fileReader);
 
         while((line = bufferedReader.readLine()) != null) {
-            createLink(line, fileNameOnly);
+            if (line.length() > 0) {
+				createLink(line);
+			}
         }   
 
         bufferedReader.close();
 	}
 	
-	private void createLink(String line, String fileName){
+	private void createLink(String line){
 
-		Link link = new Link(ValueConstants.VALUE_NEW, line, createDescription(fileName));
+		Link link = new Link(ValueConstants.VALUE_NEW, line, createDescription(line));
 		link.setCategory(null);
 
 		FailedLink fl = null;
@@ -71,8 +71,8 @@ public class TextImportHandler {
 		}
 	}
 
-	private String createDescription(String fileName){
-		String description = "Imported from " + fileName;
-		return  description;
+	private String createDescription(String url){
+		DescriptionUtil descriptionUtil = new DescriptionUtilImpl();
+		return descriptionUtil.generateDescription(new Link("", url,""));
 	}
 }
