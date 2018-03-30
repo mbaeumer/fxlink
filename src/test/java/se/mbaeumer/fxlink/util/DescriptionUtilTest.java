@@ -19,6 +19,25 @@ public class DescriptionUtilTest {
     }
 
     @Test
+    public void testGenerateDescriptionWithLongUrlAndDashesAndPdfSuffix(){
+        String url = "https://stackoverflow.com/questions/23151306/how-to-retrieve-list-string-from-httpresponse-object-in-java.pdf";
+        String expected = "how to retrieve list string from httpresponse object in java [pdf]";
+        Link link  = new Link("", url, "");
+
+        assertTrue(descriptionUtil.generateDescription(link).equalsIgnoreCase(expected));
+    }
+
+    @Test
+    public void testGenerateDescriptionWithLongUrlAndDashesAndHtmlSuffix(){
+        String url = "https://stackoverflow.com/questions/23151306/how-to-retrieve-list-string-from-httpresponse-object-in-java.html";
+        String expected = "how to retrieve list string from httpresponse object in java";
+        Link link  = new Link("", url, "");
+
+        assertTrue(descriptionUtil.generateDescription(link).equalsIgnoreCase(expected));
+    }
+
+
+    @Test
     public void testGenerateDescriptionWithLongUrlAndDashesAndTrailingSlash(){
         String url = "https://stackoverflow.com/questions/23151306/how-to-retrieve-list-string-from-httpresponse-object-in-java/";
         String expected = "how to retrieve list string from httpresponse object in java";
@@ -34,6 +53,22 @@ public class DescriptionUtilTest {
         Link link  = new Link("", url, "");
 
         assertTrue(descriptionUtil.generateDescription(link).equalsIgnoreCase(expected));
+    }
+
+    @Test
+    public void testRemoveHtml(){
+        String description = "how to retrieve list string from httpresponse object in java.html";
+        String expected = "how to retrieve list string from httpresponse object in java";
+        String actual = descriptionUtil.handleSuffix(description);
+        assertTrue(actual.equalsIgnoreCase(expected));
+    }
+
+    @Test
+    public void testHandlePdf(){
+        String description = "how to retrieve list string from httpresponse object in java.pdf";
+        String expected = "how to retrieve list string from httpresponse object in java [pdf]";
+        String actual = descriptionUtil.handleSuffix(description);
+        assertTrue(actual.equalsIgnoreCase(expected));
     }
 
     @Test

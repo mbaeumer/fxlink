@@ -3,6 +3,7 @@ package se.mbaeumer.fxlink.util;
 import se.mbaeumer.fxlink.models.Link;
 
 public class DescriptionUtilImpl implements DescriptionUtil {
+
     @Override
     public String generateDescription(Link link) {
         String url = "";
@@ -16,6 +17,7 @@ public class DescriptionUtilImpl implements DescriptionUtil {
             description = urlParts[urlParts.length-1];
             description = description.replaceAll("-", " ");
             description = description.replaceAll("_", " ");
+            description = handleSuffix(description);
         }
         return description;
     }
@@ -27,5 +29,12 @@ public class DescriptionUtilImpl implements DescriptionUtil {
             startIndex = 8;
         }
         return link.getURL().substring(startIndex);
+    }
+
+    @Override
+    public String handleSuffix(String description) {
+        description = description.replace(".html", "");
+        description = description.replace(".pdf", " [pdf]");
+        return description;
     }
 }
