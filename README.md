@@ -18,6 +18,19 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.7.5 - 2018-03-31
+
+* Changed the layout of the main stage
+* Added support for generating description for links
+* minor refactoring
+
+## 0.7.4 - 2018-02-10
+
+* added support for selecting/deselecting all links in the main stage and in the import stage
+* minor changes in the user interface
+* bug fixes related to populating combo boxes
+* minor refactoring
+
 ## 0.7.2 - 2017-06-28
 
 * Added a system check to ensure that the required database files exist during application startup
