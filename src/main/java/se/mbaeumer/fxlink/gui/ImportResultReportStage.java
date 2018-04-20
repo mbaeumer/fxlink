@@ -64,9 +64,10 @@ public class ImportResultReportStage extends Stage {
 		this.initScene();
 		
 		this.importReport = report;
-		this.flowGeneral.prefHeightProperty().bind(this.scene.heightProperty());
-		this.flowGeneral.prefWidthProperty().bind(this.scene.widthProperty());
 		this.initLayout();
+		this.bindSizes();
+		this.initSuccessLinksTableLayout();
+		this.initFailedLinksTableLayout();
 	}
 	
 	private void initScene(){
@@ -92,13 +93,13 @@ public class ImportResultReportStage extends Stage {
 		this.flowGeneral.setOrientation(Orientation.HORIZONTAL);
 		this.flowGeneral.setHgap(10);
 		this.flowGeneral.setVgap(10);
-		this.flowGeneral.setPadding(new Insets(0, 10, 0, 10));
+		this.flowGeneral.setPadding(new Insets(5, 10, 5, 10));
 		this.flowGeneral.setVgap(10);
 	}
 	
 	public void initLayout(){
 		this.initImportInfoLabels();
-		this.createMoveToCateoryComboBox();
+		this.createMoveToCategoryComboBox();
 		this.createMoveToCategoryButton();
 		this.initSelectionPane();
 		this.initSelectAllButton();
@@ -107,6 +108,12 @@ public class ImportResultReportStage extends Stage {
 		this.initSuccessLinkTableView();
 		this.initFailedLinksTableView();
 		this.initCloseButton();
+	}
+
+	private void bindSizes(){
+		this.tabPane.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+		this.tvSuccessfulLinks.prefWidthProperty().bind(this.tabPane.prefWidthProperty());
+		this.tvFailedLinks.prefWidthProperty().bind(this.tabPane.prefWidthProperty());
 	}
 	
 	private void initImportInfoLabels(){
@@ -118,7 +125,7 @@ public class ImportResultReportStage extends Stage {
 				this.lblSuccessfulImportsValue, this.lblFailedImportsText, this.lblFailedImportsValue);
 	}
 
-	private void createMoveToCateoryComboBox(){
+	private void createMoveToCategoryComboBox(){
 		this.cmbMoveToCategory = new ComboBox<>();
 
 		ObservableList<Category> categoryList =
@@ -260,7 +267,6 @@ public class ImportResultReportStage extends Stage {
 					}
 				}
 		);
-
 	}
 
 	private void createTabs(){
@@ -275,9 +281,7 @@ public class ImportResultReportStage extends Stage {
 	private void initSuccessLinkTableView(){
 		this.createSuccessLinksTableView();
 		this.createSuccessLinksTableViewColumns();
-		this.tvSuccessfulLinks.prefWidthProperty().bind(this.flowGeneral.prefWidthProperty());
 		this.tabSuccess.setContent(this.tvSuccessfulLinks);
-		this.initSuccessLinksTableLayout();
 	}
 
 	private void createSuccessLinksTableView(){
@@ -291,53 +295,11 @@ public class ImportResultReportStage extends Stage {
 		selectedCol.setCellValueFactory(c -> c.getValue().selectedProperty());
 		selectedCol.setCellFactory( tc -> new CheckBoxTableCell<>());
 
-		// create the url column
 		TableColumn urlCol = new TableColumn("Url");
 		urlCol.setCellValueFactory(new PropertyValueFactory("url"));
 		urlCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		urlCol.setEditable(false);
-		/*
-		urlCol.setOnEditCommit(
-				new EventHandler<TableColumn.CellEditEvent<Link, String>>() {
-					public void handle(TableColumn.CellEditEvent<Link, String> t) {
-						if (isLinkInformationCorrect(t.getNewValue()) && isURLCorrect(t.getNewValue())){
-							((Link) t.getTableView().getItems().get(
-									t.getTablePosition().getRow())
-							).setURL(t.getNewValue());
-							if (insertOrUpdateLink(t.getRowValue())){
-								System.out.println("Everything is ok...success!");
-								refreshLinkTable();
-							}
-						}
-					}
-				}
-		);
-		*/
 
-		// create title column
-		TableColumn titleCol = new TableColumn("Title");
-		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
-		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		titleCol.setOnEditCommit(
-				new EventHandler<TableColumn.CellEditEvent<Link, String>>() {
-					public void handle(TableColumn.CellEditEvent<Link, String> t) {
-						Link link = t.getRowValue();
-						link.setTitle(t.getNewValue());
-
-						updateLink(link);
-						tvSuccessfulLinks.setItems(FXCollections.observableList(importReport.getSuccessfulLinks()));
-						/*
-						if (isLinkInformationCorrect(link.getURL())){
-							if (insertOrUpdateLink(link)){
-								refreshLinkTable();
-							}
-						}
-						*/
-					}
-				}
-		);
-
-		// create description column
 		TableColumn descriptionCol = new TableColumn("Description");
 		descriptionCol.setCellValueFactory(new PropertyValueFactory("description"));
 		descriptionCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -348,18 +310,32 @@ public class ImportResultReportStage extends Stage {
 						link.setDescription(t.getNewValue());
 						updateLink(link);
 						tvSuccessfulLinks.setItems(FXCollections.observableList(importReport.getSuccessfulLinks()));
-						/*
-						if (isLinkInformationCorrect(link.getURL())){
-							if (insertOrUpdateLink(link)){
-								refreshLinkTable();
-							}
-						}
-						*/
 					}
 				}
 		);
 
-		// create the created column
+		TableColumn categoryCol = new TableColumn("Category");
+		categoryCol.setCellValueFactory(new PropertyValueFactory<Link, Category>("category"));
+		categoryCol.setCellFactory(new Callback<TableColumn<Link, Category>, TableCell<Link, Category>>(){
+
+			@Override
+			public TableCell<Link, Category> call(TableColumn<Link, Category> param) {
+
+				TableCell<Link, Category> categoryCell = new TableCell<Link, Category>(){
+
+					@Override
+					protected void updateItem(Category item, boolean empty) {
+						if (item != null) {
+							setText(item.getName());
+						}else{
+							setText(null);
+						}
+					}
+				};
+				return categoryCell;
+			}
+		});
+
 		TableColumn createdCol = new TableColumn("Created");
 		createdCol.setCellValueFactory(new PropertyValueFactory("created"));
 		createdCol.setCellValueFactory(
@@ -374,7 +350,7 @@ public class ImportResultReportStage extends Stage {
 				});
 
 
-		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, titleCol, urlCol, descriptionCol, createdCol);
+		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, urlCol, descriptionCol, categoryCol, createdCol);
 	}
 
 	private void updateLink(Link link){
@@ -399,8 +375,6 @@ public class ImportResultReportStage extends Stage {
 		this.createFailedLinksTableView();
 		this.createFailedLinksTableViewColumns();
 		this.tabFailed.setContent(this.tvFailedLinks);
-		this.tvFailedLinks.prefWidthProperty().bind(this.flowGeneral.prefWidthProperty());
-		this.initFailedLinksTableLayout();
 	}
 	
 	@SuppressWarnings({ "unchecked" })
