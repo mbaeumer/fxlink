@@ -1319,12 +1319,12 @@ public class FXLink extends Application{
 	
 	private void refreshLinkTable(){
 
-		if (!isSearchPaneVisible()) {
+		if (isSearchPaneVisible() && isSearchTermGiven()) {
+			runSearch();
+		}else{
 			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.updateStatusBar(false);
-		}else{
-			runSearch();
 		}
 	}
 

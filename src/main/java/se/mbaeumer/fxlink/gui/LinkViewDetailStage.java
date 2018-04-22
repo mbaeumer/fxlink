@@ -75,6 +75,7 @@ public class LinkViewDetailStage extends Stage {
 		this.link = link;
 		
 		this.initScene();
+		this.makeModal();
 		
 		this.initLayout();
 		this.initTagging();
@@ -97,7 +98,6 @@ public class LinkViewDetailStage extends Stage {
 		this.scene = new Scene(this.root, width, height, Color.WHITESMOKE);
 		this.setTitle("Link details");
 		this.setScene(this.scene);
-		this.makeModal();
 	}
 	
 	private void makeModal(){
