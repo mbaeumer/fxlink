@@ -60,7 +60,7 @@ public class LinkViewDetailStage extends Stage {
 	private Label lblLastUpdatedDate;
 	private ListView<SelectableTag> listAllSelectableTags;
 	private List<Tag> allTags;
-	private List<Tag> existingTags;
+	private List<Tag> existingTagsForLink;
 	private List<SelectableTag> selectableTags;
 	private ObservableList<SelectableTag> observableSelectableTags;
 	private GridPane gridCommands;
@@ -184,8 +184,7 @@ public class LinkViewDetailStage extends Stage {
                     @Override
                     protected void updateItem(Category t, boolean bln) {
                         super.updateItem(t, bln);
-                         
-                        if(t != null){                        	 
+                        if(t != null){
                             setText(t.getName());                                      
                         }else{
                             setText(null);                            
@@ -196,7 +195,6 @@ public class LinkViewDetailStage extends Stage {
                 return cell;
             }
 		});
-		
 
 		this.cmbCategories.setButtonCell(new ListCell<Category>() {
 		    @Override
@@ -245,14 +243,13 @@ public class LinkViewDetailStage extends Stage {
 	}
 	
 	private void populateDataLists(){
-		this.allTags = new ArrayList<Tag>();
 		this.allTags = TagHandler.getTags();
-		this.existingTags = new ArrayList<Tag>();
+		this.existingTagsForLink = new ArrayList<Tag>();
 		this.selectableTags = new ArrayList<SelectableTag>();
 		try {
-			this.existingTags = TagHandler.getAllTagsForLink(this.link);
+			this.existingTagsForLink = TagHandler.getAllTagsForLink(this.link);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// TODO Add alert here
 			e.printStackTrace();
 		}
 		
@@ -260,7 +257,7 @@ public class LinkViewDetailStage extends Stage {
 			SelectableTag selectableTag = new SelectableTag();
 			selectableTag.setId(tagFromAllTags.getId());
 			selectableTag.setSelected(false);
-			for (Tag tagFromExistingTags : this.existingTags){
+			for (Tag tagFromExistingTags : this.existingTagsForLink){
 				if (tagFromAllTags.getId() == tagFromExistingTags.getId()){
 					selectableTag.setSelected(true);					
 					break;
@@ -285,7 +282,6 @@ public class LinkViewDetailStage extends Stage {
 					Tag tag = new Tag();
 					tag.setId(t.getId());
 					if (isSelected){
-						
 						try {
 							TagHandler.addTagToLink(tag, link);
 						} catch (SQLException e) {
@@ -404,12 +400,17 @@ public class LinkViewDetailStage extends Stage {
 		updatedLink.setId(this.link.getId());
 
 		setCategory(updatedLink);
-		LinkHandler.updateLink(updatedLink);
+		if (this.link.getId() <= 0) {
+			LinkHandler.createLink(updatedLink);
+		}else {
+			LinkHandler.updateLink(updatedLink);
+		}
 		return true;
 	}
 
 	private void showAlert() {
 		Alert alert = new Alert(Alert.AlertType.ERROR, "The URL is incorrect!", ButtonType.OK);
+		alert.initOwner(this);
 		alert.showAndWait();
 	}
 

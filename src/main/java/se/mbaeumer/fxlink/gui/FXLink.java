@@ -80,6 +80,7 @@ public class FXLink extends Application{
 	private Button btnImportTextFile;
 	private Button btnShowSearchPane;
 	private Button btnDeleteLinks;
+	private Button btnCreateLink;
 	private ComboBox<Category> cmbMoveToCategory;
 	private Button btnMoveToCategory;
 	private Button btnGenerateDescription;
@@ -283,6 +284,7 @@ public class FXLink extends Application{
 		this.createWriteBackupButton();
 		this.createReadBackupButton();
 		this.createShowSearchPaneButton();
+		this.createNewLinkButton();
 		this.createDeleteLinksButton();
 		this.createMoveToCategoryComboBox();
 		this.createMoveToCategoryButton();
@@ -449,6 +451,19 @@ public class FXLink extends Application{
 			}
 		});
 		this.flowActions.getChildren().add(this.btnDeleteLinks);
+	}
+
+	private void createNewLinkButton(){
+		this.btnCreateLink = new Button("New");
+		this.btnCreateLink.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				LinkViewDetailStage linkDetail = new LinkViewDetailStage(LinkHandler.createPseudoLink());
+				linkDetail.showAndWait();
+				refreshLinkTable();
+			}
+		});
+		this.flowActions.getChildren().add(this.btnCreateLink);
 	}
 
 	private void createMoveToCategoryComboBox(){
