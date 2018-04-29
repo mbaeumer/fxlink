@@ -280,15 +280,15 @@ public class FXLink extends Application{
 		this.flowActions.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 		this.flowGeneral.getChildren().add(this.flowActions);
 		FlowPane.setMargin(flowActions, new Insets(5));
-		this.createImportButton();
-		this.createWriteBackupButton();
-		this.createReadBackupButton();
-		this.createShowSearchPaneButton();
 		this.createNewLinkButton();
 		this.createDeleteLinksButton();
+		this.createShowSearchPaneButton();
 		this.createMoveToCategoryComboBox();
 		this.createMoveToCategoryButton();
 		this.createGenerateDescriptionButton();
+		this.createImportButton();
+		this.createWriteBackupButton();
+		this.createReadBackupButton();
 	}
 
 	private void createImportButton(){
