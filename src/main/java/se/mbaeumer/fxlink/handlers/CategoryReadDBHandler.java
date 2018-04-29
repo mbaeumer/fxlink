@@ -15,7 +15,7 @@ public class CategoryReadDBHandler {
 		List<Category> categories = new ArrayList<Category>();
 		
 		String sql = "select c.id as categoryId, c.name, c.description, c.created, c.lastUpdated " +
-					"from category c";
+					"from category c order by c.name asc";
 		
 		try {
 			Statement stmt = connection.createStatement();
