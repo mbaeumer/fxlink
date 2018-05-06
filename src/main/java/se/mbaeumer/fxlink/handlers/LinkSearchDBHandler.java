@@ -2,6 +2,7 @@ package se.mbaeumer.fxlink.handlers;
 
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
+import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,8 +25,12 @@ public class LinkSearchDBHandler {
 	public static String DESCRIPTION_CRITERIA_START = "description LIKE '%";
 	public static String DESCRIPTION_CRITERIA_END = "%' ";	
 	public static String OR = "OR ";
+	public static String AND = " AND ";
+	public static String CATEGORY_ID = "categoryId ";
+	public static String IS_NULL = "IS NULL";
+	public static String EQUALS = "= ";
 	
-	public static String constructSearchString(String searchTerm, boolean isUrl, boolean isTitle, boolean isDescription){
+	public static String constructSearchString(String searchTerm, boolean isUrl, boolean isTitle, boolean isDescription, Category category){
 		String sql = "";
 		if (searchTerm == null || searchTerm == ""){
 			return null;
@@ -62,6 +67,12 @@ public class LinkSearchDBHandler {
 		}
 		
 		sql += criteria;
+
+		if (category.getName() == ValueConstants.VALUE_N_A){
+			sql += AND + CATEGORY_ID + IS_NULL;
+		}else if (category.getName() != ValueConstants.VALUE_ALL){
+			sql += AND + CATEGORY_ID + EQUALS + category.getId();
+		}
 		
 		return sql;
 	}

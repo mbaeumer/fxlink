@@ -92,6 +92,7 @@ public class FXLink extends Application{
 	private CheckBox chkSearchURL;
 	private CheckBox chkSearchTitle;
 	private CheckBox chkSearchDescription;
+	private ComboBox<Category> cmbCategoriesSearch;
 
 	private TableView<Link> tblLinks;
 	private TableView<Category> tblCategories;
@@ -619,6 +620,7 @@ public class FXLink extends Application{
 		this.createURLSearchCheckBox();
 		this.createTitleSearchCheckBox();
 		this.createDescriptionSearchCheckBox();
+		this.createSearchCategoryComboBox();
 		this.createSearchButton();
 	}
 	
@@ -678,6 +680,59 @@ public class FXLink extends Application{
 		});
 		this.flowSearch.getChildren().add(this.chkSearchDescription);
 	}
+
+	private void createSearchCategoryComboBox(){
+		this.cmbCategoriesSearch = new ComboBox<Category>();
+
+		ObservableList<Category> categoryList =
+				FXCollections.observableArrayList(CategoryHandler.getCategories());
+		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_ALL));
+		categoryList.add(1, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
+
+		this.cmbCategoriesSearch.setItems(categoryList);
+
+		this.cmbCategoriesSearch.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
+			@Override
+			public ListCell<Category> call(ListView<Category> p) {
+				final ListCell<Category> cell = new ListCell<Category>(){
+					@Override
+					protected void updateItem(Category t, boolean bln) {
+						super.updateItem(t, bln);
+						if(t != null){
+							setText(t.getName());
+						}else{
+							setText(null);
+						}
+					}
+				};
+				return cell;
+			}
+		});
+
+		this.cmbCategoriesSearch.setButtonCell(new ListCell<Category>() {
+			@Override
+			protected void updateItem(Category t, boolean bln) {
+				super.updateItem(t, bln);
+				if (t != null) {
+					setText(t.nameProperty().getValue());
+				} else {
+					setText(null);
+				}
+			}
+		});
+
+		this.cmbCategoriesSearch.getSelectionModel().selectFirst(); //select the first element
+		this.cmbCategoriesSearch.valueProperty().addListener(
+				new ChangeListener<Category>(){
+					@SuppressWarnings("rawtypes")
+					@Override
+					public void changed(ObservableValue ov, Category c1, Category c2){
+						runSearch();
+					}
+				});
+
+		this.flowSearch.getChildren().add(this.cmbCategoriesSearch);
+	}
 	
 	private void createSearchButton(){
 		this.btnSearch = new Button("Search");
@@ -717,8 +772,9 @@ public class FXLink extends Application{
 	private void runSearch(){
 		if (isSearchTermGiven() && isCriteriaSelected()){
 			try {
+				/** TODO: Handle category here **/
 				List<Link> links = SearchHandler.findLinks(tfSearchTerm.getText(), chkSearchURL.isSelected(),
-						chkSearchTitle.isSelected(), chkSearchDescription.isSelected());
+						chkSearchTitle.isSelected(), chkSearchDescription.isSelected(), cmbCategoriesSearch.getValue());
 				refreshSearchResult(links);
 			} catch (SQLException e) {
 				Alert alert = new Alert(Alert.AlertType.ERROR, DATABASE_ERROR_OCCURRED, ButtonType.OK);
