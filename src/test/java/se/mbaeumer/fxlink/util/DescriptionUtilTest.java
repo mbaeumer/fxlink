@@ -36,6 +36,15 @@ public class DescriptionUtilTest {
         assertTrue(descriptionUtil.generateDescription(link).equalsIgnoreCase(expected));
     }
 
+    @Test
+    public void testGenerateDescriptionWithLongUrlAndDashesAndHtmSuffix(){
+        String url = "https://stackoverflow.com/questions/23151306/how-to-retrieve-list-string-from-httpresponse-object-in-java.htm";
+        String expected = "how to retrieve list string from httpresponse object in java";
+        Link link  = new Link("", url, "");
+
+        assertTrue(descriptionUtil.generateDescription(link).equalsIgnoreCase(expected));
+    }
+
 
     @Test
     public void testGenerateDescriptionWithLongUrlAndDashesAndTrailingSlash(){

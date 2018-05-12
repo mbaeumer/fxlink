@@ -34,6 +34,7 @@ public class DescriptionUtilImpl implements DescriptionUtil {
     @Override
     public String handleSuffix(String description) {
         description = description.replace(".html", "");
+        description = description.replace(".htm", "");
         description = description.replace(".pdf", " [pdf]");
         return description;
     }
