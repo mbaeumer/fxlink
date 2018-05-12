@@ -15,8 +15,8 @@ import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.SelectableTag;
 import se.mbaeumer.fxlink.models.Tag;
-import se.mbaeumer.fxlink.util.DescriptionUtil;
-import se.mbaeumer.fxlink.util.DescriptionUtilImpl;
+import se.mbaeumer.fxlink.util.LinkTitleUtil;
+import se.mbaeumer.fxlink.util.LinkTitleUtilImpl;
 import se.mbaeumer.fxlink.util.URLValidator;
 import se.mbaeumer.fxlink.util.ValueConstants;
 import javafx.beans.value.ChangeListener;
@@ -66,7 +66,7 @@ public class LinkViewDetailStage extends Stage {
 	private GridPane gridCommands;
 	private Button btnSave;
 	private Button btnCancel;
-	private Button btnGenerateDescription;
+	private Button btnGenerateTitle;
 	private Link link;
 	private boolean isValidationError = false;
 	
@@ -333,7 +333,7 @@ public class LinkViewDetailStage extends Stage {
 	private void initButtons(){
 		this.initSaveButton();
 		this.initCancelButton();
-		this.initGenerateDescriptionButton();
+		this.initGenerateTitleButton();
 	}
 	
 	private void initSaveButton(){
@@ -372,19 +372,19 @@ public class LinkViewDetailStage extends Stage {
 		this.gridCommands.add(this.btnCancel, 1, 0);
 	}
 
-	private void initGenerateDescriptionButton(){
-		this.btnGenerateDescription = new Button("Generate description");
-		this.btnGenerateDescription.setOnAction(new EventHandler<ActionEvent>(){
+	private void initGenerateTitleButton(){
+		this.btnGenerateTitle = new Button("Generate title");
+		this.btnGenerateTitle.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				DescriptionUtil descriptionUtil = new DescriptionUtilImpl();
-				link.setDescription(descriptionUtil.generateDescription(link));
-				taDescription.setText(link.getDescription());
+				LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
+				link.setTitle(linkTitleUtil.generateTitle(link));
+				txtTitle.setText(link.getTitle());
 			}
 
 		});
-		this.gridCommands.add(this.btnGenerateDescription, 2, 0);
+		this.gridCommands.add(this.btnGenerateTitle, 2, 0);
 
 	}
 	

@@ -50,7 +50,7 @@ public class TextImportHandler {
 	
 	private void createLink(String line){
 
-		Link link = new Link(ValueConstants.VALUE_NEW, line, createDescription(line));
+		Link link = new Link(createTitle(line), line, ValueConstants.VALUE_NEW);
 		link.setCategory(null);
 
 		FailedLink fl = null;
@@ -71,8 +71,8 @@ public class TextImportHandler {
 		}
 	}
 
-	private String createDescription(String url){
-		DescriptionUtil descriptionUtil = new DescriptionUtilImpl();
-		return descriptionUtil.generateDescription(new Link("", url,""));
+	private String createTitle(String url){
+		LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
+		return linkTitleUtil.generateTitle(new Link("", url,""));
 	}
 }

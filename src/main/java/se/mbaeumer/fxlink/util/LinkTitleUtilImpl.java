@@ -2,10 +2,10 @@ package se.mbaeumer.fxlink.util;
 
 import se.mbaeumer.fxlink.models.Link;
 
-public class DescriptionUtilImpl implements DescriptionUtil {
+public class LinkTitleUtilImpl implements LinkTitleUtil {
 
     @Override
-    public String generateDescription(Link link) {
+    public String generateTitle(Link link) {
         String url = "";
         String description = null;
         url = removeTheProtocol(link);

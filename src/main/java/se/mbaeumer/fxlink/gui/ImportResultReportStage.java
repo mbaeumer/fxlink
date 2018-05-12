@@ -300,6 +300,12 @@ public class ImportResultReportStage extends Stage {
 		urlCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		urlCol.setEditable(false);
 
+		// create title column
+		TableColumn titleCol = new TableColumn("Title");
+		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
+		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		titleCol.setEditable(false);
+
 		TableColumn descriptionCol = new TableColumn("Description");
 		descriptionCol.setCellValueFactory(new PropertyValueFactory("description"));
 		descriptionCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -350,7 +356,7 @@ public class ImportResultReportStage extends Stage {
 				});
 
 
-		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, urlCol, descriptionCol, categoryCol, createdCol);
+		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, categoryCol, createdCol);
 	}
 
 	private void updateLink(Link link){

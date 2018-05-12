@@ -83,7 +83,7 @@ public class FXLink extends Application{
 	private Button btnCreateLink;
 	private ComboBox<Category> cmbMoveToCategory;
 	private Button btnMoveToCategory;
-	private Button btnGenerateDescription;
+	private Button btnGenerateTitle;
 
 	private FlowPane flowSearch;
 	private Button btnSearch;
@@ -286,7 +286,7 @@ public class FXLink extends Application{
 		this.createShowSearchPaneButton();
 		this.createMoveToCategoryComboBox();
 		this.createMoveToCategoryButton();
-		this.createGenerateDescriptionButton();
+		this.createGenerateTitleButton();
 		this.createImportButton();
 		this.createWriteBackupButton();
 		this.createReadBackupButton();
@@ -530,14 +530,14 @@ public class FXLink extends Application{
 		this.flowActions.getChildren().add(this.btnMoveToCategory);
 	}
 
-	private void createGenerateDescriptionButton(){
-		this.btnGenerateDescription = new Button("Generate description");
-		this.btnGenerateDescription.setOnAction(new EventHandler<ActionEvent>() {
+	private void createGenerateTitleButton(){
+		this.btnGenerateTitle = new Button("Generate title");
+		this.btnGenerateTitle.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				DescriptionUtil descriptionUtil = new DescriptionUtilImpl();
+				LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
 				for (Link link : getSelectedLinks()){
-					link.setDescription(descriptionUtil.generateDescription(link));
+					link.setTitle(linkTitleUtil.generateTitle(link));
 					try {
 						LinkHandler.updateLink(link);
 					}catch(SQLException | ParseException pe){
@@ -548,7 +548,7 @@ public class FXLink extends Application{
 				filterCategories();
 			}
 		});
-		this.flowActions.getChildren().add(this.btnGenerateDescription);
+		this.flowActions.getChildren().add(this.btnGenerateTitle);
 	}
 
 	private void createSelectionFlowPane(){
@@ -851,6 +851,24 @@ public class FXLink extends Application{
 		    }
 		);
 
+		// create title column
+		TableColumn titleCol = new TableColumn("Title");
+		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
+		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		titleCol.setOnEditCommit(
+				new EventHandler<CellEditEvent<Link, String>>() {
+					public void handle(CellEditEvent<Link, String> t) {
+						Link link = t.getRowValue();
+						link.setTitle(t.getNewValue());
+						if (isLinkInformationCorrect(link.getURL())){
+							if (insertOrUpdateLink(link)){
+								refreshLinkTable();
+							}
+						}
+					}
+				}
+		);
+
 		// create description column
 		TableColumn descriptionCol = new TableColumn("Description");
 		descriptionCol.setCellValueFactory(new PropertyValueFactory("description"));
@@ -891,24 +909,6 @@ public class FXLink extends Application{
 			}
 		});
 
-		// create title column
-		TableColumn titleCol = new TableColumn("Title");
-		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
-		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		titleCol.setOnEditCommit(
-				new EventHandler<CellEditEvent<Link, String>>() {
-					public void handle(CellEditEvent<Link, String> t) {
-						Link link = t.getRowValue();
-						link.setTitle(t.getNewValue());
-						if (isLinkInformationCorrect(link.getURL())){
-							if (insertOrUpdateLink(link)){
-								refreshLinkTable();
-							}
-						}
-					}
-				}
-		);
-
 		// create the created column
 		TableColumn createdCol = new TableColumn("Created");
 		createdCol.setCellValueFactory(new PropertyValueFactory("created"));
@@ -937,7 +937,7 @@ public class FXLink extends Application{
 					   });
 
 		// add all columns to the table view
-		this.tblLinks.getColumns().addAll(selectedCol, urlCol, descriptionCol, categoryCol, titleCol, createdCol, lastUpdatedCol);
+		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, categoryCol, createdCol, lastUpdatedCol);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -1489,7 +1489,7 @@ public class FXLink extends Application{
 		this.btnDeleteLinks.setDisable(true);
 		this.cmbMoveToCategory.setDisable(true);
 		this.btnMoveToCategory.setDisable(true);
-		this.btnGenerateDescription.setDisable(true);
+		this.btnGenerateTitle.setDisable(true);
 		this.cmbCategories.setDisable(true);
 		this.btnSelectAll.setDisable(true);
 		this.btnDeselectAll.setDisable(true);
@@ -1509,7 +1509,7 @@ public class FXLink extends Application{
 			this.btnDeleteLinks.setDisable(false);
 			this.cmbMoveToCategory.setDisable(false);
 			this.btnMoveToCategory.setDisable(false);
-			this.btnGenerateDescription.setDisable(false);
+			this.btnGenerateTitle.setDisable(false);
 			this.cmbCategories.setDisable(false);
 			this.btnSelectAll.setDisable(false);
 			this.btnDeselectAll.setDisable(false);
