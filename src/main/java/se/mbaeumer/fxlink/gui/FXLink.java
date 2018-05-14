@@ -59,7 +59,7 @@ public class FXLink extends Application{
 	public static final String SEARCH_TERM = "Search term";
 	public static final String URL = "URL";
 	public static final String DATABASE_ERROR_OCCURRED = "Database error occurred";
-	public static final String PLEASE_WRITE_A_SEARCH_TERM_AND_SELECT_AT_LEAST_ONE_CRITERIA = "Please write a search term and select at least one criteria";
+	public static final String PLEASE_ENTER_A_SEARCH_TERM_AND_SELECT_AT_LEAST_ONE_CRITERIA = "Please enter a search term and select at least one criteria";
 	private static String STAGE_TITLE = "FX Link";
 	private static String DATABASE_DOES_NOT_EXIST = "The database files do not exist!";
 	private static String ITEMS = "Items";
@@ -93,6 +93,7 @@ public class FXLink extends Application{
 	private CheckBox chkSearchTitle;
 	private CheckBox chkSearchDescription;
 	private ComboBox<Category> cmbCategoriesSearch;
+	private Label lblSearchError;
 
 	private TableView<Link> tblLinks;
 	private TableView<Category> tblCategories;
@@ -622,6 +623,7 @@ public class FXLink extends Application{
 		this.createDescriptionSearchCheckBox();
 		this.createSearchCategoryComboBox();
 		this.createSearchButton();
+		this.createSearchErrorStatusLabel();
 	}
 	
 	private void createSearchTermLabel(){
@@ -744,6 +746,13 @@ public class FXLink extends Application{
 		});
 		this.flowSearch.getChildren().add(this.btnSearch);
 	}
+
+	private void createSearchErrorStatusLabel(){
+		this.lblSearchError = new Label();
+		this.flowSearch.getChildren().add(this.lblSearchError);
+		this.lblSearchError.setTextFill(Color.ORANGERED);
+		this.lblSearchError.setVisible(false);
+	}
 	
 	private boolean isSearchTermGiven(){
 		return this.tfSearchTerm.getText().length() > 0;
@@ -771,8 +780,8 @@ public class FXLink extends Application{
 
 	private void runSearch(){
 		if (isSearchTermGiven() && isCriteriaSelected()){
+			this.lblSearchError.setVisible(false);
 			try {
-				/** TODO: Handle category here **/
 				List<Link> links = SearchHandler.findLinks(tfSearchTerm.getText(), chkSearchURL.isSelected(),
 						chkSearchTitle.isSelected(), chkSearchDescription.isSelected(), cmbCategoriesSearch.getValue());
 				refreshSearchResult(links);
@@ -781,8 +790,8 @@ public class FXLink extends Application{
 				alert.showAndWait();
 			}
 		}else{
-			Alert alert = new Alert(Alert.AlertType.ERROR, PLEASE_WRITE_A_SEARCH_TERM_AND_SELECT_AT_LEAST_ONE_CRITERIA, ButtonType.OK);
-			alert.showAndWait();
+			this.lblSearchError.setText(PLEASE_ENTER_A_SEARCH_TERM_AND_SELECT_AT_LEAST_ONE_CRITERIA);
+			this.lblSearchError.setVisible(true);
 		}
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
