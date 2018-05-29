@@ -18,6 +18,12 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.7.6 - 2018-05-27
+
+* Added category as search criterion
+* Added support for generating link itle instead of link description
+* Minor GUI changes
+
 ## 0.7.5 - 2018-03-31
 
 * Changed the layout of the main stage
