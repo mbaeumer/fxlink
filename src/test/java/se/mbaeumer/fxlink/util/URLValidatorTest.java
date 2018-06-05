@@ -27,4 +27,9 @@ public class URLValidatorTest extends TestCase {
 		assertFalse("htpp://sport.com. should fail", URLValidator.isValidURL("htpp://sport.com"));
 		assertFalse("lotto:pe should fail", URLValidator.isValidURL("lott:pe"));
 	}
+
+	@Test
+	public void testAllowUrlWithFourCharsinDomainSuffix(){
+		assertTrue(URLValidator.isValidURL("https://allegro.tech/2018"));
+	}
 }
