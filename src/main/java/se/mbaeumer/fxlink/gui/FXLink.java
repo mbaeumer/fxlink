@@ -1495,6 +1495,7 @@ public class FXLink extends Application{
 		}
 		
 		this.btnShowSearchPane.setText(this.getSearchPaneTitle());
+		this.btnCreateLink.setDisable(true);
 		this.btnDeleteLinks.setDisable(true);
 		this.cmbMoveToCategory.setDisable(true);
 		this.btnMoveToCategory.setDisable(true);
@@ -1515,6 +1516,7 @@ public class FXLink extends Application{
 			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.btnShowSearchPane.setDisable(false);
+			this.btnCreateLink.setDisable(false);
 			this.btnDeleteLinks.setDisable(false);
 			this.cmbMoveToCategory.setDisable(false);
 			this.btnMoveToCategory.setDisable(false);
