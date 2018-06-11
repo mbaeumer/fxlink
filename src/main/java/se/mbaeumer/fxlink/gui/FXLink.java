@@ -138,13 +138,10 @@ public class FXLink extends Application{
 		this.createFilterFlowPane();
 		this.createActionFlowPane();
 		this.createSelectionFlowPane();
-
 		this.createLinkTableView();
 		this.createCategoryTableView();
 		this.createTagTableView();
-
 		this.createStatusFlowPane();
-
 	}
 	
 	public void createGeneralFlowPane() {
@@ -798,6 +795,14 @@ public class FXLink extends Application{
 	private void createLinkTableView(){
 		this.tblLinks = new TableView();
 	
+
+
+		this.tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
+		this.tblLinks.getItems().add(LinkHandler.createPseudoLink());
+
+		this.createLinkTableColumns();
+		this.tblLinks.setEditable(true);
+
 		this.tblLinks.prefWidthProperty().bind(this.scene.widthProperty());
 		this.tblLinks.prefWidthProperty().addListener(new ChangeListener() {
 			@Override
@@ -805,12 +810,6 @@ public class FXLink extends Application{
 				setLinkTableLayout();
 			}
 		});
-
-		this.tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
-		this.tblLinks.getItems().add(LinkHandler.createPseudoLink());
-
-		this.createLinkTableColumns();
-		this.tblLinks.setEditable(true);
 		this.setLinkTableLayout();
 		
 		tblLinks.addEventHandler(MouseEvent.MOUSE_CLICKED, 
@@ -831,6 +830,7 @@ public class FXLink extends Application{
 				});
 
 		this.flowGeneral.getChildren().add(this.tblLinks);
+
 		FlowPane.setMargin(flowGeneral, new Insets(5));
 	}
 	
@@ -1357,7 +1357,7 @@ public class FXLink extends Application{
 
 	private void updateStatusBar(boolean isSearch){
 		this.lblStatusItemCountText.setText(cmbItems.getValue());
-		int itemSize = 0;
+		int itemSize;
 		if (isSearch){
 			itemSize = getSelectedTableView().getItems().size();
 		}else{
@@ -1387,6 +1387,11 @@ public class FXLink extends Application{
 			}
 		}else{
 			try {
+				Category category = cmbCategories.getValue();
+				if (category.getName().equalsIgnoreCase(ValueConstants.VALUE_N_A)) {
+					link.setCategory(null);
+				}
+
 				LinkHandler.updateLink(link);
 			} catch (ParseException | SQLException e) {
 				Alert alert = new Alert(Alert.AlertType.ERROR, "The URL MUST be unique!", ButtonType.OK);
