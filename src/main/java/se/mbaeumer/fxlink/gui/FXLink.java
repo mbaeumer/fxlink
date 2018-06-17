@@ -1148,28 +1148,30 @@ public class FXLink extends Application{
 		TableColumn createdCol = new TableColumn("Created");
 		createdCol.setCellValueFactory(new PropertyValueFactory("created"));
 		createdCol.setCellValueFactory(
-				   new Callback<TableColumn.CellDataFeatures<Tag, String>, ObservableValue<String>>() {
-					      @Override
-					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Tag, String> tag) {
-					         SimpleStringProperty property = new SimpleStringProperty();
-					         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-					         property.setValue(dateFormat.format(tag.getValue().getCreated()));
-					         return property;
-					      }
-					   });
+		   new Callback<TableColumn.CellDataFeatures<Tag, String>, ObservableValue<String>>() {
+				  @Override
+				  public ObservableValue<String> call(TableColumn.CellDataFeatures<Tag, String> tag) {
+					 SimpleStringProperty property = new SimpleStringProperty();
+					 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					 property.setValue(dateFormat.format(tag.getValue().getCreated()));
+					 return property;
+				  }
+		   }
+	    );
 
 		TableColumn<Tag, String> lastUpdatedCol = new TableColumn<Tag, String>("Last modified");
 		lastUpdatedCol.setCellValueFactory(new PropertyValueFactory<Tag, String>("lastUpdated"));
 		lastUpdatedCol.setCellValueFactory(
-				   new Callback<TableColumn.CellDataFeatures<Tag, String>, ObservableValue<String>>() {
-					      @Override
-					      public ObservableValue<String> call(TableColumn.CellDataFeatures<Tag, String> tag) {
-					         SimpleStringProperty property = new SimpleStringProperty();
-					         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					         property.setValue(dateFormat.format(tag.getValue().getLastUpdated()));
-					         return property;
-					      }
-					   });
+		   new Callback<TableColumn.CellDataFeatures<Tag, String>, ObservableValue<String>>() {
+				  @Override
+				  public ObservableValue<String> call(TableColumn.CellDataFeatures<Tag, String> tag) {
+					 SimpleStringProperty property = new SimpleStringProperty();
+					 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+					 property.setValue(dateFormat.format(tag.getValue().getLastUpdated()));
+					 return property;
+				  }
+		   }
+	     );
 								
 		this.tblTags.getColumns().addAll(nameCol, descriptionCol, createdCol, lastUpdatedCol);
 

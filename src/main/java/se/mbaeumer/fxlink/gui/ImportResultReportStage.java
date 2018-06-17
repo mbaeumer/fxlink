@@ -65,13 +65,19 @@ public class ImportResultReportStage extends Stage {
 		
 		this.importReport = report;
 		this.initLayout();
-		this.bindSizes();
-		this.initSuccessLinksTableLayout();
-		this.initFailedLinksTableLayout();
+		this.initSizes();
+		this.setSuccessLinksTableLayout();
+		this.setFailedLinksTableLayout();
+
+		this.flowGeneral.widthProperty().addListener((obs, oldVal, newVal) -> {
+			this.tabPane.setPrefWidth(this.flowGeneral.widthProperty().doubleValue()-20);
+			this.setSuccessLinksTableLayout();
+			this.setFailedLinksTableLayout();
+		});
 	}
 	
 	private void initScene(){
-		int width = 650;
+		int width = 750;
 		int height = 800;
 		this.scene = new Scene(this.flowGeneral, width, height);
 		this.scene.setFill(Color.WHITESMOKE);
@@ -85,7 +91,6 @@ public class ImportResultReportStage extends Stage {
 	private void makeModal(){
 		this.initModality(Modality.APPLICATION_MODAL);
 		this.initStyle(StageStyle.UTILITY);
-		this.setResizable(false);
 	}
 	
 	private void initRootPane(){
@@ -110,8 +115,8 @@ public class ImportResultReportStage extends Stage {
 		this.initCloseButton();
 	}
 
-	private void bindSizes(){
-		this.tabPane.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+	private void initSizes(){
+		this.tabPane.setPrefWidth(this.flowGeneral.widthProperty().doubleValue()-20);
 		this.tvSuccessfulLinks.prefWidthProperty().bind(this.tabPane.prefWidthProperty());
 		this.tvFailedLinks.prefWidthProperty().bind(this.tabPane.prefWidthProperty());
 	}
@@ -251,21 +256,21 @@ public class ImportResultReportStage extends Stage {
 	private void createTabPane(){
 		this.tabPane = new TabPane();
 		this.tabPane.getSelectionModel().selectedItemProperty().addListener(
-				new ChangeListener<Tab>() {
-					@Override
-					public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-						cmbMoveToCategory.setDisable(true);
-						btnMoveToCategory.setDisable(true);
-						btnSelectAll.setDisable(true);
-						btnDeselectAll.setDisable(true);
-						if (tabPane.getSelectionModel().isSelected(0)){
-							cmbMoveToCategory.setDisable(false);
-							btnMoveToCategory.setDisable(false);
-							btnSelectAll.setDisable(false);
-							btnDeselectAll.setDisable(false);
-						}
+			new ChangeListener<Tab>() {
+				@Override
+				public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+					cmbMoveToCategory.setDisable(true);
+					btnMoveToCategory.setDisable(true);
+					btnSelectAll.setDisable(true);
+					btnDeselectAll.setDisable(true);
+					if (tabPane.getSelectionModel().isSelected(0)){
+						cmbMoveToCategory.setDisable(false);
+						btnMoveToCategory.setDisable(false);
+						btnSelectAll.setDisable(false);
+						btnDeselectAll.setDisable(false);
 					}
 				}
+			}
 		);
 	}
 
@@ -369,7 +374,7 @@ public class ImportResultReportStage extends Stage {
 		}
 	}
 
-	private void initSuccessLinksTableLayout(){
+	private void setSuccessLinksTableLayout(){
 		((TableColumn)this.tvSuccessfulLinks.getColumns().get(0)).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*10)/100);
 		((TableColumn)this.tvSuccessfulLinks.getColumns().get(1)).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*20)/100);
 		((TableColumn)this.tvSuccessfulLinks.getColumns().get(2)).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*40)/100);
@@ -423,7 +428,7 @@ public class ImportResultReportStage extends Stage {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private void initFailedLinksTableLayout(){
+	private void setFailedLinksTableLayout(){
 		for (Object o : this.tvFailedLinks.getColumns()){
 			TableColumn tc = (TableColumn) o;
 			tc.setPrefWidth((this.tvFailedLinks.getPrefWidth()*50)/100);
@@ -432,15 +437,7 @@ public class ImportResultReportStage extends Stage {
 	
 	private void initCloseButton(){
 		this.btnClose = new Button("Close");
-		
-		this.btnClose.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent arg0) {
-				close();
-			}
-		});
-		
+		this.btnClose.setOnAction((event) -> {close();});
 		this.flowGeneral.getChildren().add(this.btnClose);
 	}
 }
