@@ -18,6 +18,12 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.7.7 - 2018-06-17
+
+* Added support for creating links that contain four characters in the domain suffix
+* Minor bug fixes
+* Minor layout fixes
+
 ## 0.7.6 - 2018-05-27
 
 * Added category as search criterion
