@@ -13,6 +13,11 @@ public class CategoryHandler {
 	public static List<Category> getCategories(){
 		return CategoryReadDBHandler.getAllCategories(GenericDBHandler.getInstance());
 	}
+
+	public static Category getCategoryByName(final String categoryName) throws SQLException {
+		String sql = CategoryReadDBHandler.constructSqlString(categoryName);
+		return CategoryReadDBHandler.getCategoryByName(sql, GenericDBHandler.getInstance());
+	}
 	
 	public static Category createPseudoCategory(String categoryName){
 		Category category = new Category();

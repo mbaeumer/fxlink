@@ -80,7 +80,7 @@ public class FXLink extends Application{
 	private Button btnImportTextFile;
 	private Button btnShowSearchPane;
 	private Button btnDeleteLinks;
-	private Button btnCreateLink;
+	private Button btnCreateItem;
 	private ComboBox<Category> cmbMoveToCategory;
 	private Button btnMoveToCategory;
 	private Button btnGenerateTitle;
@@ -279,7 +279,7 @@ public class FXLink extends Application{
 		this.flowActions.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 		this.flowGeneral.getChildren().add(this.flowActions);
 		FlowPane.setMargin(flowActions, new Insets(5));
-		this.createNewLinkButton();
+		this.createNewItemButton();
 		this.createDeleteLinksButton();
 		this.createShowSearchPaneButton();
 		this.createMoveToCategoryComboBox();
@@ -452,17 +452,22 @@ public class FXLink extends Application{
 		this.flowActions.getChildren().add(this.btnDeleteLinks);
 	}
 
-	private void createNewLinkButton(){
-		this.btnCreateLink = new Button("New");
-		this.btnCreateLink.setOnAction(new EventHandler<ActionEvent>() {
+	private void createNewItemButton(){
+		this.btnCreateItem = new Button("New");
+		this.btnCreateItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				LinkViewDetailStage linkDetail = new LinkViewDetailStage(LinkHandler.createPseudoLink());
-				linkDetail.showAndWait();
-				refreshLinkTable();
+				if (cmbItems.getValue().equalsIgnoreCase("Links")){
+					LinkViewDetailStage linkDetail = new LinkViewDetailStage(LinkHandler.createPseudoLink());
+					linkDetail.showAndWait();
+					refreshLinkTable();
+				}else{
+					CreateCategoryStage createCategoryStage = new CreateCategoryStage();
+					createCategoryStage.showAndWait();
+				}
 			}
 		});
-		this.flowActions.getChildren().add(this.btnCreateLink);
+		this.flowActions.getChildren().add(this.btnCreateItem);
 	}
 
 	private void createMoveToCategoryComboBox(){
@@ -1502,7 +1507,7 @@ public class FXLink extends Application{
 		}
 		
 		this.btnShowSearchPane.setText(this.getSearchPaneTitle());
-		this.btnCreateLink.setDisable(true);
+		this.btnCreateItem.setDisable(true);
 		this.btnDeleteLinks.setDisable(true);
 		this.cmbMoveToCategory.setDisable(true);
 		this.btnMoveToCategory.setDisable(true);
@@ -1523,7 +1528,7 @@ public class FXLink extends Application{
 			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.btnShowSearchPane.setDisable(false);
-			this.btnCreateLink.setDisable(false);
+			this.btnCreateItem.setDisable(false);
 			this.btnDeleteLinks.setDisable(false);
 			this.cmbMoveToCategory.setDisable(false);
 			this.btnMoveToCategory.setDisable(false);
@@ -1540,6 +1545,7 @@ public class FXLink extends Application{
 			tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
 			this.btnShowSearchPane.setText(this.getSearchPaneTitle());
 			this.btnShowSearchPane.setDisable(true);
+			this.btnCreateItem.setDisable(false);
 		}else if (item.equals("Tags")){
 			this.removeSearchPane();
 			this.flowGeneral.getChildren().remove(this.tblLinks);

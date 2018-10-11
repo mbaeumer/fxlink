@@ -2,14 +2,18 @@ package se.mbaeumer.fxlink.handlers;
 
 import se.mbaeumer.fxlink.models.Category;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryReadDBHandler {
+	private static final String SELECT_BY_NAME = "select c.id as categoryId, c.name, c.description from category c where c.name='";
+
+	public static String constructSqlString(final String categoryName){
+		String sql = SELECT_BY_NAME  + categoryName + "'";
+		return sql;
+	}
+
 	public static List<Category> getAllCategories(GenericDBHandler dbh){
 		Connection connection = dbh.getConnection();				
 		List<Category> categories = new ArrayList<Category>();
@@ -37,4 +41,21 @@ public class CategoryReadDBHandler {
 		return categories;
 	}
 
+	public static Category getCategoryByName(final String sql, GenericDBHandler dbh) throws SQLException{
+		Connection connection = dbh.getConnection();
+		Category category = null;
+
+		PreparedStatement stmt = connection.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		while (rs.next()) {
+			category = new Category();
+			category.setId(rs.getInt("categoryId"));
+			category.setName(rs.getString("name"));
+			category.setDescription(rs.getString("description"));
+		}
+		stmt.close();
+		rs.close();
+
+		return category;
+	}
 }
