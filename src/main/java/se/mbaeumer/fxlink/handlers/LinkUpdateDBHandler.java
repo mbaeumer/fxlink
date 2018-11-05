@@ -29,7 +29,7 @@ public class LinkUpdateDBHandler {
 			return null;
 		}
 
-		if (link.getCategory() != null){
+		if (link.getCategory() != null && link.getCategory().getId() > 0){
 			sql += SQL_UPDATE_CATEGORY;
 		}else{
 			sql += DEFAULT_CATEGORY;
