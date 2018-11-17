@@ -341,7 +341,7 @@ public class FXLink extends Application{
 	private void logFileImport(final String filename){
 		ImportItemHandler importItemHandler = new ImportItemHandler();
 		try {
-			importItemHandler.doSom(filename);
+			importItemHandler.createImportItem(filename);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

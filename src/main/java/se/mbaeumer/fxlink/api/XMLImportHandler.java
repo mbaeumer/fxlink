@@ -25,28 +25,19 @@ public class XMLImportHandler {
 	}
 	
 	public void truncateDatabase() throws SQLException{
-		// truncate in the following order:
-		//1. link tags
 		LinkTagHandler.deleteAllLinkTags();
-		//2. tags
 		TagHandler.deleteAllTags();
-		//3. links
 		LinkHandler.deleteAllLinks();
-		//4. categories
 		CategoryHandler.deleteAllCategories();
+
+		ImportItemHandler importItemHandler = new ImportItemHandler();
+		importItemHandler.deleteAllImportItems();
 	}
 	
 	public void importData() throws SQLException{
-		// 1. categories
 		importCategories();
-		
-		// 2. links
 		importLinks();
-		
-		// 3. tags
 		importTags();
-		
-		// 4. linktags
 		importLinkTags();
 	}
 	
