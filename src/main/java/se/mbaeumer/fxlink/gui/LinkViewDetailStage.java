@@ -373,7 +373,7 @@ public class LinkViewDetailStage extends Stage {
 	}
 
 	private void initGenerateTitleButton(){
-		this.btnGenerateTitle = new Button("Generate filename");
+		this.btnGenerateTitle = new Button("Generate title");
 		this.btnGenerateTitle.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override

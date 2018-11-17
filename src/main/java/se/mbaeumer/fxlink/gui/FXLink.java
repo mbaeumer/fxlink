@@ -557,7 +557,7 @@ public class FXLink extends Application{
 	}
 
 	private void createGenerateTitleButton(){
-		this.btnGenerateTitle = new Button("Generate filename");
+		this.btnGenerateTitle = new Button("Generate title");
 		this.btnGenerateTitle.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
