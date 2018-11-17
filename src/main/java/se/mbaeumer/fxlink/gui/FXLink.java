@@ -265,6 +265,16 @@ public class FXLink extends Application{
 		this.btnResetFilter.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				/*
+				ImportHistoryStage importHistoryStage = null;
+				try {
+					importHistoryStage = new ImportHistoryStage();
+					importHistoryStage.showAndWait();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				*/
+
 				cmbCategories.getSelectionModel().selectFirst();
 				cmbItems.getSelectionModel().selectFirst();
 			}
@@ -534,7 +544,7 @@ public class FXLink extends Application{
 	}
 
 	private void createGenerateTitleButton(){
-		this.btnGenerateTitle = new Button("Generate title");
+		this.btnGenerateTitle = new Button("Generate filename");
 		this.btnGenerateTitle.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -664,7 +674,7 @@ public class FXLink extends Application{
 	}
 	
 	private void createTitleSearchCheckBox(){
-		this.chkSearchTitle= new CheckBox("title");
+		this.chkSearchTitle= new CheckBox("filename");
 		this.chkSearchTitle.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -865,9 +875,9 @@ public class FXLink extends Application{
 		    }
 		);
 
-		// create title column
+		// create filename column
 		TableColumn titleCol = new TableColumn("Title");
-		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
+		titleCol.setCellValueFactory(new PropertyValueFactory("filename"));
 		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		titleCol.setOnEditCommit(
 				new EventHandler<CellEditEvent<Link, String>>() {

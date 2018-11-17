@@ -1,6 +1,5 @@
 package se.mbaeumer.fxlink.handlers;
 
-import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
 
 import java.sql.Connection;

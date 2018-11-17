@@ -33,7 +33,4 @@ public class ImportResultReport {
 	public void setFailedLinks(List<FailedLink> failedLinks) {
 		this.failedLinks = failedLinks;
 	}
-	
-	
-	
 }
