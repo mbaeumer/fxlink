@@ -17,6 +17,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.handlers.HsqldbConnectionHandler;
 import se.mbaeumer.fxlink.handlers.ImportItemReadDBHandler;
+import se.mbaeumer.fxlink.models.ImportItem;
 import se.mbaeumer.fxlink.models.Link;
 
 import java.sql.SQLException;
@@ -81,23 +82,13 @@ public class ImportHistoryStage extends Stage {
     private void createTableViewColumns(){
         TableColumn filenameCol = new TableColumn("Filename");
         filenameCol.setCellValueFactory(new PropertyValueFactory("filename"));
-        filenameCol.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Link, String>, ObservableValue<String>>() {
-                    @Override
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Link, String> link) {
-                        SimpleStringProperty property = new SimpleStringProperty();
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        property.setValue(dateFormat.format(link.getValue().getCreated()));
-                        return property;
-                    }
-                });
 
         TableColumn createdCol = new TableColumn("Created");
         createdCol.setCellValueFactory(new PropertyValueFactory("created"));
         createdCol.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Link, String>, ObservableValue<String>>() {
+                new Callback<TableColumn.CellDataFeatures<ImportItem, String>, ObservableValue<String>>() {
                     @Override
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Link, String> link) {
+                    public ObservableValue<String> call(TableColumn.CellDataFeatures<ImportItem, String> link) {
                         SimpleStringProperty property = new SimpleStringProperty();
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         property.setValue(dateFormat.format(link.getValue().getCreated()));

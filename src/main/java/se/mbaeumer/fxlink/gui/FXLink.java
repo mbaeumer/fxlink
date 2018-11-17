@@ -274,7 +274,6 @@ public class FXLink extends Application{
 					e.printStackTrace();
 				}
 				*/
-
 				cmbCategories.getSelectionModel().selectFirst();
 				cmbItems.getSelectionModel().selectFirst();
 			}
@@ -314,6 +313,11 @@ public class FXLink extends Application{
 					return;
 				}
 
+				try {
+					logFileImport(importFile.getCanonicalPath());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				TextImportHandler tih = new TextImportHandler();
 				try {
 					tih.importFromTextFile(importFile);
@@ -332,6 +336,15 @@ public class FXLink extends Application{
 			}
 		});
 		this.flowActions.getChildren().add(this.btnImportTextFile);
+	}
+
+	private void logFileImport(final String filename){
+		ImportItemHandler importItemHandler = new ImportItemHandler();
+		try {
+			importItemHandler.doSom(filename);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void createWriteBackupButton(){
