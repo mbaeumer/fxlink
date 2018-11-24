@@ -1,10 +1,8 @@
 package se.mbaeumer.fxlink.xmlexport;
 
+import se.mbaeumer.fxlink.api.ImportItemHandler;
 import se.mbaeumer.fxlink.handlers.*;
-import se.mbaeumer.fxlink.models.Category;
-import se.mbaeumer.fxlink.models.Link;
-import se.mbaeumer.fxlink.models.LinkTag;
-import se.mbaeumer.fxlink.models.Tag;
+import se.mbaeumer.fxlink.models.*;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
 import javax.xml.stream.XMLEventFactory;
@@ -31,6 +29,7 @@ public class LinkXMLWriter {
 	private List<Category> categories;
 	private List<Tag> tags;
 	private List<LinkTag> linkTags;
+	private List<ImportItem> importItems;
 	
 	private String configFile;
 	
@@ -59,6 +58,9 @@ public class LinkXMLWriter {
 
 		this.tags = tagDBHandler.getAllTags(tagDBHandler.constructSqlString(null), new HsqldbConnectionHandler());
 		this.linkTags = LinkTagReadDBHandler.getAllLinkTagEntries(GenericDBHandler.getInstance());
+
+		ImportItemHandler importItemHandler = new ImportItemHandler();
+		this.importItems = importItemHandler.readImportItems();
 	}
 	
 	public void writeDataToFile() throws XMLStreamException, SQLException {
@@ -76,6 +78,7 @@ public class LinkXMLWriter {
 		this.writeLinks();
 		this.writeTags();
 		this.writeLinkTags();
+		this.writeImportItems();
 		
 		EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
 				"", "fxlink-data");
@@ -318,6 +321,51 @@ public class LinkXMLWriter {
 		this.xmlEventWriter.add(attribute);
 		
 		attribute = this.xmlEventFactory.createAttribute("tagid", new Integer(tag.getTagId()).toString());
+		this.xmlEventWriter.add(attribute);
+	}
+
+	private void writeImportItems() throws XMLStreamException {
+		this.xmlEventWriter.add(this.xmlTab);
+		StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
+				"", "importitems");
+		this.xmlEventWriter.add(rootStartElement);
+		this.xmlEventWriter.add(this.xmlEndLine);
+
+		this.writeImportItemData();
+
+		this.xmlEventWriter.add(this.xmlTab);
+		EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
+				"", "importitems");
+		this.xmlEventWriter.add(rootEndElement);
+		this.xmlEventWriter.add(this.xmlEndLine);
+	}
+
+	private void writeImportItemData() throws XMLStreamException {
+		for (ImportItem importItem : this.importItems){
+			this.xmlEventWriter.add(this.xmlTab);
+			this.xmlEventWriter.add(this.xmlTab);
+			StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
+					"", "importitem");
+
+			this.xmlEventWriter.add(rootStartElement);
+
+			this.writeImportItemAttributes(importItem);
+
+			EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
+					"", "importitem");
+			this.xmlEventWriter.add(rootEndElement);
+			this.xmlEventWriter.add(this.xmlEndLine);
+		}
+	}
+
+	private void writeImportItemAttributes(ImportItem importItem) throws XMLStreamException {
+		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", new Integer(importItem.getId()).toString());
+		this.xmlEventWriter.add(attribute);
+
+		attribute = this.xmlEventFactory.createAttribute("filename", importItem.getFilename());
+		this.xmlEventWriter.add(attribute);
+
+		attribute = this.xmlEventFactory.createAttribute("created", importItem.getCreated().toString());
 		this.xmlEventWriter.add(attribute);
 	}
 }
