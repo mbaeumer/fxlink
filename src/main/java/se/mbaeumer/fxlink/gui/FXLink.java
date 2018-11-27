@@ -411,9 +411,9 @@ public class FXLink extends Application{
 						xmlImportHandler.truncateDatabase();
 						xmlImportHandler.importData();
 						cmbItems.setValue(LINKS);
-						refreshLinkTable();
 						loadCategoriesForFilter();
 						loadCategoriesForMove();
+						refreshLinkTable();
 					} catch (FileNotFoundException | XMLStreamException e) {
 						e.printStackTrace();
 					} catch (IOException e) {

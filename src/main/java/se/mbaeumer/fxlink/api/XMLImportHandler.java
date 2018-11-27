@@ -1,10 +1,7 @@
 package se.mbaeumer.fxlink.api;
 
 import se.mbaeumer.fxlink.handlers.*;
-import se.mbaeumer.fxlink.models.Category;
-import se.mbaeumer.fxlink.models.Link;
-import se.mbaeumer.fxlink.models.LinkTag;
-import se.mbaeumer.fxlink.models.Tag;
+import se.mbaeumer.fxlink.models.*;
 import se.mbaeumer.fxlink.xmlimport.LinkXMLReader;
 
 import javax.xml.stream.XMLStreamException;
@@ -39,6 +36,7 @@ public class XMLImportHandler {
 		importLinks();
 		importTags();
 		importLinkTags();
+		importImportItems();
 	}
 	
 	private void importCategories() throws SQLException{
@@ -64,4 +62,13 @@ public class XMLImportHandler {
 			LinkTagImportDBHandler.importLinkTag(linkTag, GenericDBHandler.getInstance());
 		}
 	}
+
+	private void importImportItems() throws SQLException{
+		ImportItemImportDBandler importItemImportDBandler = new ImportItemImportDBandler();
+		for (ImportItem linkTag : reader.getImportItems()){
+			importItemImportDBandler.importImportItem(linkTag, new HsqldbConnectionHandler());
+		}
+	}
+
+
 }

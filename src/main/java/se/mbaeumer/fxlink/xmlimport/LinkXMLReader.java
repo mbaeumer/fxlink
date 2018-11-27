@@ -1,9 +1,6 @@
 package se.mbaeumer.fxlink.xmlimport;
 
-import se.mbaeumer.fxlink.models.Category;
-import se.mbaeumer.fxlink.models.Link;
-import se.mbaeumer.fxlink.models.LinkTag;
-import se.mbaeumer.fxlink.models.Tag;
+import se.mbaeumer.fxlink.models.*;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -30,6 +27,8 @@ public class LinkXMLReader {
 	static final String TAG = "tag";
 	static final String LINKTAGS = "linktags";
 	static final String LINKTAG = "linktag";
+	static final String IMPORTITEMS = "importitems";
+	static final String IMPORTITEM = "importitem";
 	
 	private XMLInputFactory xmlInputFactory;
 	private XMLEventReader xmlEventReader;
@@ -40,6 +39,10 @@ public class LinkXMLReader {
 	private List<Link> links;
 	private List<Tag> tags;
 	private List<LinkTag> linkTags;
+
+
+
+	private List<ImportItem> importItems;
 	
 	public LinkXMLReader(String fileName) throws FileNotFoundException, XMLStreamException {
 		this.configFile = fileName;
@@ -170,7 +173,27 @@ public class LinkXMLReader {
 					linkTag.setTagId(new Integer(startElement.getAttributeByName(
 							new QName("tagid")).getValue()));
 					this.linkTags.add(linkTag);
+				}else if (startElement.getName().getLocalPart() == (IMPORTITEMS)) {
+					this.importItems = new ArrayList<>();
+				}else if (startElement.getName().getLocalPart() == (IMPORTITEM)) {
+					ImportItem importItem = new ImportItem();
+					importItem.setId(new Integer(startElement.getAttributeByName(
+							new QName("id")).getValue()));
+					importItem.setFilename(startElement.getAttributeByName(
+							new QName("filename")).getValue());
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+					Date date;
+
+					try {
+						date = df.parse(startElement.getAttributeByName(
+								new QName("created")).getValue());
+						importItem.setCreated(date);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					this.importItems.add(importItem);
 				}
+
 			}
 		}
 	}
@@ -189,5 +212,9 @@ public class LinkXMLReader {
 
 	public List<LinkTag> getLinkTags() {
 		return linkTags;
+	}
+
+	public List<ImportItem> getImportItems() {
+		return importItems;
 	}
 }
