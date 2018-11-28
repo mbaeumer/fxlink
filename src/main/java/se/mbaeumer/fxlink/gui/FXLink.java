@@ -77,6 +77,7 @@ public class FXLink extends Application{
 	private Label lblCategories;
 	private ComboBox<Category> cmbCategories;
 	private Button btnResetFilter;
+	private Button btnShowImportHistory;
 	private Button btnImportTextFile;
 	private Button btnShowSearchPane;
 	private Button btnDeleteLinks;
@@ -164,7 +165,7 @@ public class FXLink extends Application{
 		this.createCategoryLabel();
 		this.createCategoryComboBox();
 		this.createResetButton();
-
+		this.createShowImportHistoryButton();
 	}
 	
 	public void createItemLabel(){
@@ -265,7 +266,18 @@ public class FXLink extends Application{
 		this.btnResetFilter.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				/*
+				cmbCategories.getSelectionModel().selectFirst();
+				cmbItems.getSelectionModel().selectFirst();
+			}
+		});
+		this.flowFilter.getChildren().add(this.btnResetFilter);
+	}
+
+	private void createShowImportHistoryButton(){
+		btnShowImportHistory = new Button("Show import history");
+		this.btnShowImportHistory.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
 				ImportHistoryStage importHistoryStage = null;
 				try {
 					importHistoryStage = new ImportHistoryStage();
@@ -273,12 +285,9 @@ public class FXLink extends Application{
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-				*/
-				cmbCategories.getSelectionModel().selectFirst();
-				cmbItems.getSelectionModel().selectFirst();
 			}
 		});
-		this.flowFilter.getChildren().add(this.btnResetFilter);
+		this.flowFilter.getChildren().add(this.btnShowImportHistory);
 	}
 
 	private void createActionFlowPane(){
@@ -890,7 +899,7 @@ public class FXLink extends Application{
 
 		// create filename column
 		TableColumn titleCol = new TableColumn("Title");
-		titleCol.setCellValueFactory(new PropertyValueFactory("filename"));
+		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
 		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		titleCol.setOnEditCommit(
 				new EventHandler<CellEditEvent<Link, String>>() {
