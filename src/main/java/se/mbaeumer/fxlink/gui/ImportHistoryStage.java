@@ -9,16 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import se.mbaeumer.fxlink.handlers.HsqldbConnectionHandler;
-import se.mbaeumer.fxlink.handlers.ImportItemReadDBHandler;
+import se.mbaeumer.fxlink.api.ImportItemHandler;
 import se.mbaeumer.fxlink.models.ImportItem;
-import se.mbaeumer.fxlink.models.Link;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -68,9 +65,9 @@ public class ImportHistoryStage extends Stage {
     private void initTableView() throws SQLException {
         this.tvImportItems = new TableView();
 
-        ImportItemReadDBHandler importItemReadDBHandler = new ImportItemReadDBHandler();
-        String sql = "select * from ImportItem";
-        this.tvImportItems.setItems(FXCollections.observableList(importItemReadDBHandler.getAllImportItems(sql, new HsqldbConnectionHandler())));
+        ImportItemHandler importItemHandler = new ImportItemHandler();
+
+        this.tvImportItems.setItems(FXCollections.observableList(importItemHandler.readImportItems()));
         this.createTableViewColumns();
 
         this.flowGeneral.getChildren().add(this.tvImportItems);

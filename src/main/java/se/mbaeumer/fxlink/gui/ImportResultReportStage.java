@@ -119,14 +119,16 @@ public class ImportResultReportStage extends Stage {
 		this.tabPane.setPrefWidth(this.flowGeneral.widthProperty().doubleValue()-20);
 		this.tvSuccessfulLinks.prefWidthProperty().bind(this.tabPane.prefWidthProperty());
 		this.tvFailedLinks.prefWidthProperty().bind(this.tabPane.prefWidthProperty());
+		this.lblImportFileName.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+		this.flowSelection.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 	}
 	
 	private void initImportInfoLabels(){
-		this.lblImportFileName.setText(this.importReport.getFilename());
+		this.lblImportFileName.setText("Imported from " + this.importReport.getFilename());
 		
 		this.lblSuccessfulImportsValue.setText(new Integer(this.importReport.getSuccessfulLinks().size()).toString());
 		this.lblFailedImportsValue.setText(new Integer(this.importReport.getFailedLinks().size()).toString());
-		this.flowGeneral.getChildren().addAll(this.lblImportFileText, this.lblImportFileName, this.lblSuccessfulImportsText, 
+		this.flowGeneral.getChildren().addAll(this.lblImportFileName, this.lblSuccessfulImportsText,
 				this.lblSuccessfulImportsValue, this.lblFailedImportsText, this.lblFailedImportsValue);
 	}
 
@@ -215,7 +217,7 @@ public class ImportResultReportStage extends Stage {
 	private void initSelectionPane(){
 		this.flowSelection = new FlowPane(Orientation.HORIZONTAL);
 		this.flowSelection.setHgap(10);
-		this.flowSelection.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+
 		this.flowGeneral.getChildren().add(this.flowSelection);
 	}
 
