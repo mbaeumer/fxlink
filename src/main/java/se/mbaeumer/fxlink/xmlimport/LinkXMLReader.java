@@ -19,16 +19,16 @@ import java.util.Date;
 import java.util.List;
 
 public class LinkXMLReader {
-	static final String CATEGORIES = "categories";
-	static final String CATEGORY = "category";
-	static final String LINKS = "links";
-	static final String LINK = "link";
-	static final String TAGS = "tags";
-	static final String TAG = "tag";
-	static final String LINKTAGS = "linktags";
-	static final String LINKTAG = "linktag";
-	static final String IMPORTITEMS = "importitems";
-	static final String IMPORTITEM = "importitem";
+	public static final String CATEGORIES = "categories";
+	public static final String CATEGORY = "category";
+	public static final String LINKS = "links";
+	public static final String LINK = "link";
+	public static final String TAGS = "tags";
+	public static final String TAG = "tag";
+	public static final String LINKTAGS = "linktags";
+	public static final String LINKTAG = "linktag";
+	public static final String IMPORTITEMS = "importitems";
+	public static final String IMPORTITEM = "importitem";
 	
 	private XMLInputFactory xmlInputFactory;
 	private XMLEventReader xmlEventReader;

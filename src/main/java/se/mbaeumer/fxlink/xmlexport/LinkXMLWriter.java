@@ -4,6 +4,7 @@ import se.mbaeumer.fxlink.api.ImportItemHandler;
 import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.*;
 import se.mbaeumer.fxlink.util.ValueConstants;
+import se.mbaeumer.fxlink.xmlimport.LinkXMLReader;
 
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
@@ -91,7 +92,7 @@ public class LinkXMLWriter {
 	private void writeCategories() throws XMLStreamException {
 		this.xmlEventWriter.add(this.xmlTab);
 		StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-				"", "categories");
+				"", LinkXMLReader.CATEGORIES);
 		this.xmlEventWriter.add(rootStartElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 		
@@ -99,7 +100,7 @@ public class LinkXMLWriter {
 		
 		this.xmlEventWriter.add(this.xmlTab);
 		EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-				"", "categories");
+				"", LinkXMLReader.CATEGORIES);
 		this.xmlEventWriter.add(rootEndElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 	}
@@ -109,13 +110,13 @@ public class LinkXMLWriter {
 			this.xmlEventWriter.add(this.xmlTab);
 			this.xmlEventWriter.add(this.xmlTab);
 			StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-					"", "category");
+					"", LinkXMLReader.CATEGORY);
 			this.xmlEventWriter.add(rootStartElement);
 			
 			this.writeCategoryAttributes(category);
 			
 			EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-					"", "category");
+					"", LinkXMLReader.CATEGORY);
 			this.xmlEventWriter.add(rootEndElement);
 			this.xmlEventWriter.add(this.xmlEndLine);
 		}
@@ -148,7 +149,7 @@ public class LinkXMLWriter {
 	private void writeLinks() throws XMLStreamException {
 		this.xmlEventWriter.add(this.xmlTab);
 		StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-				"", "links");
+				"", LinkXMLReader.LINKS);
 		this.xmlEventWriter.add(rootStartElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 		
@@ -156,7 +157,7 @@ public class LinkXMLWriter {
 		
 		this.xmlEventWriter.add(this.xmlTab);
 		EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-				"", "links");
+				"", LinkXMLReader.LINKS);
 		this.xmlEventWriter.add(rootEndElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 	}
@@ -166,14 +167,14 @@ public class LinkXMLWriter {
 			this.xmlEventWriter.add(this.xmlTab);
 			this.xmlEventWriter.add(this.xmlTab);
 			StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-					"", "link");
+					"", LinkXMLReader.LINK);
 			
 			this.xmlEventWriter.add(rootStartElement);
 			
 			this.writeLinkAttributes(link);
 			
 			EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-					"", "link");
+					"", LinkXMLReader.LINK);
 			this.xmlEventWriter.add(rootEndElement);
 			this.xmlEventWriter.add(this.xmlEndLine);
 		}
@@ -223,7 +224,7 @@ public class LinkXMLWriter {
 	private void writeTags() throws XMLStreamException {
 		this.xmlEventWriter.add(this.xmlTab);
 		StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-				"", "tags");
+				"", LinkXMLReader.TAGS);
 		this.xmlEventWriter.add(rootStartElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 		
@@ -231,7 +232,7 @@ public class LinkXMLWriter {
 		
 		this.xmlEventWriter.add(this.xmlTab);
 		EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-				"", "tags");
+				"", LinkXMLReader.TAGS);
 		this.xmlEventWriter.add(rootEndElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 	}
@@ -241,14 +242,14 @@ public class LinkXMLWriter {
 			this.xmlEventWriter.add(this.xmlTab);
 			this.xmlEventWriter.add(this.xmlTab);
 			StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-					"", "tag");
+					"", LinkXMLReader.TAG);
 			
 			this.xmlEventWriter.add(rootStartElement);
 			
 			this.writeTagAttributes(tag);
 			
 			EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-					"", "tag");
+					"", LinkXMLReader.TAG);
 			this.xmlEventWriter.add(rootEndElement);
 			this.xmlEventWriter.add(this.xmlEndLine);
 		}
@@ -282,7 +283,7 @@ public class LinkXMLWriter {
 	private void writeLinkTags() throws XMLStreamException {
 		this.xmlEventWriter.add(this.xmlTab);
 		StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-				"", "linktags");
+				"", LinkXMLReader.LINKTAGS);
 		this.xmlEventWriter.add(rootStartElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 		
@@ -290,7 +291,7 @@ public class LinkXMLWriter {
 		
 		this.xmlEventWriter.add(this.xmlTab);
 		EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-				"", "linktags");
+				"", LinkXMLReader.LINKTAGS);
 		this.xmlEventWriter.add(rootEndElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 	}
@@ -300,14 +301,14 @@ public class LinkXMLWriter {
 			this.xmlEventWriter.add(this.xmlTab);
 			this.xmlEventWriter.add(this.xmlTab);
 			StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-					"", "linktag");
+					"", LinkXMLReader.LINKTAG);
 			
 			this.xmlEventWriter.add(rootStartElement);
 			
 			this.writeLinkTagAttributes(linkTag);
 			
 			EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-					"", "linktag");
+					"", LinkXMLReader.LINKTAG);
 			this.xmlEventWriter.add(rootEndElement);
 			this.xmlEventWriter.add(this.xmlEndLine);
 		}
@@ -327,7 +328,7 @@ public class LinkXMLWriter {
 	private void writeImportItems() throws XMLStreamException {
 		this.xmlEventWriter.add(this.xmlTab);
 		StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-				"", "importitems");
+				"", LinkXMLReader.IMPORTITEMS);
 		this.xmlEventWriter.add(rootStartElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 
@@ -335,7 +336,7 @@ public class LinkXMLWriter {
 
 		this.xmlEventWriter.add(this.xmlTab);
 		EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-				"", "importitems");
+				"", LinkXMLReader.IMPORTITEMS);
 		this.xmlEventWriter.add(rootEndElement);
 		this.xmlEventWriter.add(this.xmlEndLine);
 	}
@@ -345,14 +346,14 @@ public class LinkXMLWriter {
 			this.xmlEventWriter.add(this.xmlTab);
 			this.xmlEventWriter.add(this.xmlTab);
 			StartElement rootStartElement = this.xmlEventFactory.createStartElement("",
-					"", "importitem");
+					"",LinkXMLReader.IMPORTITEM);
 
 			this.xmlEventWriter.add(rootStartElement);
 
 			this.writeImportItemAttributes(importItem);
 
 			EndElement rootEndElement = this.xmlEventFactory.createEndElement("",
-					"", "importitem");
+					"", LinkXMLReader.IMPORTITEM);
 			this.xmlEventWriter.add(rootEndElement);
 			this.xmlEventWriter.add(this.xmlEndLine);
 		}
