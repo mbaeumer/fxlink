@@ -316,44 +316,59 @@ public class FXLink extends Application{
 				FileChooser fc = new FileChooser();
 				fc.getExtensionFilters().add(
 						new ExtensionFilter("txt", "*.txt"));
-				File importFile= fc.showOpenDialog(null);
+				File importFile = fc.showOpenDialog(null);
 				if (importFile == null){
 					arg0.consume();
 					return;
 				}
 
+				// handle duplicate imports here
+				String message = "It seems that this file has been imported already. Proceed anyway?";
+				boolean isDuplicate = false;
 				try {
 					logFileImport(importFile.getCanonicalPath());
-				} catch (IOException e) {
-					e.printStackTrace();
+				} catch (SQLException | IOException  e) {
+					isDuplicate = true;
 				}
-				TextImportHandler tih = new TextImportHandler();
-				try {
-					tih.importFromTextFile(importFile);
-					ImportResultReport report = new ImportResultReport();
-					report.setFilename(importFile.getCanonicalPath());
-					report.setImportDate(new Date());
-					report.setSuccessfulLinks(tih.getImportedLinks());
-					report.setFailedLinks(tih.getFailedLinks());
-					ImportResultReportStage reportStage = new ImportResultReportStage(report);
-					reportStage.showAndWait();
-					cmbItems.setValue("Links");
-					refreshLinkTable();
-				} catch (IOException e) {
-					e.printStackTrace();
+
+				// if there seems to be a duplicate
+				if (isDuplicate){
+					Alert alert = new Alert(Alert.AlertType.WARNING, message, ButtonType.YES, ButtonType.NO);
+					Optional<ButtonType> result = alert.showAndWait();
+
+					if (result.isPresent() && result.get() == ButtonType.YES){
+						importTextFile(importFile);
+					}
+
+				}else{
+					importTextFile(importFile);
 				}
 			}
 		});
 		this.flowActions.getChildren().add(this.btnImportTextFile);
 	}
 
-	private void logFileImport(final String filename){
-		ImportItemHandler importItemHandler = new ImportItemHandler();
+	private void importTextFile(File importFile) {
+		TextImportHandler tih = new TextImportHandler();
 		try {
-			importItemHandler.createImportItem(filename);
-		} catch (SQLException e) {
+			tih.importFromTextFile(importFile);
+			ImportResultReport report = new ImportResultReport();
+			report.setFilename(importFile.getCanonicalPath());
+			report.setImportDate(new Date());
+			report.setSuccessfulLinks(tih.getImportedLinks());
+			report.setFailedLinks(tih.getFailedLinks());
+			ImportResultReportStage reportStage = new ImportResultReportStage(report);
+			reportStage.showAndWait();
+			cmbItems.setValue("Links");
+			refreshLinkTable();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void logFileImport(final String filename) throws SQLException {
+		ImportItemHandler importItemHandler = new ImportItemHandler();
+		importItemHandler.createImportItem(filename);
 	}
 	
 	private void createWriteBackupButton(){
