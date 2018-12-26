@@ -3,6 +3,8 @@ package se.mbaeumer.fxlink.gui;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -15,10 +17,14 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.api.ImportItemHandler;
+import se.mbaeumer.fxlink.api.LinkHandler;
+import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.ImportItem;
+import se.mbaeumer.fxlink.models.Link;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class ImportHistoryStage extends Stage {
@@ -26,6 +32,7 @@ public class ImportHistoryStage extends Stage {
     private FlowPane flowGeneral;
     private TableView tvImportItems;
     private Button btnClose;
+    private Button btnClearHistory;
 
     public ImportHistoryStage() throws SQLException {
         super();
@@ -54,6 +61,7 @@ public class ImportHistoryStage extends Stage {
 
         this.initTableView();
         this.initCloseButton();
+        this.initHistoryButton();
     }
 
     private void makeModal(){
@@ -100,5 +108,22 @@ public class ImportHistoryStage extends Stage {
         this.btnClose = new Button("Close");
         this.btnClose.setOnAction((event) -> {close();});
         this.flowGeneral.getChildren().add(this.btnClose);
+    }
+
+    private void initHistoryButton(){
+        this.btnClearHistory = new Button("Clear history");
+        this.btnClearHistory.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                ImportItemHandler importItemHandler = new ImportItemHandler();
+                try {
+                    importItemHandler.deleteAllImportItems();
+                    tvImportItems.setItems(FXCollections.observableList(importItemHandler.readImportItems()));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        this.flowGeneral.getChildren().add(this.btnClearHistory);
     }
 }
