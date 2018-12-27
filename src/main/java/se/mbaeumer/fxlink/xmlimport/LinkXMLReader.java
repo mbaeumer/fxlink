@@ -35,19 +35,15 @@ public class LinkXMLReader {
 	private FileInputStream fileInputStream;
 	private String configFile;
 	
-	private List<Category> categories;
-	private List<Link> links;
-	private List<Tag> tags;
-	private List<LinkTag> linkTags;
-
-
-
-	private List<ImportItem> importItems;
+	private List<Category> categories = new ArrayList<>();
+	private List<Link> links = new ArrayList<>();
+	private List<Tag> tags = new ArrayList<>();
+	private List<LinkTag> linkTags = new ArrayList<>();
+	private List<ImportItem> importItems = new ArrayList<>();
 	
 	public LinkXMLReader(String fileName) throws FileNotFoundException, XMLStreamException {
 		this.configFile = fileName;
 		this.init();
-		
 	}
 	
 	private void init() throws FileNotFoundException, XMLStreamException {

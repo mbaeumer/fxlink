@@ -434,9 +434,9 @@ public class FXLink extends Application{
 						xmlImportHandler.readData(importFile.getCanonicalPath());
 						xmlImportHandler.truncateDatabase();
 						xmlImportHandler.importData();
-						cmbItems.setValue(LINKS);
 						loadCategoriesForFilter();
 						loadCategoriesForMove();
+                        cmbItems.setValue(LINKS);
 						refreshLinkTable();
 					} catch (FileNotFoundException | XMLStreamException e) {
 						e.printStackTrace();
@@ -1541,7 +1541,7 @@ public class FXLink extends Application{
 	}
 	
 	private void filterCategories(){
-		if (!cmbCategories.isDisabled()) {
+		if (!cmbCategories.isDisabled() && cmbCategories.getValue() != null) {
 			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.updateStatusBar(false);

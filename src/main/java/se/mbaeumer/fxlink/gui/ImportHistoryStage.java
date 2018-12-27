@@ -17,14 +17,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.api.ImportItemHandler;
-import se.mbaeumer.fxlink.api.LinkHandler;
-import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.ImportItem;
-import se.mbaeumer.fxlink.models.Link;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class ImportHistoryStage extends Stage {
