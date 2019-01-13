@@ -511,6 +511,7 @@ public class FXLink extends Application{
 				}else{
 					CreateCategoryStage createCategoryStage = new CreateCategoryStage();
 					createCategoryStage.showAndWait();
+					refreshCategoryTable(null);
 				}
 			}
 		});
