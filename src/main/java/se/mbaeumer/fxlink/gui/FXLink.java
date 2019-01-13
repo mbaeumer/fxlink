@@ -373,149 +373,143 @@ public class FXLink extends Application{
 	
 	private void createWriteBackupButton(){
 		btnWriteBackup = new Button(SAVE_BACKUP);
-		this.btnWriteBackup.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				FileChooser fc = new FileChooser();
-				fc.getExtensionFilters().add(
-						new ExtensionFilter("XML", "*.xml"));
-				File importFile = fc.showSaveDialog(null);
-				
-				if (importFile == null){
-					arg0.consume();
-					return;
-				}
-
-				try {
-					String path = importFile.getCanonicalPath();
-					if (!path.endsWith(".xml")){
-						path += ".xml";
-					}
-
-					XMLExportHandler.exportData(path);
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				} catch (XMLStreamException e1) {
-					e1.printStackTrace();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
+		this.btnWriteBackup.setOnAction(this::handleWriteBackup);
 		this.flowActions.getChildren().add(this.btnWriteBackup);
+	}
 
+	private void handleWriteBackup(ActionEvent arg0){
+		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters().add(
+				new ExtensionFilter("XML", "*.xml"));
+		File importFile = fc.showSaveDialog(null);
+
+		if (importFile == null){
+			arg0.consume();
+			return;
+		}
+
+		try {
+			String path = importFile.getCanonicalPath();
+			if (!path.endsWith(".xml")){
+				path += ".xml";
+			}
+
+			XMLExportHandler.exportData(path);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (XMLStreamException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	private void createReadBackupButton(){
 		this.btnReadBackup = new Button(IMPORT_BACKUP);
-		this.btnReadBackup.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				FileChooser fc = new FileChooser();
-				fc.getExtensionFilters().add(
-						new ExtensionFilter("XML", "*.xml"));
-				File importFile = fc.showOpenDialog(null);
-				
-				if (importFile == null){
-					arg0.consume();
-					return;
-				}
-				
-				// ask the use to confirm that the database content 
-				// will be overwritten now
-				Alert alert = new Alert(Alert.AlertType.WARNING, THE_CURRENT_CONTENT_WILL_BE_OVERWRITTEN_CONTINUE, ButtonType.YES, ButtonType.NO);
-				Optional<ButtonType> result = alert.showAndWait();
-
-				XMLImportHandler xmlImportHandler = new XMLImportHandler();
-				if (result.isPresent() && result.get() == ButtonType.YES) {
-					try {
-						xmlImportHandler.readData(importFile.getCanonicalPath());
-						xmlImportHandler.truncateDatabase();
-						xmlImportHandler.importData();
-						loadCategoriesForFilter();
-						loadCategoriesForMove();
-                        cmbItems.setValue(LINKS);
-						refreshLinkTable();
-					} catch (FileNotFoundException | XMLStreamException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}else{
-					arg0.consume();
-					return;
-				}
-			}
-		});
+		this.btnReadBackup.setOnAction(this::handleReadBackup);
 		this.flowActions.getChildren().add(this.btnReadBackup);
+	}
+
+	private void handleReadBackup(ActionEvent actionEvent){
+		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters().add(
+				new ExtensionFilter("XML", "*.xml"));
+		File importFile = fc.showOpenDialog(null);
+
+		if (importFile == null){
+			actionEvent.consume();
+			return;
+		}
+
+		// ask the use to confirm that the database content
+		// will be overwritten now
+		Alert alert = new Alert(Alert.AlertType.WARNING, THE_CURRENT_CONTENT_WILL_BE_OVERWRITTEN_CONTINUE, ButtonType.YES, ButtonType.NO);
+		Optional<ButtonType> result = alert.showAndWait();
+
+		XMLImportHandler xmlImportHandler = new XMLImportHandler();
+		if (result.isPresent() && result.get() == ButtonType.YES) {
+			try {
+				xmlImportHandler.readData(importFile.getCanonicalPath());
+				xmlImportHandler.truncateDatabase();
+				xmlImportHandler.importData();
+				loadCategoriesForFilter();
+				loadCategoriesForMove();
+				cmbItems.setValue(LINKS);
+				refreshLinkTable();
+			} catch (FileNotFoundException | XMLStreamException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}else{
+			actionEvent.consume();
+			return;
+		}
 	}
 	
 	private void createShowSearchPaneButton(){
 		this.btnShowSearchPane = new Button(getSearchPaneTitle());
 		
-		this.btnShowSearchPane.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				if (isSearchPaneVisible()){
-					removeSearchPane();
-					refreshLinkTable();
-				}else{
-					createSearchFlowPane();
-				}
-				btnShowSearchPane.setText(getSearchPaneTitle());
-			}
-		});
+		this.btnShowSearchPane.setOnAction(this::handleShowSearchPane);
 		this.flowActions.getChildren().add(this.btnShowSearchPane);
+	}
+
+	private void handleShowSearchPane(ActionEvent actionEvent){
+		if (isSearchPaneVisible()){
+			removeSearchPane();
+			refreshLinkTable();
+		}else{
+			createSearchFlowPane();
+		}
+		btnShowSearchPane.setText(getSearchPaneTitle());
 	}
 
 	private void createDeleteLinksButton(){
 		this.btnDeleteLinks = new Button(DELETE);
-		this.btnDeleteLinks.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				List<Link> selectedLinks = getSelectedLinks();
+		this.btnDeleteLinks.setOnAction(this::deleteSelectedLinks);
+		this.flowActions.getChildren().add(this.btnDeleteLinks);
+	}
 
-				if (selectedLinks.size() > 0) {
-					Alert alert = new Alert(Alert.AlertType.WARNING, THE_SELECTED_LINKS_WILL_BE_DELETED_CONTINUE, ButtonType.YES, ButtonType.NO);
-					Optional<ButtonType> result = alert.showAndWait();
-					boolean deletedSuccess = true;
-					if (result.isPresent() && result.get() == ButtonType.YES) {
-						for (Link link : selectedLinks) {
-							try {
-								LinkHandler.deleteLink(link);
-							} catch (SQLException sqle) {
-								deletedSuccess = false;
-							}
-						}
+	private void deleteSelectedLinks(ActionEvent actionEvent){
+		List<Link> selectedLinks = getSelectedLinks();
+
+		if (selectedLinks.size() > 0) {
+			Alert alert = new Alert(Alert.AlertType.WARNING, THE_SELECTED_LINKS_WILL_BE_DELETED_CONTINUE, ButtonType.YES, ButtonType.NO);
+			Optional<ButtonType> result = alert.showAndWait();
+			boolean deletedSuccess = true;
+			if (result.isPresent() && result.get() == ButtonType.YES) {
+				for (Link link : selectedLinks) {
+					try {
+						LinkHandler.deleteLink(link);
+					} catch (SQLException sqle) {
+						deletedSuccess = false;
 					}
-					refreshLinkTable();
 				}
 			}
-		});
-		this.flowActions.getChildren().add(this.btnDeleteLinks);
+			refreshLinkTable();
+		}
 	}
 
 	private void createNewItemButton(){
 		this.btnCreateItem = new Button("New");
-		this.btnCreateItem.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				if (cmbItems.getValue().equalsIgnoreCase("Links")){
-					LinkViewDetailStage linkDetail = new LinkViewDetailStage(LinkHandler.createPseudoLink());
-					linkDetail.showAndWait();
-					refreshLinkTable();
-				}else{
-					CreateCategoryStage createCategoryStage = new CreateCategoryStage();
-					createCategoryStage.showAndWait();
-					refreshCategoryTable(null);
-				}
-			}
-		});
+		this.btnCreateItem.setOnAction(this::handleNewItemButtonClick);
 		this.flowActions.getChildren().add(this.btnCreateItem);
+	}
+
+	private void handleNewItemButtonClick(ActionEvent actionEvent){
+		if (cmbItems.getValue().equalsIgnoreCase("Links")){
+			LinkViewDetailStage linkDetail = new LinkViewDetailStage(LinkHandler.createPseudoLink());
+			linkDetail.showAndWait();
+			refreshLinkTable();
+		}else{
+			CreateCategoryStage createCategoryStage = new CreateCategoryStage();
+			createCategoryStage.showAndWait();
+			refreshCategoryTable(null);
+		}
 	}
 
 	private void createMoveToCategoryComboBox(){
@@ -847,8 +841,6 @@ public class FXLink extends Application{
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createLinkTableView(){
 		this.tblLinks = new TableView();
-	
-
 
 		this.tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
 		this.tblLinks.getItems().add(LinkHandler.createPseudoLink());
