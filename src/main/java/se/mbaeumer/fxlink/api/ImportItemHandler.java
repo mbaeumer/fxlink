@@ -26,7 +26,7 @@ public class ImportItemHandler {
 
     public List<ImportItem> readImportItems() throws SQLException {
         ImportItemReadDBHandler importItemReadDBHandler = new ImportItemReadDBHandler();
-        String sql = "select * from ImportItem";
+        String sql = "select * from ImportItem i order by i.created desc ";
         return importItemReadDBHandler.getAllImportItems(sql, new HsqldbConnectionHandler());
     }
 }

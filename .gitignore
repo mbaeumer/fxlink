@@ -9,6 +9,9 @@
 *.jar
 *.war
 *.ear
+
+# jenv
+.java-version
  
 # Maven
 target/
