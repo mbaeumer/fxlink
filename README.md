@@ -18,6 +18,10 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.7.9 - 2019-05-25
+* Fix to update the list of categories after a new category has been added
+* Updated the list of imports to descending order
+
 ## 0.7.8 - 2018-12-30
 * Added support for an import history, i.e. keeping track of which files have been imported
 * Minor bug fixes
