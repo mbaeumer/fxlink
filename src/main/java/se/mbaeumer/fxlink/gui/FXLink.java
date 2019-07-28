@@ -300,9 +300,9 @@ public class FXLink extends Application{
 		this.createNewItemButton();
 		this.createDeleteLinksButton();
 		this.createShowSearchPaneButton();
+        this.createGenerateTitleButton();
 		this.createMoveToCategoryComboBox();
 		this.createMoveToCategoryButton();
-		this.createGenerateTitleButton();
 		this.createImportButton();
 		this.createWriteBackupButton();
 		this.createReadBackupButton();
@@ -658,7 +658,7 @@ public class FXLink extends Application{
 		this.flowSearch.setHgap(10);
 		
 		this.showSearchPane();
-		FlowPane.setMargin(flowSearch, new Insets(5));
+		FlowPane.setMargin(flowSearch, new Insets(2));
 		
 		this.createSearchTermLabel();
 		this.createSearchTermTextField();
@@ -706,7 +706,7 @@ public class FXLink extends Application{
 	}
 	
 	private void createTitleSearchCheckBox(){
-		this.chkSearchTitle= new CheckBox("filename");
+		this.chkSearchTitle= new CheckBox("title");
 		this.chkSearchTitle.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
