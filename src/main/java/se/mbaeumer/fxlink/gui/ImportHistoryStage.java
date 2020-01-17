@@ -4,7 +4,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -22,6 +21,7 @@ import se.mbaeumer.fxlink.models.ImportItem;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 public class ImportHistoryStage extends Stage {
     private Scene scene;
@@ -108,18 +108,26 @@ public class ImportHistoryStage extends Stage {
 
     private void initHistoryButton(){
         this.btnClearHistory = new Button("Clear history");
-        this.btnClearHistory.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent arg0) {
-                ImportItemHandler importItemHandler = new ImportItemHandler();
-                try {
-                    importItemHandler.deleteAllImportItems();
-                    tvImportItems.setItems(FXCollections.observableList(importItemHandler.readImportItems()));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        this.btnClearHistory.setOnAction(this::handleClick);
         this.flowGeneral.getChildren().add(this.btnClearHistory);
+    }
+
+    private void handleClick(ActionEvent actionEvent){
+
+        Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure?", ButtonType.YES, ButtonType.NO);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.YES){
+            ImportItemHandler importItemHandler = new ImportItemHandler();
+            try {
+                importItemHandler.deleteAllImportItems();
+                tvImportItems.setItems(FXCollections.observableList(importItemHandler.readImportItems()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }else{
+            actionEvent.consume();
+        }
     }
 }
