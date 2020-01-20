@@ -114,7 +114,8 @@ public class ImportHistoryStage extends Stage {
 
     private void handleClick(ActionEvent actionEvent){
 
-        Alert alert = new Alert(Alert.AlertType.WARNING, "Are you sure?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.WARNING, "The history will be deleted. Continue?", ButtonType.YES, ButtonType.NO);
+        alert.initOwner(this);
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.YES){

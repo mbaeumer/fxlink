@@ -20,7 +20,7 @@ public class ImportItemReadDBHandler {
         while (rs.next()) {
             ImportItem importItem = new ImportItem();
             importItem.setId(rs.getInt("id"));
-            importItem.setFilename(rs.getString("filename"));
+            importItem.setFilename(this.getFilename(rs.getString("filename")));
             importItem.setCreated(rs.getTimestamp("created"));
             items.add(importItem);
         }
@@ -28,5 +28,13 @@ public class ImportItemReadDBHandler {
         rs.close();
 
         return items;
+    }
+
+    public String getFilename(String filenameFromDatabase){
+        if (filenameFromDatabase == null){
+            throw new IllegalArgumentException("Could not handle filename");
+        }
+        String[] parts = filenameFromDatabase.split("/");
+        return parts[parts.length - 1];
     }
 }

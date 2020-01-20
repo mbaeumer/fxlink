@@ -44,6 +44,20 @@ public class ImportItemReadDBHandlerTest {
                 names.get(0).getFilename().equalsIgnoreCase("import1.txt"));
     }
 
+    @Test
+    public void testGetFilename(){
+        importItemReadDBHandler = new ImportItemReadDBHandler();
+
+        String actual = importItemReadDBHandler.getFilename("/Users/martinbaumer/Documents/links/work-mac/test.txt");
+        Assert.assertTrue("Unexpected filename", "test.txt".equals(actual));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArgument(){
+        importItemReadDBHandler = new ImportItemReadDBHandler();
+        importItemReadDBHandler.getFilename(null);
+    }
+
     private void mockStuff() throws SQLException {
         Mockito.when(databaseConnectionHandler.getConnection()).thenReturn(mockConn);
         Mockito.when(mockConn.createStatement()).thenReturn(mockStatement);
