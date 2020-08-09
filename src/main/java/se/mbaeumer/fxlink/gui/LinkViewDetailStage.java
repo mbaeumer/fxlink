@@ -345,17 +345,22 @@ public class LinkViewDetailStage extends Stage {
 				try {
 					isValidationError = false;
 					if (processInput()){
-						close();
+					 	close();
 					}
 				} catch (ParseException | SQLException e) {
-					Alert alert = new Alert(Alert.AlertType.ERROR, "The URL must be unique!", ButtonType.OK);
-					alert.showAndWait();
+					showErrorMessage(e);
 					isValidationError = true;
 				}
 			}
 			
 		});
 		this.gridCommands.add(this.btnSave, 0, 0);
+	}
+
+	private void showErrorMessage(final Exception ex){
+		Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+		alert.initOwner(this);
+		alert.showAndWait();
 	}
 	
 	private void initCancelButton(){

@@ -174,19 +174,14 @@ public class FXLink extends Application{
 	}
 	
 	private void createItemComboBox(){
-		this.cmbItems = new ComboBox<String>();
-		List<String> items = new ArrayList<String>();
+		this.cmbItems = new ComboBox<>();
+		List<String> items;
 		items = ManagedItemHandler.getManagedItems(new ManagedItemDBHandler());
 		this.cmbItems.setItems(FXCollections.observableArrayList(items));
-		this.cmbItems.valueProperty().addListener(
-				new ChangeListener<String>(){
-					@SuppressWarnings("rawtypes")
-					@Override
-					public void changed(ObservableValue ov, String s1, String s2){
-						switchTableView(cmbItems.getValue());
-					}
-				});
-		
+		this.cmbItems.valueProperty().addListener((observable, oldValue, newValue) ->{
+			switchTableView(cmbItems.getValue());
+		});
+
 		this.cmbItems.getSelectionModel().selectFirst();
 		this.flowFilter.getChildren().add(this.cmbItems);
 	}
@@ -230,15 +225,10 @@ public class FXLink extends Application{
 		});
 
 		this.cmbCategories.getSelectionModel().selectFirst(); //select the first element
-		this.cmbCategories.valueProperty().addListener(
-				new ChangeListener<Category>(){
-					@SuppressWarnings("rawtypes")
-					@Override
-					public void changed(ObservableValue ov, Category c1, Category c2){
-                        filterCategories();
-					}
-				});
-		 
+		this.cmbCategories.valueProperty().addListener((observable, oldValue, newValue) -> {
+			filterCategories();
+		});
+
 		this.flowFilter.getChildren().add(this.cmbCategories);
 	}
 
@@ -278,7 +268,7 @@ public class FXLink extends Application{
 		this.btnShowImportHistory.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				ImportHistoryStage importHistoryStage = null;
+				ImportHistoryStage importHistoryStage;
 				try {
 					importHistoryStage = new ImportHistoryStage();
 					importHistoryStage.showAndWait();
@@ -1428,7 +1418,7 @@ public class FXLink extends Application{
 				LinkHandler.createLink(link);
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
-				Alert alert = new Alert(Alert.AlertType.ERROR, "The URL MUST be unique!", ButtonType.OK);
+				Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
 				alert.showAndWait();
 				isCorrect = false;
 			}
@@ -1441,7 +1431,7 @@ public class FXLink extends Application{
 
 				LinkHandler.updateLink(link);
 			} catch (ParseException | SQLException e) {
-				Alert alert = new Alert(Alert.AlertType.ERROR, "The URL MUST be unique!", ButtonType.OK);
+				Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
 				alert.showAndWait();
 				isCorrect = false;
 			}
