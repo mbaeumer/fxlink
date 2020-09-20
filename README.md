@@ -1,22 +1,36 @@
 
 # Project description
 FXLink is a little tool for handling URLs. Users can categorize and tag URLs based on topics of interest and enrich the data with further descriptions. </br>
-Apart from that, FXLink provides import of data as text files, a search filter and backup of data in XML. 
+Apart from that, FXLink provides import of data as text files, a search filter and backup of data. 
 
 ![](/docs/fxlink8.png) 
 
 # Running FXLink
+Depending on which version is used, FXLink can be started up in different ways:
+From version 0.8.1, FXLink is built on Java 11. There are two ways to start up:
+Either you clone the repository and then run `mvn javafx:run` from the project root directory. This requires that you have maven installed. 
+Alternatively, you can do the following:
+
+* Download the latest tar.gz file
+* Unpack the file
+* Download and unpack javafx-sdk [here](https://gluonhq.com/products/javafx/)
+* Run the following command: `java --module-path <path-to-javafx-sdk>  --add-modules javafx.controls,java.sql,java.desktop -jar fxlink11-0.8.1-jar-with-dependencies.jar` 
+
+Version 0.8.0 and earlier can be started as a usual jar file:
 ```bash 
 java -jar fxlink8-<version>-jar-with-dependencies.jar
 ```
 
 # Development details
 
-* Java 8, JavaFX
+* Java 11, JavaFX
 * Maven
 * HSQLDB
          
 # Version/release history 
+
+## 0.8.1 - 2020-09-20
+* migrated to Java 11
 
 ## 0.8.0 - 2020-02-13
 * Updated import history stage
