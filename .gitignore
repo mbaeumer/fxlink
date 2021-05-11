@@ -3,6 +3,7 @@
 *.out
 *.log
 *.jar
+*.DS_Store
 
 # Java
 *.class

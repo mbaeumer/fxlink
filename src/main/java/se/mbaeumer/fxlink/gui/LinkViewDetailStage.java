@@ -8,17 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.control.*;
-import se.mbaeumer.fxlink.api.CategoryHandler;
-import se.mbaeumer.fxlink.api.LinkHandler;
-import se.mbaeumer.fxlink.api.TagHandler;
-import se.mbaeumer.fxlink.models.Category;
-import se.mbaeumer.fxlink.models.Link;
-import se.mbaeumer.fxlink.models.SelectableTag;
-import se.mbaeumer.fxlink.models.Tag;
-import se.mbaeumer.fxlink.util.LinkTitleUtil;
-import se.mbaeumer.fxlink.util.LinkTitleUtilImpl;
-import se.mbaeumer.fxlink.util.URLValidator;
-import se.mbaeumer.fxlink.util.ValueConstants;
+import se.mbaeumer.fxlink.api.*;
+import se.mbaeumer.fxlink.models.*;
+import se.mbaeumer.fxlink.util.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -54,6 +46,8 @@ public class LinkViewDetailStage extends Stage {
 	private TextArea taDescription;
 	private Label lblCategories = new Label("Categories");
 	private ComboBox<Category> cmbCategories;
+	private Label lblSuggestions = new Label("Suggestions");
+	private FlowPane flowSuggestions;
 	private Label lblCreated = new Label("Created");
 	private Label lblCreatedDate;
 	private Label lblLastUpdated = new Label("Last updated");
@@ -136,13 +130,14 @@ public class LinkViewDetailStage extends Stage {
 		this.initTitle();
 		this.initDescription();
 		this.initCategory();
+		this.initSuggestions();
 		this.initCreationDate();
 		this.initLastUpdated();
 	}
 
 	private void bindSizes(){
 		this.flowGeneral.prefWidthProperty().bind(this.scene.widthProperty());
-		this.gridData.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+		//this.gridData.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 		this.listAllSelectableTags.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 	}
 	
@@ -207,9 +202,15 @@ public class LinkViewDetailStage extends Stage {
 		        }
 		    }
 		});
+		setCategory();
+
+		this.gridData.add(this.cmbCategories, 1,3);		
+	}
+
+	private void setCategory() {
 		int index = 0;
 		if (this.link.getCategory() != null){
-			for (Category c : categoryList){
+			for (Category c : this.cmbCategories.getItems()){
 				if (c.getName().equalsIgnoreCase(this.link.getCategory().getName())){
 					break;
 				}
@@ -219,22 +220,72 @@ public class LinkViewDetailStage extends Stage {
 			index = 0;
 		}
 		this.cmbCategories.getSelectionModel().select(index);
-		
-		this.gridData.add(this.cmbCategories, 1,3);		
+	}
+
+	private void initSuggestions(){
+		this.gridData.add(this.lblSuggestions, 0, 4);
+
+		this.flowSuggestions = new FlowPane(Orientation.HORIZONTAL);
+		this.flowSuggestions.setPadding(new Insets(5, 5, 0, 5));
+
+		List<Suggestion> suggestions = initSuggestionData();
+
+
+		for (Suggestion suggestion : suggestions){
+			Button button = new Button(suggestion.getCategory());
+			button.setOnAction(actionEvent -> doSth(actionEvent));
+			this.flowSuggestions.getChildren().add(button);
+
+		}
+		/*
+		Button button1= new Button("Button 1");
+		Button button2= new Button("Button 1");
+		Button button3= new Button("Button 1");
+		Button button4= new Button("Button 1");
+		Button button5= new Button("Button 1");
+		Button button6= new Button("Button 1");
+		Button button7= new Button("Button 1");
+		Button button8= new Button("Button 1");
+
+		this.flowSuggestions.getChildren().addAll(button1, button2, button3, button4, button5, button6, button7, button8);
+
+		 */
+
+		this.gridData.add(this.flowSuggestions, 1, 4);
+	}
+
+	private void doSth(ActionEvent actionEvent){
+		// get category
+		// update link
+		try {
+			Category category = CategoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
+			link.setCategory(category);
+			LinkHandler.updateLink(link);
+			setCategory();
+		} catch (SQLException | ParseException throwables) {
+			throwables.printStackTrace();
+		}
+	}
+
+	private List<Suggestion> initSuggestionData(){
+		URLHelper urlHelper = new URLHelper();
+		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(urlHelper);
+		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper);
+		return suggestionHandler.getSuggestions(this.link);
 	}
 	
 	private void initCreationDate(){
-		this.gridData.add(this.lblCreated, 0, 4);
+		this.gridData.add(this.lblCreated, 0, 5);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		this.lblCreatedDate = new Label(df.format(this.link.getCreated()));
-		this.gridData.add(this.lblCreatedDate, 1, 4);
+		this.gridData.add(this.lblCreatedDate, 1, 5);
 	}
 	
 	private void initLastUpdated(){
-		this.gridData.add(this.lblLastUpdated, 0, 5);		
+		this.gridData.add(this.lblLastUpdated, 0, 6);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		this.lblLastUpdatedDate = new Label(df.format(this.link.getLastUpdated()));
-		this.gridData.add(this.lblLastUpdatedDate, 1, 5);
+		this.gridData.add(this.lblLastUpdatedDate, 1, 6);
 	}
 	
 	private void initTagging(){
