@@ -22,10 +22,10 @@ public class SuggestionHandler {
 
     public List<Suggestion> getSuggestions(Link link){
         List<Link> allLinks = LinkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance());
-        List<Link> liksWithCategories = allLinks.stream().filter(l -> l.getCategory()!=null).collect(Collectors.toList());
-        Map<String, List<CategoryCount>> map = suggestionDataHandler.prepareData(liksWithCategories);
+        List<Link> linksWithCategories = allLinks.stream().filter(l -> l.getCategory()!=null)
+                .collect(Collectors.toList());
+        Map<String, List<CategoryCount>> map = suggestionDataHandler.prepareData(linksWithCategories);
         map = suggestionDataHandler.removeStopWords(map);
-
 
         return createSuggestions(map, link);
     }
@@ -53,8 +53,6 @@ public class SuggestionHandler {
                 }
             });
         }
-
-
 
         return suggestions.stream().sorted(Comparator.comparing(Suggestion::getCount).reversed()).collect(Collectors.toList());
     }

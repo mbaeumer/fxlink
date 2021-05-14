@@ -137,7 +137,6 @@ public class LinkViewDetailStage extends Stage {
 
 	private void bindSizes(){
 		this.flowGeneral.prefWidthProperty().bind(this.scene.widthProperty());
-		//this.gridData.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 		this.listAllSelectableTags.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 	}
 	
@@ -237,26 +236,11 @@ public class LinkViewDetailStage extends Stage {
 			this.flowSuggestions.getChildren().add(button);
 
 		}
-		/*
-		Button button1= new Button("Button 1");
-		Button button2= new Button("Button 1");
-		Button button3= new Button("Button 1");
-		Button button4= new Button("Button 1");
-		Button button5= new Button("Button 1");
-		Button button6= new Button("Button 1");
-		Button button7= new Button("Button 1");
-		Button button8= new Button("Button 1");
-
-		this.flowSuggestions.getChildren().addAll(button1, button2, button3, button4, button5, button6, button7, button8);
-
-		 */
 
 		this.gridData.add(this.flowSuggestions, 1, 4);
 	}
 
 	private void doSth(ActionEvent actionEvent){
-		// get category
-		// update link
 		try {
 			Category category = CategoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
 			link.setCategory(category);
@@ -485,6 +469,4 @@ public class LinkViewDetailStage extends Stage {
 	public void setLink(Link link) {
 		this.link = link;
 	}
-	
 }
-

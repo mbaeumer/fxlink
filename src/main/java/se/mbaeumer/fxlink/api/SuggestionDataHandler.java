@@ -15,7 +15,7 @@ public class SuggestionDataHandler {
         this.urlHelper = urlHelper;
     }
 
-    public Map prepareData(final List<Link> links){
+    public Map<String, List<CategoryCount>> prepareData(final List<Link> links){
         Map<String, List<CategoryCount>> hash = new HashMap();
         for (Link link : links){
             String url = urlHelper.withoutProtocol(link.getURL());
@@ -44,7 +44,7 @@ public class SuggestionDataHandler {
         return hash;
     }
 
-    public Map removeStopWords(final Map<String, List<CategoryCount>> map){
+    public Map<String, List<CategoryCount>> removeStopWords(final Map<String, List<CategoryCount>> map){
 
         Set<String> toExclude = map.keySet().stream()
                 .filter(key -> "for".equals(key) || key.length() <=1 || "of".equals(key) || "with".equals(key)

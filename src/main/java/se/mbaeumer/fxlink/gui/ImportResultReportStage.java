@@ -6,7 +6,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.LinkHandler;
@@ -40,7 +39,6 @@ import java.util.List;
 public class ImportResultReportStage extends Stage {
 	private Scene scene;
 	private FlowPane flowGeneral;
-	private Label lblImportFileText = new Label("Imported from");
 	private Label lblImportFileName = new Label();
 	private Label lblSuccessfulImportsText = new Label("Successful imports");
 	private Label lblSuccessfulImportsValue = new Label();
