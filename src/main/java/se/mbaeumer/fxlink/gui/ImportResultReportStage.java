@@ -6,12 +6,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.LinkHandler;
-import se.mbaeumer.fxlink.models.Category;
-import se.mbaeumer.fxlink.models.FailedLink;
-import se.mbaeumer.fxlink.models.ImportResultReport;
-import se.mbaeumer.fxlink.models.Link;
+import se.mbaeumer.fxlink.api.SuggestionDataHandler;
+import se.mbaeumer.fxlink.api.SuggestionHandler;
+import se.mbaeumer.fxlink.models.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +27,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import se.mbaeumer.fxlink.util.URLHelper;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.sql.SQLException;
@@ -55,6 +57,7 @@ public class ImportResultReportStage extends Stage {
 	private ImportResultReport importReport;
 
 	private FlowPane flowSelection;
+	private FlowPane flowSuggestions;
 	private Button btnSelectAll;
 	private Button btnDeselectAll;
 	
@@ -112,6 +115,7 @@ public class ImportResultReportStage extends Stage {
 		this.initTabPane();
 		this.initSuccessLinkTableView();
 		this.initFailedLinksTableView();
+		this.initSuggestionPane();
 		this.initCloseButton();
 	}
 
@@ -121,6 +125,7 @@ public class ImportResultReportStage extends Stage {
 		this.tvFailedLinks.prefWidthProperty().bind(this.tabPane.prefWidthProperty());
 		this.lblImportFileName.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 		this.flowSelection.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+		this.flowSuggestions.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 	}
 	
 	private void initImportInfoLabels(){
@@ -288,6 +293,16 @@ public class ImportResultReportStage extends Stage {
 	private void initSuccessLinkTableView(){
 		this.createSuccessLinksTableView();
 		this.createSuccessLinksTableViewColumns();
+		this.tvSuccessfulLinks.addEventHandler(MouseEvent.MOUSE_CLICKED,
+				new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent me) {
+						Link link = tvSuccessfulLinks.getSelectionModel().getSelectedItem();
+						initSuggestions(link);
+
+					}
+				});
+
 		this.tabSuccess.setContent(this.tvSuccessfulLinks);
 	}
 
@@ -434,6 +449,36 @@ public class ImportResultReportStage extends Stage {
 		for (Object o : this.tvFailedLinks.getColumns()){
 			TableColumn tc = (TableColumn) o;
 			tc.setPrefWidth((this.tvFailedLinks.getPrefWidth()*50)/100);
+		}
+	}
+
+	private void initSuggestionPane(){
+		this.flowSuggestions= new FlowPane(Orientation.HORIZONTAL);
+		this.flowSuggestions.setPadding(new Insets(5, 5, 0, 5));
+		this.flowGeneral.getChildren().add(this.flowSuggestions);
+	}
+
+	private void initSuggestions(final Link link){
+		this.flowSuggestions.getChildren().clear();
+		URLHelper urlHelper = new URLHelper();
+		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(urlHelper);
+		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper);
+		List<Suggestion> suggestions = suggestionHandler.getSuggestions(link);
+
+		for (Suggestion suggestion : suggestions){
+			Button button = new Button(suggestion.getCategory());
+			button.setOnAction(actionEvent -> doSth(actionEvent, link));
+			this.flowSuggestions.getChildren().add(button);
+		}
+	}
+
+	private void doSth(ActionEvent actionEvent, Link link){
+		try {
+			Category category = CategoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
+			link.setCategory(category);
+			LinkHandler.updateLink(link);
+		} catch (SQLException | ParseException throwables) {
+			throwables.printStackTrace();
 		}
 	}
 	

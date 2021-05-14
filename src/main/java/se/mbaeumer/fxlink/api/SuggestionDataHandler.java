@@ -48,7 +48,8 @@ public class SuggestionDataHandler {
 
         Set<String> toExclude = map.keySet().stream()
                 .filter(key -> "for".equals(key) || key.length() <=1 || "of".equals(key) || "with".equals(key)
-                        || "com".equals(key) || "de".equals(key) || key.matches("\\d+"))
+                        || "com".equals(key) || "de".equals(key) || key.matches("\\d+")
+                        || "html".equals(key) || "htm".equals(key))
                 .collect(Collectors.toSet());
         map.keySet().removeAll(toExclude);
 
