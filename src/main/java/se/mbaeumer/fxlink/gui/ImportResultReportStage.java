@@ -11,6 +11,7 @@ import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.LinkHandler;
 import se.mbaeumer.fxlink.api.SuggestionDataHandler;
 import se.mbaeumer.fxlink.api.SuggestionHandler;
+import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.models.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -460,7 +461,8 @@ public class ImportResultReportStage extends Stage {
 		this.flowSuggestions.getChildren().clear();
 		URLHelper urlHelper = new URLHelper();
 		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(urlHelper);
-		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper);
+		LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
+		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper, linkReadDBHandler);
 		List<Suggestion> suggestions = suggestionHandler.getSuggestions(link);
 
 		for (Suggestion suggestion : suggestions){

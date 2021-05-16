@@ -9,6 +9,7 @@ import java.util.List;
 
 import javafx.scene.control.*;
 import se.mbaeumer.fxlink.api.*;
+import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.models.*;
 import se.mbaeumer.fxlink.util.*;
 import javafx.beans.value.ChangeListener;
@@ -254,7 +255,8 @@ public class LinkViewDetailStage extends Stage {
 	private List<Suggestion> initSuggestionData(){
 		URLHelper urlHelper = new URLHelper();
 		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(urlHelper);
-		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper);
+		LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
+		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper, linkReadDBHandler);
 		return suggestionHandler.getSuggestions(this.link);
 	}
 	

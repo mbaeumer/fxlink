@@ -14,14 +14,16 @@ public class SuggestionHandler {
 
     private SuggestionDataHandler suggestionDataHandler;
     private URLHelper urlHelper;
+    private LinkReadDBHandler linkReadDBHandler;
 
-    public SuggestionHandler(SuggestionDataHandler suggestionDataHandler, URLHelper urlHelper) {
+    public SuggestionHandler(SuggestionDataHandler suggestionDataHandler, URLHelper urlHelper, LinkReadDBHandler linkReadDBHandler) {
         this.suggestionDataHandler = suggestionDataHandler;
         this.urlHelper = urlHelper;
+        this.linkReadDBHandler = linkReadDBHandler;
     }
 
     public List<Suggestion> getSuggestions(Link link){
-        List<Link> allLinks = LinkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance());
+        List<Link> allLinks = linkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance());
         List<Link> linksWithCategories = allLinks.stream().filter(l -> l.getCategory()!=null)
                 .collect(Collectors.toList());
         Map<String, List<CategoryCount>> map = suggestionDataHandler.prepareData(linksWithCategories);

@@ -10,8 +10,15 @@ import java.text.ParseException;
 import java.util.List;
 
 public class LinkHandler {
-	public static List<Link> getLinks(){
-		return LinkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance());
+
+	private LinkReadDBHandler linkReadDBHandler;
+
+	public LinkHandler(LinkReadDBHandler linkReadDBHandler) {
+		this.linkReadDBHandler = linkReadDBHandler;
+	}
+
+	public List<Link> getLinks(){
+		return this.linkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance());
 	}
 	
 	public static List<Link> getLinksByCategory(Category category){

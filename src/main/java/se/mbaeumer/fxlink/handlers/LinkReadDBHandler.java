@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LinkReadDBHandler {
-	public static List<Link> getAllLinksWithCategories(GenericDBHandler dbh){
+	public List<Link> getAllLinksWithCategories(GenericDBHandler dbh){
 		Connection connection = dbh.getConnection();				
 		List<Link> links = new ArrayList<Link>();
 		

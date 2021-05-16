@@ -26,6 +26,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.api.*;
+import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.handlers.ManagedItemDBHandler;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.ImportResultReport;
@@ -832,7 +833,9 @@ public class FXLink extends Application{
 	private void createLinkTableView(){
 		this.tblLinks = new TableView();
 
-		this.tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinks()));
+		LinkHandler linkHandler = new LinkHandler(new LinkReadDBHandler());
+
+		this.tblLinks.setItems(FXCollections.observableList(linkHandler.getLinks()));
 		this.tblLinks.getItems().add(LinkHandler.createPseudoLink());
 
 		this.createLinkTableColumns();
