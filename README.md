@@ -29,6 +29,9 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.8.2 - 2021-05-18
+* added support for generating category suggestions
+
 ## 0.8.1 - 2020-09-20
 * migrated to Java 11
 
