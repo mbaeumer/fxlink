@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.control.*;
+import javafx.scene.layout.ColumnConstraints;
 import se.mbaeumer.fxlink.api.*;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.models.*;
@@ -76,7 +77,7 @@ public class LinkViewDetailStage extends Stage {
 		this.initTagging();
 		this.bindSizes();
 		this.initCommandGrid();
-		
+
 		this.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		    @Override
 		    public void handle(WindowEvent event) {
@@ -89,7 +90,7 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void initScene(){
 		int width = 600;
-		int height = 700;
+		int height = 750;
 		this.scene = new Scene(this.root, width, height, Color.WHITESMOKE);
 		this.setTitle("Link details");
 		this.setScene(this.scene);
@@ -138,7 +139,13 @@ public class LinkViewDetailStage extends Stage {
 
 	private void bindSizes(){
 		this.flowGeneral.prefWidthProperty().bind(this.scene.widthProperty());
-		this.listAllSelectableTags.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+		this.gridData.prefWidthProperty().set(this.flowGeneral.prefWidthProperty().getValue() - 10);
+		ColumnConstraints col1 = new ColumnConstraints();
+		col1.setPercentWidth(20);
+		ColumnConstraints col2 = new ColumnConstraints();
+		col2.setPercentWidth(80);
+		this.gridData.getColumnConstraints().addAll(col1, col2);
+		this.listAllSelectableTags.prefWidthProperty().set(this.gridData.prefWidthProperty().getValue());
 	}
 	
 	private void initURL(){
@@ -276,6 +283,7 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void initTagging(){
 		this.populateDataLists();
+
 		this.initTaggingListView();
 	}
 	
@@ -362,7 +370,7 @@ public class LinkViewDetailStage extends Stage {
 		this.gridCommands = new GridPane();
 		gridCommands.setHgap(10);
 	    gridCommands.setVgap(10);
-	    gridCommands.setPadding(new Insets(0, 10, 0, 10));
+	    gridCommands.setPadding(new Insets(5));
 	    this.flowGeneral.getChildren().add(this.gridCommands);
 	    this.initButtons();
 	}

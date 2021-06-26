@@ -649,7 +649,7 @@ public class FXLink extends Application{
 		this.flowSearch.setHgap(10);
 		
 		this.showSearchPane();
-		FlowPane.setMargin(flowSearch, new Insets(2));
+		FlowPane.setMargin(flowSearch, new Insets(10, 10, 2, 2));
 		
 		this.createSearchTermLabel();
 		this.createSearchTermTextField();
