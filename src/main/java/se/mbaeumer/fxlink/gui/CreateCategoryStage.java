@@ -1,6 +1,5 @@
 package se.mbaeumer.fxlink.gui;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -29,7 +28,7 @@ public class CreateCategoryStage extends Stage {
     private Label lblNameText;
     private TextField tfCategoryName;
     private Label lblDescriptionText;
-    private TextArea taCategoryDesription;
+    private TextArea taCategoryDescription;
     
     private Label lblStatus;
     private FlowPane flowCommand;
@@ -38,7 +37,7 @@ public class CreateCategoryStage extends Stage {
 
     public CreateCategoryStage() {
         super();
-        this.initRootPane();;
+        this.initRootPane();
         this.initScene();
 
         this.initGridPane();
@@ -88,28 +87,8 @@ public class CreateCategoryStage extends Stage {
         this.gridPane.add(lblNameText, 0, 0);
 
         this.tfCategoryName = new TextField();
-        this.tfCategoryName.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                btnCreate.setDisable(false);
-                if (newValue.length() > 0){
-                    try {
-                        Category category = CategoryHandler.getCategoryByName(newValue);
-                        if (category != null){
-                            lblStatus.setText("This category already exists");
-                            btnCreate.setDisable(true);
-                        }else{
-                            lblStatus.setText("");
-                        }
-                    } catch (SQLException e) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR, DATABASE_ERROR_OCCURRED, ButtonType.OK);
-                        alert.showAndWait();
-                    }
-                }else{
-                    lblStatus.setText("");
-                }
-            }
-        });
+        this.tfCategoryName.textProperty().addListener(this::changed);
+
         this.gridPane.add(tfCategoryName, 1, 0);
     }
 
@@ -117,10 +96,10 @@ public class CreateCategoryStage extends Stage {
         this.lblDescriptionText = new Label("Description:");
         this.gridPane.add(lblDescriptionText, 0, 1);
 
-        this.taCategoryDesription = new TextArea();
-        this.taCategoryDesription.setPrefRowCount(3);
-        this.taCategoryDesription.setPrefColumnCount(1);
-        this.gridPane.add(taCategoryDesription, 1, 1);
+        this.taCategoryDescription = new TextArea();
+        this.taCategoryDescription.setPrefRowCount(3);
+        this.taCategoryDescription.setPrefColumnCount(1);
+        this.gridPane.add(taCategoryDescription, 1, 1);
     }
     
     private void initStatusLabel(){
@@ -144,14 +123,14 @@ public class CreateCategoryStage extends Stage {
 
     private void initCancelButton(){
         this.btnCancel = new Button("Cancel");
-        this.btnCancel.setOnAction((event)->{close();});
+        this.btnCancel.setOnAction(this::handleClose);
         this.flowCommand.getChildren().add(this.btnCancel);
     }
 
     private void handleSaveCategory(ActionEvent event) {
         Category category = new Category();
         category.setName(tfCategoryName.getText());
-        category.setDescription(taCategoryDesription.getText());
+        category.setDescription(taCategoryDescription.getText());
 
         try {
             CategoryHandler.createCategory(category);
@@ -164,6 +143,30 @@ public class CreateCategoryStage extends Stage {
 
     private void resetForm(){
         this.tfCategoryName.setText("");
-        this.taCategoryDesription.setText("");
+        this.taCategoryDescription.setText("");
+    }
+
+    private void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        btnCreate.setDisable(false);
+        if (newValue.length() > 0) {
+            try {
+                Category category = CategoryHandler.getCategoryByName(newValue);
+                if (category != null) {
+                    lblStatus.setText("This category already exists");
+                    btnCreate.setDisable(true);
+                } else {
+                    lblStatus.setText("");
+                }
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, DATABASE_ERROR_OCCURRED, ButtonType.OK);
+                alert.showAndWait();
+            }
+        } else {
+            lblStatus.setText("");
+        }
+    }
+
+    private void handleClose(ActionEvent event) {
+        close();
     }
 }

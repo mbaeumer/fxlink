@@ -150,7 +150,7 @@ public class FXLink extends Application{
 		this.flowGeneral = new FlowPane();
 		this.flowGeneral.setOrientation(Orientation.VERTICAL);
 		this.flowGeneral.setPrefWrapLength(700);
-		this.flowGeneral.setVgap(10);
+		this.flowGeneral.setVgap(5);
 		this.root.getChildren().add(this.flowGeneral);
 	}
 	
@@ -592,6 +592,12 @@ public class FXLink extends Application{
 		this.flowSelection.setHgap(10);
 		this.flowSelection.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 		this.flowGeneral.getChildren().add(this.flowSelection);
+		System.out.println(this.flowFilter.layoutXProperty().getValue());
+		System.out.println(this.flowFilter.layoutYProperty().getValue());
+		System.out.println(this.flowActions.layoutXProperty().getValue());
+		System.out.println(this.flowActions.layoutYProperty().getValue());
+		System.out.println(this.flowSelection.layoutXProperty().getValue());
+		System.out.println(this.flowSelection.layoutYProperty().getValue());
 		FlowPane.setMargin(flowSelection, new Insets(5));
 		this.createSelectAllButton();
 		this.createDeselectAllButton();
@@ -649,7 +655,7 @@ public class FXLink extends Application{
 		this.flowSearch.setHgap(10);
 		
 		this.showSearchPane();
-		FlowPane.setMargin(flowSearch, new Insets(10, 10, 2, 2));
+		FlowPane.setMargin(flowSearch, new Insets(5, 5, 0, 5));
 		
 		this.createSearchTermLabel();
 		this.createSearchTermTextField();
@@ -659,6 +665,7 @@ public class FXLink extends Application{
 		this.createSearchCategoryComboBox();
 		this.createSearchButton();
 		this.createSearchErrorStatusLabel();
+		this.flowSearch.prefHeightProperty().set(27);
 	}
 	
 	private void createSearchTermLabel(){

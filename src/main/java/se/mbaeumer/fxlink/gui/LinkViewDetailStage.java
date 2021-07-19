@@ -18,7 +18,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
@@ -78,14 +77,13 @@ public class LinkViewDetailStage extends Stage {
 		this.bindSizes();
 		this.initCommandGrid();
 
-		this.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		    @Override
-		    public void handle(WindowEvent event) {
-		    	if (isValidationError){
-		    		event.consume();
-		    	}
-		    }
-		});
+		this.setOnCloseRequest(this::handleCloseRequest);
+	}
+
+	private void handleCloseRequest(WindowEvent windowEvent){
+		if (isValidationError){
+			windowEvent.consume();
+		}
 	}
 	
 	private void initScene(){
@@ -169,7 +167,7 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void initCategory(){
 		this.gridData.add(this.lblCategories, 0, 3);
-		this.cmbCategories = new ComboBox<Category>();
+		this.cmbCategories = new ComboBox<>();
 
 		ObservableList<Category> categoryList =
 	            FXCollections.observableArrayList(CategoryHandler.getCategories());
@@ -198,16 +196,16 @@ public class LinkViewDetailStage extends Stage {
             }
 		});
 
-		this.cmbCategories.setButtonCell(new ListCell<Category>() {
-		    @Override
-		    protected void updateItem(Category t, boolean bln) {
-		        super.updateItem(t, bln);
-		        if (t != null) {
-		            setText(t.nameProperty().getValue());
-		        } else {
-		            setText(null);
-		        }
-		    }
+		this.cmbCategories.setButtonCell(new ListCell<>() {
+			@Override
+			protected void updateItem(Category t, boolean bln) {
+				super.updateItem(t, bln);
+				if (t != null) {
+					setText(t.nameProperty().getValue());
+				} else {
+					setText(null);
+				}
+			}
 		});
 		setCategory();
 
@@ -237,18 +235,16 @@ public class LinkViewDetailStage extends Stage {
 
 		List<Suggestion> suggestions = initSuggestionData();
 
-
 		for (Suggestion suggestion : suggestions){
 			Button button = new Button(suggestion.getCategory());
-			button.setOnAction(actionEvent -> doSth(actionEvent));
+			button.setOnAction(this::setSuggestedCategory);
 			this.flowSuggestions.getChildren().add(button);
-
 		}
 
 		this.gridData.add(this.flowSuggestions, 1, 4);
 	}
 
-	private void doSth(ActionEvent actionEvent){
+	private void setSuggestedCategory(ActionEvent actionEvent){
 		try {
 			Category category = CategoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
 			link.setCategory(category);
@@ -289,8 +285,8 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void populateDataLists(){
 		this.allTags = TagHandler.getTags();
-		this.existingTagsForLink = new ArrayList<Tag>();
-		this.selectableTags = new ArrayList<SelectableTag>();
+		this.existingTagsForLink = new ArrayList();
+		this.selectableTags = new ArrayList();
 		try {
 			this.existingTagsForLink = TagHandler.getAllTagsForLink(this.link);
 		} catch (SQLException e) {
@@ -316,7 +312,7 @@ public class LinkViewDetailStage extends Stage {
 	}
 	
 	private void initTaggingListView(){
-		this.listAllSelectableTags = new ListView<SelectableTag>();
+		this.listAllSelectableTags = new ListView<>();
 		
 		for (final SelectableTag t : this.observableSelectableTags){
 			t.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -344,12 +340,7 @@ public class LinkViewDetailStage extends Stage {
 		}
 
 		
-		this.listAllSelectableTags.setCellFactory(CheckBoxListCell.forListView(new Callback<SelectableTag, ObservableValue<Boolean>>() {
-            @Override
-            public ObservableValue<Boolean> call(SelectableTag item) {
-                return item.selectedProperty();
-            }
-        }, new StringConverter<SelectableTag>() {
+		this.listAllSelectableTags.setCellFactory(CheckBoxListCell.forListView(SelectableTag::selectedProperty, new StringConverter<SelectableTag>() {
 
 			@Override
 			public SelectableTag fromString(String arg0) {
@@ -359,7 +350,9 @@ public class LinkViewDetailStage extends Stage {
 			@Override
 			public String toString(SelectableTag arg0) {
 				return arg0.getName();
-			}}));
+			}}
+			)
+		);
 
 		this.listAllSelectableTags.setItems(this.observableSelectableTags);
 
@@ -383,23 +376,20 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void initSaveButton(){
 		this.btnSave = new Button("Save");
-		this.btnSave.setOnAction(new EventHandler<ActionEvent>(){
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				try {
-					isValidationError = false;
-					if (processInput()){
-					 	close();
-					}
-				} catch (ParseException | SQLException e) {
-					showErrorMessage(e);
-					isValidationError = true;
-				}
-			}
-			
-		});
+		this.btnSave.setOnAction(this::saveAndClose);
 		this.gridCommands.add(this.btnSave, 0, 0);
+	}
+
+	private void saveAndClose(ActionEvent actionEvent){
+		try {
+			isValidationError = false;
+			if (processInput()){
+				close();
+			}
+		} catch (ParseException | SQLException e) {
+			showErrorMessage(e);
+			isValidationError = true;
+		}
 	}
 
 	private void showErrorMessage(final Exception ex){
@@ -410,32 +400,25 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void initCancelButton(){
 		this.btnCancel = new Button("Cancel");
-		this.btnCancel.setOnAction(new EventHandler<ActionEvent>(){
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				isValidationError = false;
-				close();
-			}
-			
-		});
+		this.btnCancel.setOnAction(this::cancelAndClose);
 		this.gridCommands.add(this.btnCancel, 1, 0);
+	}
+
+	private void cancelAndClose(ActionEvent actionEvent){
+		isValidationError = false;
+		close();
 	}
 
 	private void initGenerateTitleButton(){
 		this.btnGenerateTitle = new Button("Generate title");
-		this.btnGenerateTitle.setOnAction(new EventHandler<ActionEvent>(){
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
-				link.setTitle(linkTitleUtil.generateTitle(link));
-				txtTitle.setText(link.getTitle());
-			}
-
-		});
+		this.btnGenerateTitle.setOnAction(this::generateTitle);
 		this.gridCommands.add(this.btnGenerateTitle, 2, 0);
+	}
 
+	private void generateTitle(ActionEvent actionEvent){
+		LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
+		link.setTitle(linkTitleUtil.generateTitle(link));
+		txtTitle.setText(link.getTitle());
 	}
 	
 	private boolean processInput() throws ParseException, SQLException{

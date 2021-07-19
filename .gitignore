@@ -28,3 +28,7 @@ target/
 *.iws
 *.ipr
 atlassian-ide-plugin.xml
+
+*.txt
+*.dmp
+*.trc
