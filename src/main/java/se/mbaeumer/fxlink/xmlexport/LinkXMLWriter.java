@@ -123,7 +123,7 @@ public class LinkXMLWriter {
 	}
 	
 	private void writeCategoryAttributes(Category category) throws XMLStreamException {
-		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", new Integer(category.getId()).toString());
+		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", Integer.toString(category.getId()));
 		this.xmlEventWriter.add(attribute);
 		
 		if (category.getName().equalsIgnoreCase(ValueConstants.VALUE_NEW)
@@ -181,7 +181,7 @@ public class LinkXMLWriter {
 	}
 	
 	private void writeLinkAttributes(Link link) throws XMLStreamException {
-		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", new Integer(link.getId()).toString());
+		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", Integer.valueOf(link.getId()).toString());
 		this.xmlEventWriter.add(attribute);
 		
 		if (link.getURL().equalsIgnoreCase(ValueConstants.VALUE_NEW)
@@ -208,12 +208,10 @@ public class LinkXMLWriter {
 		this.xmlEventWriter.add(attribute);
 		
 		if (link.getCategory() != null){
-			attribute = this.xmlEventFactory.createAttribute("categoryid", new Integer(link.getCategory().getId()).toString());
+			attribute = this.xmlEventFactory.createAttribute("categoryid", Integer.valueOf(link.getCategory().getId()).toString());
 			this.xmlEventWriter.add(attribute);
-		}else{
-			
 		}
-		
+
 		attribute = this.xmlEventFactory.createAttribute("created", link.getCreated().toString());
 		this.xmlEventWriter.add(attribute);
 		
@@ -256,7 +254,7 @@ public class LinkXMLWriter {
 	}
 	
 	private void writeTagAttributes(Tag tag) throws XMLStreamException {
-		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", new Integer(tag.getId()).toString());
+		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", Integer.valueOf(tag.getId()).toString());
 		this.xmlEventWriter.add(attribute);
 		
 		if (tag.getName().equalsIgnoreCase(ValueConstants.VALUE_NEW)
@@ -315,13 +313,13 @@ public class LinkXMLWriter {
 	}
 	
 	private void writeLinkTagAttributes(LinkTag tag) throws XMLStreamException {
-		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", new Integer(tag.getId()).toString());
+		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", Integer.valueOf(tag.getId()).toString());
 		this.xmlEventWriter.add(attribute);
 		
-		attribute = this.xmlEventFactory.createAttribute("linkid", new Integer(tag.getLinkId()).toString());
+		attribute = this.xmlEventFactory.createAttribute("linkid", Integer.valueOf(tag.getLinkId()).toString());
 		this.xmlEventWriter.add(attribute);
 		
-		attribute = this.xmlEventFactory.createAttribute("tagid", new Integer(tag.getTagId()).toString());
+		attribute = this.xmlEventFactory.createAttribute("tagid", Integer.valueOf(tag.getTagId()).toString());
 		this.xmlEventWriter.add(attribute);
 	}
 
@@ -360,7 +358,7 @@ public class LinkXMLWriter {
 	}
 
 	private void writeImportItemAttributes(ImportItem importItem) throws XMLStreamException {
-		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", new Integer(importItem.getId()).toString());
+		XMLEvent attribute = this.xmlEventFactory.createAttribute("id", Integer.valueOf(importItem.getId()).toString());
 		this.xmlEventWriter.add(attribute);
 
 		attribute = this.xmlEventFactory.createAttribute("filename", importItem.getFilename());

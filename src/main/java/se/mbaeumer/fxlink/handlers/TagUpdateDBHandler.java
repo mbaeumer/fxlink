@@ -26,7 +26,7 @@ public class TagUpdateDBHandler {
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
 		sql = sql.replaceFirst("\\?", "'" + tsLastUpdated + "'");
 
-		sql = sql.replaceFirst("\\?", new Integer(tag.getId()).toString() );
+		sql = sql.replaceFirst("\\?", Integer.valueOf(tag.getId()).toString() );
 
 		return sql;
 	}
@@ -38,6 +38,5 @@ public class TagUpdateDBHandler {
 
 		stmt.executeUpdate();
 		stmt.close();
-
 	}
 }

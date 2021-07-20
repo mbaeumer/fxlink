@@ -43,14 +43,14 @@ public class LinkUpdateDBHandler {
 		sql = sql.replaceFirst(Pattern.quote("DESCRIPTION_PLACEHOLDER"), "'" + link.getDescription() + "'");
 
 		if (link.getCategory() != null){
-			sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), new Integer(link.getCategory().getId()).toString() );
+			sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), Integer.valueOf(link.getCategory().getId()).toString() );
 		}
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
 		sql = sql.replaceFirst(Pattern.quote("DATE_PLACEHOLDER"), "'" + tsLastUpdated + "'");
 
-		sql = sql.replaceFirst(Pattern.quote("ID_PLACEHOLDER"), new Integer(link.getId()).toString() );
+		sql = sql.replaceFirst(Pattern.quote("ID_PLACEHOLDER"), Integer.valueOf(link.getId()).toString() );
 
 		return sql;
 	}
@@ -72,8 +72,8 @@ public class LinkUpdateDBHandler {
 
 		String sql = SQL_BASE_MOVE;
 
-		sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), new Integer(target.getId()).toString() );
-		sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), new Integer(source.getId()).toString() );
+		sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), Integer.valueOf(target.getId()).toString() );
+		sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), Integer.toString(source.getId()));
 
 		return sql;
 	}

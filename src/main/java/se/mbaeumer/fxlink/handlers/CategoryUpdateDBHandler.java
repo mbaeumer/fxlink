@@ -26,7 +26,7 @@ public class CategoryUpdateDBHandler {
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
 		sql = sql.replaceFirst("\\?", "'" + tsLastUpdated + "'");
 
-		sql = sql.replaceFirst("\\?", new Integer(category.getId()).toString() );
+		sql = sql.replaceFirst("\\?", Integer.valueOf(category.getId()).toString() );
 
 		return sql;
 	}

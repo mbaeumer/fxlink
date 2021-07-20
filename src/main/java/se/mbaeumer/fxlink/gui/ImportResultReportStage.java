@@ -130,8 +130,8 @@ public class ImportResultReportStage extends Stage {
 	private void initImportInfoLabels(){
 		this.lblImportFileName.setText("Imported from " + this.importReport.getFilename());
 		
-		this.lblSuccessfulImportsValue.setText(new Integer(this.importReport.getSuccessfulLinks().size()).toString());
-		this.lblFailedImportsValue.setText(new Integer(this.importReport.getFailedLinks().size()).toString());
+		this.lblSuccessfulImportsValue.setText(Integer.toString(this.importReport.getSuccessfulLinks().size()));
+		this.lblFailedImportsValue.setText(Integer.toString(this.importReport.getFailedLinks().size()));
 		this.flowGeneral.getChildren().addAll(this.lblImportFileName, this.lblSuccessfulImportsText,
 				this.lblSuccessfulImportsValue, this.lblFailedImportsText, this.lblFailedImportsValue);
 	}

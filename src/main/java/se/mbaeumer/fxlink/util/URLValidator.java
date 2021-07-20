@@ -2,9 +2,6 @@ package se.mbaeumer.fxlink.util;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class URLValidator {
 	public static final String HTTP = "http://";
 	public static final String HTTPS = "https://";

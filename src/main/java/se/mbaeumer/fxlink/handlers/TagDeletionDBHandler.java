@@ -16,7 +16,7 @@ public class TagDeletionDBHandler {
 		}
 
 		String sql = SQL_BASE_DELETE + WHERE_CLAUSE;
-		sql = sql.replaceFirst("\\?", new Integer(tag.getId()).toString() );
+		sql = sql.replaceFirst("\\?", Integer.valueOf(tag.getId()).toString() );
 
 		return sql;
 	}
@@ -38,7 +38,5 @@ public class TagDeletionDBHandler {
 
 		stmt.executeUpdate();
 		stmt.close();
-		
 	}
-
 }

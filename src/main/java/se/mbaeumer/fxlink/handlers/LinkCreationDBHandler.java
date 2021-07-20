@@ -27,7 +27,7 @@ public class LinkCreationDBHandler {
 
 		if (LinkCreationDBHandler.isCategorySet(link)){
 			sql += CATEGORY_SET;
-			sql = sql.replaceFirst(Pattern.quote("CATEGORY_PLACEHOLDER"), new Integer(link.getCategory().getId()).toString() );
+			sql = sql.replaceFirst(Pattern.quote("CATEGORY_PLACEHOLDER"), Integer.valueOf(link.getCategory().getId()).toString() );
 		}else{
 			sql += DEFAULT_CATEGORY;
 		}

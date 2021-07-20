@@ -16,7 +16,7 @@ public class CategoryDeletionDBHandler {
 		}
 
 		String sql = SQL_BASE_DELETE + WHERE_CLAUSE;
-		sql = sql.replaceFirst("\\?", new Integer(category.getId()).toString() );
+		sql = sql.replaceFirst("\\?", Integer.valueOf(category.getId()).toString() );
 
 		return sql;
 	}

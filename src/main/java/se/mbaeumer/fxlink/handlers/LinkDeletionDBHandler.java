@@ -17,7 +17,7 @@ public class LinkDeletionDBHandler {
 		}
 
 		String sql = SQL_BASE_DELETE + SQL_WHERE_CLAUSE;
-		sql = sql.replaceFirst("\\?", new Integer(link.getId()).toString() );
+		sql = sql.replaceFirst("\\?", Integer.valueOf(link.getId()).toString() );
 
 		return sql;
 	}

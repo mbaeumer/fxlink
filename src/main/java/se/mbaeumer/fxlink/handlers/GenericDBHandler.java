@@ -10,8 +10,7 @@ import java.sql.SQLException;
 public class GenericDBHandler {
 	private static final GenericDBHandler INSTANCE = new GenericDBHandler();
 
-	private GenericDBHandler() {
-	};
+	private GenericDBHandler() {}
 
 	public static GenericDBHandler getInstance() {
 		return INSTANCE;

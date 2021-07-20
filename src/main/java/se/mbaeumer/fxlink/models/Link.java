@@ -42,7 +42,7 @@ public class Link {
 	public void setCategory(Category category){this.category.setValue(category);}
 
 	private BooleanProperty selected = new SimpleBooleanProperty();
-	public BooleanProperty selectedProperty(){return selected;};
+	public BooleanProperty selectedProperty(){return selected;}
 	public boolean isSelected(){return selected.get();}
 	public void setSelected(boolean selected){this.selected.set(selected);}
 

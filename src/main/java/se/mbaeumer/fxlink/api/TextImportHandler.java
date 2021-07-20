@@ -31,7 +31,7 @@ public class TextImportHandler {
 		String fileName = textFile.getCanonicalPath();
 		String fileNameOnly = textFile.getName();
 
-        String line = null;
+        String line;
 
         FileReader fileReader = 
             new FileReader(fileName);
@@ -53,7 +53,7 @@ public class TextImportHandler {
 		Link link = new Link(createTitle(line), line, ValueConstants.VALUE_NEW);
 		link.setCategory(null);
 
-		FailedLink fl = null;
+		FailedLink fl;
 		if (!URLValidator.isValidURL(line)){
 			fl = new FailedLink(link, "The URL seems to be incorrect");
 			failedLinks.add(fl);

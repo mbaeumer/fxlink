@@ -411,7 +411,6 @@ public class FXLink extends Application{
 
 		if (importFile == null){
 			actionEvent.consume();
-			return;
 		}
 
 		// ask the use to confirm that the database content
@@ -438,7 +437,6 @@ public class FXLink extends Application{
 			}
 		}else{
 			actionEvent.consume();
-			return;
 		}
 	}
 	
