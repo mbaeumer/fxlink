@@ -11,7 +11,7 @@ import java.util.List;
 
 public class LinkHandler {
 
-	private LinkReadDBHandler linkReadDBHandler;
+	private final LinkReadDBHandler linkReadDBHandler;
 
 	public LinkHandler(LinkReadDBHandler linkReadDBHandler) {
 		this.linkReadDBHandler = linkReadDBHandler;
@@ -22,9 +22,9 @@ public class LinkHandler {
 	}
 	
 	public List<Link> getLinksByCategory(Category category){
-		if (category.getName() == ValueConstants.VALUE_ALL){
+		if (ValueConstants.VALUE_ALL.equals(category.getName())){
 			return this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
-		}else if (category.getName() == ValueConstants.VALUE_N_A){
+		}else if (ValueConstants.VALUE_N_A.equals(category.getName())){
 			return this.linkReadDBHandler.getAllLinksWithNoCategory(GenericDBHandler.getInstance());
 		}
 		return this.linkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(), category.getId());
