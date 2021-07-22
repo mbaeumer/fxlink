@@ -116,6 +116,8 @@ public class FXLink extends Application{
 	private ContextMenu contCategories;
 	private Category selectedCategory = null;
 
+	private LinkHandler linkHandler;
+
 	public void start(Stage stage) {
 		DatabaseCheckUtil dbCheckUtil = new DatabaseCheckUtilImpl();
 		if (dbCheckUtil.checkDatabaseFolder() == DatabaseCheckResult.OK
@@ -124,6 +126,7 @@ public class FXLink extends Application{
 			stage.setTitle(STAGE_TITLE);
 			stage.setScene(this.scene);
 			stage.show();
+			this.initHandlers();
 			this.initLayout();
 		}else{
 			Alert alert = new Alert(Alert.AlertType.ERROR, DATABASE_DOES_NOT_EXIST, ButtonType.OK);
@@ -133,6 +136,10 @@ public class FXLink extends Application{
 
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	private void initHandlers(){
+		this.linkHandler = new LinkHandler(new LinkReadDBHandler());
 	}
 	
 	public void initLayout() {
@@ -838,9 +845,9 @@ public class FXLink extends Application{
 	private void createLinkTableView(){
 		this.tblLinks = new TableView();
 
-		LinkHandler linkHandler = new LinkHandler(new LinkReadDBHandler());
+		//LinkHandler linkHandler = new LinkHandler(new LinkReadDBHandler());
 
-		this.tblLinks.setItems(FXCollections.observableList(linkHandler.getLinks()));
+		this.tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinks()));
 		this.tblLinks.getItems().add(LinkHandler.createPseudoLink());
 
 		this.createLinkTableColumns();
@@ -1352,7 +1359,7 @@ public class FXLink extends Application{
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-					List<Link> links = LinkHandler.getLinksByCategory(selectedCategory);
+					List<Link> links = linkHandler.getLinksByCategory(selectedCategory);
 					if (links.size() > 0){
 						Alert alert = new Alert(Alert.AlertType.WARNING, "This category is contains " + links.size() + " links. Do you really want to delete this category?", ButtonType.YES, ButtonType.NO);
 						Optional<ButtonType> result = alert.showAndWait();
@@ -1452,7 +1459,7 @@ public class FXLink extends Application{
 		if (isSearchPaneVisible() && isSearchTermGiven()) {
 			runSearch();
 		}else{
-			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
+			tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.updateStatusBar(false);
 		}
@@ -1533,7 +1540,7 @@ public class FXLink extends Application{
 	
 	private void filterCategories(){
 		if (!cmbCategories.isDisabled() && cmbCategories.getValue() != null) {
-			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
+			tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.updateStatusBar(false);
 		}
@@ -1563,7 +1570,7 @@ public class FXLink extends Application{
 				this.flowGeneral.getChildren().add(3, this.tblLinks);
 			}
 
-			tblLinks.setItems(FXCollections.observableList(LinkHandler.getLinksByCategory(cmbCategories.getValue())));
+			tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.btnShowSearchPane.setDisable(false);
 			this.btnCreateItem.setDisable(false);

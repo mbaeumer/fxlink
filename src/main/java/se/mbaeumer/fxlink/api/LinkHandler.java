@@ -21,13 +21,13 @@ public class LinkHandler {
 		return this.linkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance());
 	}
 	
-	public static List<Link> getLinksByCategory(Category category){
+	public List<Link> getLinksByCategory(Category category){
 		if (category.getName() == ValueConstants.VALUE_ALL){
-			return LinkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
+			return this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
 		}else if (category.getName() == ValueConstants.VALUE_N_A){
-			return LinkReadDBHandler.getAllLinksWithNoCategory(GenericDBHandler.getInstance());
+			return this.linkReadDBHandler.getAllLinksWithNoCategory(GenericDBHandler.getInstance());
 		}
-		return LinkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(), category.getId());	
+		return this.linkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(), category.getId());
 	}
 	
 	public static void createLink(Link link) throws SQLException{

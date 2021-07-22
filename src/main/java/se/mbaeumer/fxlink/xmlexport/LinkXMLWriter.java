@@ -33,8 +33,9 @@ public class LinkXMLWriter {
 	private List<ImportItem> importItems;
 	
 	private String configFile;
-	
-	
+
+	private LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
+
 	public LinkXMLWriter(String fileName) throws FileNotFoundException, XMLStreamException {
 		this.configFile = fileName;
 		this.init();
@@ -54,7 +55,7 @@ public class LinkXMLWriter {
 	private void getDataForExport() throws SQLException {
 		// get all categories
 		this.categories = CategoryReadDBHandler.getAllCategories(GenericDBHandler.getInstance());
-		this.links = LinkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
+		this.links = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
 		TagDBHandler tagDBHandler = new TagDBHandler();
 
 		this.tags = tagDBHandler.getAllTags(tagDBHandler.constructSqlString(null), new HsqldbConnectionHandler());

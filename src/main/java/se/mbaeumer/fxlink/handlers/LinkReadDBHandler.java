@@ -44,7 +44,7 @@ public class LinkReadDBHandler {
 		return links;
 	}
 	
-	public static List<Link> getAllLinksByCategoryId(GenericDBHandler dbh, int categoryId){
+	public List<Link> getAllLinksByCategoryId(GenericDBHandler dbh, int categoryId){
 		Connection connection = dbh.getConnection();				
 		List<Link> links = new ArrayList<Link>();
 		
@@ -82,7 +82,7 @@ public class LinkReadDBHandler {
 		return links;
 	}
 
-	public static List<Link> getAllLinksWithNoCategory(GenericDBHandler dbh){
+	public List<Link> getAllLinksWithNoCategory(GenericDBHandler dbh){
 		Connection connection = dbh.getConnection();				
 		List<Link> links = new ArrayList<Link>();
 		
@@ -114,7 +114,7 @@ public class LinkReadDBHandler {
 		return links;
 	}
 
-	public static List<Link> getAllLinks(GenericDBHandler dbh){
+	public List<Link> getAllLinks(GenericDBHandler dbh){
 		Connection connection = dbh.getConnection();				
 		List<Link> links = new ArrayList<Link>();
 		
