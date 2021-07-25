@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.api.*;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
+import se.mbaeumer.fxlink.handlers.LinkTagReadDBHandler;
 import se.mbaeumer.fxlink.handlers.ManagedItemDBHandler;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.ImportResultReport;
@@ -139,7 +140,7 @@ public class FXLink extends Application{
 	}
 
 	private void initHandlers(){
-		this.linkHandler = new LinkHandler(new LinkReadDBHandler());
+		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler());
 	}
 	
 	public void initLayout() {
@@ -1317,7 +1318,7 @@ public class FXLink extends Application{
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-					List<Link> links = LinkHandler.getLinksWithTag(selectedTag.getId());
+					List<Link> links = linkHandler.getLinksWithTag(selectedTag.getId());
 					if (links.size() > 0){
 						Alert alert = new Alert(Alert.AlertType.WARNING, "This tag is used by " + links.size() + " links. Do you really want to delete this tag?", ButtonType.YES, ButtonType.NO);
 						Optional<ButtonType> result = alert.showAndWait();

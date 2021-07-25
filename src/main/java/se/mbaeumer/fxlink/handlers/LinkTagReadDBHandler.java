@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LinkTagReadDBHandler {
-	public static List<Link> getAllLinksByTagId(GenericDBHandler dbh, int tagId) throws SQLException{
+	public List<Link> getAllLinksByTagId(GenericDBHandler dbh, int tagId) throws SQLException{
 		Connection connection = dbh.getConnection();				
 		List<Link> links = new ArrayList<Link>();
 		

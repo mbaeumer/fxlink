@@ -12,9 +12,11 @@ import java.util.List;
 public class LinkHandler {
 
 	private final LinkReadDBHandler linkReadDBHandler;
+	private final LinkTagReadDBHandler linkTagReadDBHandler;
 
-	public LinkHandler(LinkReadDBHandler linkReadDBHandler) {
+	public LinkHandler(LinkReadDBHandler linkReadDBHandler, LinkTagReadDBHandler linkTagReadDBHandler) {
 		this.linkReadDBHandler = linkReadDBHandler;
+		this.linkTagReadDBHandler = linkTagReadDBHandler;
 	}
 
 	public List<Link> getLinks(){
@@ -52,8 +54,8 @@ public class LinkHandler {
 		return link;
 	}
 	
-	public static List<Link> getLinksWithTag(int tagId) throws SQLException{
-		return LinkTagReadDBHandler.getAllLinksByTagId(GenericDBHandler.getInstance(), tagId);
+	public List<Link> getLinksWithTag(int tagId) throws SQLException{
+		return this.linkTagReadDBHandler.getAllLinksByTagId(GenericDBHandler.getInstance(), tagId);
 	}
 	
 	public static void deleteAllLinks() throws SQLException{
