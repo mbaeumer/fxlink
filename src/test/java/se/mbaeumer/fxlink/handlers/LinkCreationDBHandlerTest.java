@@ -1,6 +1,7 @@
 package se.mbaeumer.fxlink.handlers;
 
 import junit.framework.TestCase;
+import org.junit.Before;
 import org.junit.Test;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
@@ -15,9 +16,16 @@ import java.util.Date;
  */
 public class LinkCreationDBHandlerTest extends TestCase {
 
+    private LinkCreationDBHandler linkCreationDBHandler;
+
+    @Before
+    public void setUp(){
+        linkCreationDBHandler = new LinkCreationDBHandler();
+    }
+
     @Test
     public void testReturnNullIfLinkIsNull(){
-        assertNull(LinkCreationDBHandler.constructSqlString(null));
+        assertNull(linkCreationDBHandler.constructSqlString(null));
     }
 
     @Test
@@ -25,7 +33,7 @@ public class LinkCreationDBHandlerTest extends TestCase {
         Link link = createLinkWithoutCategory();
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
         expected += " '" + link.getLastUpdated() + "')";
-        String actual = LinkCreationDBHandler.constructSqlString(link);
+        String actual = linkCreationDBHandler.constructSqlString(link);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
     }
 
@@ -37,7 +45,7 @@ public class LinkCreationDBHandlerTest extends TestCase {
         link.setDescription("Some youtube link");
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Some youtube link', 'https://www.youtube.com/watch?v=HZyRQ8Uhhmk', 'Some youtube link', DEFAULT, DEFAULT,";
         expected += " '" + link.getLastUpdated() + "')";
-        String actual = LinkCreationDBHandler.constructSqlString(link);
+        String actual = linkCreationDBHandler.constructSqlString(link);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
     }
 
@@ -47,7 +55,7 @@ public class LinkCreationDBHandlerTest extends TestCase {
         link.setCategory(createSportsCategory());
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', 1, DEFAULT,";
         expected += " '" + link.getLastUpdated() + "')";
-        String actual = LinkCreationDBHandler.constructSqlString(link);
+        String actual = linkCreationDBHandler.constructSqlString(link);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
     }
 
@@ -57,7 +65,7 @@ public class LinkCreationDBHandlerTest extends TestCase {
         link.setCategory(createCategoryWithNA());
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
         expected += " '" + link.getLastUpdated() + "')";
-        String actual = LinkCreationDBHandler.constructSqlString(link);
+        String actual = linkCreationDBHandler.constructSqlString(link);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
     }
 
@@ -67,7 +75,7 @@ public class LinkCreationDBHandlerTest extends TestCase {
         link.setCategory(createCategoryWithNameAll());
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
         expected += " '" + link.getLastUpdated() + "')";
-        String actual = LinkCreationDBHandler.constructSqlString(link);
+        String actual = linkCreationDBHandler.constructSqlString(link);
         System.out.println("expected: " + expected);
         System.out.println("actual:   " + actual);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
@@ -76,26 +84,22 @@ public class LinkCreationDBHandlerTest extends TestCase {
     @Test
     public void testReturnFalseIfCategoryIsNull(){
         Link link = createLinkWithoutCategory();
-        assertFalse("result should be false", LinkCreationDBHandler.isCategorySet(link));
+        assertFalse("result should be false", linkCreationDBHandler.isCategorySet(link));
     }
 
     @Test
     public void testReturnFalseIfCategoryIsNA(){
         Link link = createLinkWithoutCategory();
         link.setCategory(createCategoryWithNA());
-        assertFalse("result should be false", LinkCreationDBHandler.isCategorySet(link));
+        assertFalse("result should be false", linkCreationDBHandler.isCategorySet(link));
     }
 
     @Test
     public void testReturnFalseIfCategoryIsAll(){
         Link link = createLinkWithoutCategory();
         link.setCategory(createCategoryWithNameAll());
-        assertFalse("result should be false", LinkCreationDBHandler.isCategorySet(link));
+        assertFalse("result should be false", linkCreationDBHandler.isCategorySet(link));
     }
-
-
-
-
 
     private Link createLinkWithoutCategory(){
         Link link = new Link("Der Kicker", "www.kicker.de", "German sports magazin");
@@ -128,8 +132,4 @@ public class LinkCreationDBHandlerTest extends TestCase {
         category.setName(ValueConstants.VALUE_N_A);
         return category;
     }
-
-
-
-
 }

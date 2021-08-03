@@ -26,6 +26,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.api.*;
+import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkTagReadDBHandler;
 import se.mbaeumer.fxlink.handlers.ManagedItemDBHandler;
@@ -140,7 +141,7 @@ public class FXLink extends Application{
 	}
 
 	private void initHandlers(){
-		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler());
+		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(), new LinkCreationDBHandler());
 	}
 	
 	public void initLayout() {
@@ -1431,7 +1432,7 @@ public class FXLink extends Application{
 						&& !category.getName().equalsIgnoreCase(ValueConstants.VALUE_N_A)) {
 					link.setCategory(category);
 				}
-				LinkHandler.createLink(link);
+				this.linkHandler.createLink(link);
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
 				Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);

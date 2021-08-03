@@ -64,6 +64,8 @@ public class LinkViewDetailStage extends Stage {
 	private Button btnGenerateTitle;
 	private Link link;
 	private boolean isValidationError = false;
+
+	private LinkHandler linkHandler;
 	
 	public LinkViewDetailStage(Link link){
 		super();
@@ -434,7 +436,7 @@ public class LinkViewDetailStage extends Stage {
 
 		setCategory(updatedLink);
 		if (this.link.getId() <= 0) {
-			LinkHandler.createLink(updatedLink);
+			linkHandler.createLink(updatedLink);
 		}else {
 			LinkHandler.updateLink(updatedLink);
 		}

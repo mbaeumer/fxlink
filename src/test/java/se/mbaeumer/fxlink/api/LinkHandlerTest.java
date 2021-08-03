@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.verification.VerificationMode;
 import se.mbaeumer.fxlink.handlers.GenericDBHandler;
+import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkTagReadDBHandler;
 import se.mbaeumer.fxlink.models.Category;
@@ -30,10 +31,13 @@ public class LinkHandlerTest {
     @Mock
     private LinkTagReadDBHandler linkTagReadDBHandler;
 
+    @Mock
+    private LinkCreationDBHandler linkCreationDBHandler;
+
     @Test
     public void testGetAllLinks(){
         Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any())).thenReturn(new ArrayList<>());
-        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler);
+        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler, linkCreationDBHandler);
         List<Link> links = linkHandler.getLinks();
         assertTrue(links.size() == 0);
     }
@@ -41,7 +45,7 @@ public class LinkHandlerTest {
     @Test
     public void testGetLinksByCategory_all(){
         Mockito.when(linkReadDBHandler.getAllLinks(any())).thenReturn(new ArrayList<>());
-        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler);
+        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler, linkCreationDBHandler);
         Category category = new Category();
         category.setName(ValueConstants.VALUE_ALL);
         List<Link> links = linkHandler.getLinksByCategory(category);
@@ -53,7 +57,7 @@ public class LinkHandlerTest {
     @Test
     public void testGetLinksByCategory_null(){
         Mockito.when(linkReadDBHandler.getAllLinksWithNoCategory(any())).thenReturn(new ArrayList<>());
-        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler);
+        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler, linkCreationDBHandler);
         Category category = new Category();
         category.setName(ValueConstants.VALUE_N_A);
         List<Link> links = linkHandler.getLinksByCategory(category);
@@ -66,8 +70,30 @@ public class LinkHandlerTest {
     public void testGetLinksWithTag() throws SQLException {
         Mockito.when(linkTagReadDBHandler.getAllLinksByTagId(GenericDBHandler.getInstance(), 0))
                 .thenReturn(new ArrayList<>());
-        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler);
+        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler, linkCreationDBHandler);
         List<Link> links = linkHandler.getLinksWithTag(0);
         assertTrue(links.size() == 0);
+    }
+
+    @Test
+    public void testCreateLink_success() throws SQLException {
+        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler, linkCreationDBHandler);
+        Link link = new Link("", "www.spiegel.de", "Der Spiegel");
+        Mockito.when(linkCreationDBHandler.constructSqlString(link)).thenReturn("insert into something");
+        Mockito.when(linkCreationDBHandler.createLink(any(), any())).thenReturn(1);
+        try {
+            linkHandler.createLink(link);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @Test(expected = SQLException.class)
+    public void testCreateLink_failure() throws SQLException {
+        linkHandler = new LinkHandler(linkReadDBHandler, linkTagReadDBHandler, linkCreationDBHandler);
+        Link link = new Link("", "www.spiegel.de", "Der Spiegel");
+        Mockito.when(linkCreationDBHandler.constructSqlString(link)).thenReturn("insert into something");
+        Mockito.when(linkCreationDBHandler.createLink(any(), any())).thenThrow(SQLException.class);
+        linkHandler.createLink(link);
     }
 }

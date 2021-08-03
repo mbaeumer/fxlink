@@ -14,7 +14,7 @@ public class LinkCreationDBHandler {
 	public static final String CATEGORY_SET = "CATEGORY_PLACEHOLDER, ";
 	public static final String QUERY_PART_DATE = "DEFAULT, DATE_PLACEHOLDER)";
 
-	public static String constructSqlString(Link link){
+	public String constructSqlString(Link link){
 		String sql = BASE_INSERT;
 
 		if (link == null){
@@ -25,7 +25,7 @@ public class LinkCreationDBHandler {
 		sql = sql.replaceFirst(Pattern.quote("URL_PLACEHOLDER"), "'" + link.getURL() + "'");
 		sql = sql.replaceFirst(Pattern.quote("DESCRIPTION_PLACEHOLDER"), "'" + link.getDescription() + "'");
 
-		if (LinkCreationDBHandler.isCategorySet(link)){
+		if (isCategorySet(link)){
 			sql += CATEGORY_SET;
 			sql = sql.replaceFirst(Pattern.quote("CATEGORY_PLACEHOLDER"), Integer.valueOf(link.getCategory().getId()).toString() );
 		}else{
@@ -41,16 +41,14 @@ public class LinkCreationDBHandler {
 		return sql;
 	}
 
-	public static boolean isCategorySet(Link link){
+	public boolean isCategorySet(Link link){
 		return (link.getCategory() != null && link.getCategory().getName() != ValueConstants.VALUE_ALL
 				&& link.getCategory().getName() != ValueConstants.VALUE_N_A);
-
 	}
 
-	public static int createLink(String sql, GenericDBHandler dbh) throws SQLException{
+	public int createLink(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 		
-
 		int linkId = -1;
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 

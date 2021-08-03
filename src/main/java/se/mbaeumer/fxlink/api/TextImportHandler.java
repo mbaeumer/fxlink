@@ -16,8 +16,10 @@ import java.util.List;
 
 public class TextImportHandler {
 	
-	private List<Link> importedLinks = new ArrayList<Link>();
-	private List<FailedLink> failedLinks = new ArrayList<FailedLink>();
+	private List<Link> importedLinks = new ArrayList();
+	private List<FailedLink> failedLinks = new ArrayList();
+
+	private LinkCreationDBHandler linkCreationDBHandler = new LinkCreationDBHandler();
 	
 	public List<Link> getImportedLinks() {
 		return importedLinks;
@@ -29,8 +31,6 @@ public class TextImportHandler {
 
 	public void importFromTextFile(File textFile) throws IOException{
 		String fileName = textFile.getCanonicalPath();
-		String fileNameOnly = textFile.getName();
-
         String line;
 
         FileReader fileReader = 
@@ -61,8 +61,8 @@ public class TextImportHandler {
 		}
 		
 		try {
-			String sql = LinkCreationDBHandler.constructSqlString(link);
-			int newId = LinkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
+			String sql = linkCreationDBHandler.constructSqlString(link);
+			int newId = linkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
 			link.setId(newId);
 			importedLinks.add(link);
 		} catch (SQLException e) {

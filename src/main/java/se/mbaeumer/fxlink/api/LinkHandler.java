@@ -13,10 +13,12 @@ public class LinkHandler {
 
 	private final LinkReadDBHandler linkReadDBHandler;
 	private final LinkTagReadDBHandler linkTagReadDBHandler;
+	private final LinkCreationDBHandler linkCreationDBHandler;
 
-	public LinkHandler(LinkReadDBHandler linkReadDBHandler, LinkTagReadDBHandler linkTagReadDBHandler) {
+	public LinkHandler(LinkReadDBHandler linkReadDBHandler, LinkTagReadDBHandler linkTagReadDBHandler, LinkCreationDBHandler linkCreationDBHandler) {
 		this.linkReadDBHandler = linkReadDBHandler;
 		this.linkTagReadDBHandler = linkTagReadDBHandler;
+		this.linkCreationDBHandler = linkCreationDBHandler;
 	}
 
 	public List<Link> getLinks(){
@@ -32,9 +34,9 @@ public class LinkHandler {
 		return this.linkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(), category.getId());
 	}
 	
-	public static void createLink(Link link) throws SQLException{
-		String sql = LinkCreationDBHandler.constructSqlString(link);
-		LinkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
+	public void createLink(Link link) throws SQLException{
+		String sql = linkCreationDBHandler.constructSqlString(link);
+		linkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void updateLink(Link link) throws ParseException, SQLException{
