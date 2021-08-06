@@ -2,6 +2,7 @@ package se.mbaeumer.fxlink.handlers;
 
 import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
@@ -15,9 +16,16 @@ import java.util.Date;
  */
 public class LinkUpdateDBHandlerTest extends TestCase {
 
+    private LinkUpdateDBHandler linkUpdateDBHandler;
+
+    @Before
+    public void setUp(){
+        linkUpdateDBHandler = new LinkUpdateDBHandler();
+    }
+
     @Test
     public void testReturnNullIfLinkIsNull(){
-        Assert.assertNull("The method did not return null", LinkUpdateDBHandler.constructSqlString(null));
+        Assert.assertNull("The method did not return null", linkUpdateDBHandler.constructSqlString(null));
     }
 
     @Test
@@ -25,7 +33,7 @@ public class LinkUpdateDBHandlerTest extends TestCase {
         Link link = createLink();
         String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine',";
         expected += "categoryId=5,lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
-        String actual = LinkUpdateDBHandler.constructSqlString(link);
+        String actual = linkUpdateDBHandler.constructSqlString(link);
         assertTrue("The string values do not match", actual.equalsIgnoreCase(expected));
     }
 
@@ -56,7 +64,7 @@ public class LinkUpdateDBHandlerTest extends TestCase {
         link.setCategory(null);
         String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine',categoryId=null,";
         expected += "lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
-        String actual = LinkUpdateDBHandler.constructSqlString(link);
+        String actual = linkUpdateDBHandler.constructSqlString(link);
         assertTrue("The string values do not match", actual.equalsIgnoreCase(expected));
     }
 

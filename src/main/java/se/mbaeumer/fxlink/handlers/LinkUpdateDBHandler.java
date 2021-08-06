@@ -21,8 +21,7 @@ public class LinkUpdateDBHandler {
 
 	public static String SQL_BASE_MOVE = "UPDATE Link SET categoryId=CATEGORY_ID_PLACEHOLDER WHERE categoryId=CATEGORY_ID_PLACEHOLDER";
 
-	
-	public static String constructSqlString(Link link){
+	public String constructSqlString(Link link){
 		String  sql = SQL_BASE_UPDATE;
 
 		if (link == null){
@@ -55,7 +54,7 @@ public class LinkUpdateDBHandler {
 		return sql;
 	}
 
-	public static void updateLink(String sql, GenericDBHandler dbh) throws ParseException, SQLException{
+	public void updateLink(String sql, GenericDBHandler dbh) throws ParseException, SQLException{
 		Connection connection = dbh.getConnection();
 
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);

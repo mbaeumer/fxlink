@@ -26,10 +26,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.api.*;
-import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
-import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
-import se.mbaeumer.fxlink.handlers.LinkTagReadDBHandler;
-import se.mbaeumer.fxlink.handlers.ManagedItemDBHandler;
+import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.ImportResultReport;
 import se.mbaeumer.fxlink.models.Link;
@@ -141,7 +138,7 @@ public class FXLink extends Application{
 	}
 
 	private void initHandlers(){
-		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(), new LinkCreationDBHandler());
+		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(), new LinkCreationDBHandler(), new LinkUpdateDBHandler());
 	}
 	
 	public void initLayout() {
@@ -561,7 +558,7 @@ public class FXLink extends Application{
 				for (Link link : getSelectedLinks()){
 					link.setCategory(category);
 					try {
-						LinkHandler.updateLink(link);
+						linkHandler.updateLink(link);
 					}catch(SQLException | ParseException pe){
 						Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
 						alert.showAndWait();
@@ -582,7 +579,7 @@ public class FXLink extends Application{
 				for (Link link : getSelectedLinks()){
 					link.setTitle(linkTitleUtil.generateTitle(link));
 					try {
-						LinkHandler.updateLink(link);
+						linkHandler.updateLink(link);
 					}catch(SQLException | ParseException pe){
 						Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
 						alert.showAndWait();
@@ -1445,8 +1442,7 @@ public class FXLink extends Application{
 				if (category.getName().equalsIgnoreCase(ValueConstants.VALUE_N_A)) {
 					link.setCategory(null);
 				}
-
-				LinkHandler.updateLink(link);
+				linkHandler.updateLink(link);
 			} catch (ParseException | SQLException e) {
 				Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
 				alert.showAndWait();

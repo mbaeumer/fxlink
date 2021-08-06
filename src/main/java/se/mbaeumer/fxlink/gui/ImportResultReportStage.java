@@ -11,7 +11,10 @@ import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.LinkHandler;
 import se.mbaeumer.fxlink.api.SuggestionDataHandler;
 import se.mbaeumer.fxlink.api.SuggestionHandler;
+import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
+import se.mbaeumer.fxlink.handlers.LinkTagReadDBHandler;
+import se.mbaeumer.fxlink.handlers.LinkUpdateDBHandler;
 import se.mbaeumer.fxlink.models.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -59,12 +62,15 @@ public class ImportResultReportStage extends Stage {
 	private FlowPane flowSuggestions;
 	private Button btnSelectAll;
 	private Button btnDeselectAll;
+
+	private LinkHandler linkHandler;
 	
 	public ImportResultReportStage(ImportResultReport report){
 		super();
 		this.initRootPane();
 		this.initScene();
-		
+
+		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(), new LinkCreationDBHandler(), new LinkUpdateDBHandler());
 		this.importReport = report;
 		this.initLayout();
 		this.initSizes();
@@ -195,7 +201,7 @@ public class ImportResultReportStage extends Stage {
 				for (Link link : getSelectedLinks()){
 					link.setCategory(category);
 					try {
-						LinkHandler.updateLink(link);
+						linkHandler.updateLink(link);
 					}catch(SQLException | ParseException pe){
 						Alert alert = new Alert(Alert.AlertType.ERROR, "The link could not be updated", ButtonType.OK);
 						alert.showAndWait();
@@ -382,7 +388,7 @@ public class ImportResultReportStage extends Stage {
 
 	private void updateLink(Link link){
 		try {
-			LinkHandler.updateLink(link);
+			linkHandler.updateLink(link);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -476,7 +482,7 @@ public class ImportResultReportStage extends Stage {
 		try {
 			Category category = CategoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
 			link.setCategory(category);
-			LinkHandler.updateLink(link);
+			linkHandler.updateLink(link);
 		} catch (SQLException | ParseException throwables) {
 			throwables.printStackTrace();
 		}

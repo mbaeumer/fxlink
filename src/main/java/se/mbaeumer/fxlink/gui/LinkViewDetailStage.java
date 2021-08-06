@@ -10,7 +10,10 @@ import java.util.List;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import se.mbaeumer.fxlink.api.*;
+import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
+import se.mbaeumer.fxlink.handlers.LinkTagReadDBHandler;
+import se.mbaeumer.fxlink.handlers.LinkUpdateDBHandler;
 import se.mbaeumer.fxlink.models.*;
 import se.mbaeumer.fxlink.util.*;
 import javafx.beans.value.ChangeListener;
@@ -70,6 +73,8 @@ public class LinkViewDetailStage extends Stage {
 	public LinkViewDetailStage(Link link){
 		super();
 		this.link = link;
+
+		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(), new LinkCreationDBHandler(), new LinkUpdateDBHandler());
 		
 		this.initScene();
 		this.makeModal();
@@ -250,7 +255,7 @@ public class LinkViewDetailStage extends Stage {
 		try {
 			Category category = CategoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
 			link.setCategory(category);
-			LinkHandler.updateLink(link);
+			linkHandler.updateLink(link);
 			setCategory();
 		} catch (SQLException | ParseException throwables) {
 			throwables.printStackTrace();
@@ -438,7 +443,7 @@ public class LinkViewDetailStage extends Stage {
 		if (this.link.getId() <= 0) {
 			linkHandler.createLink(updatedLink);
 		}else {
-			LinkHandler.updateLink(updatedLink);
+			linkHandler.updateLink(updatedLink);
 		}
 		return true;
 	}
