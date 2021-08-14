@@ -138,7 +138,8 @@ public class FXLink extends Application{
 	}
 
 	private void initHandlers(){
-		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(), new LinkCreationDBHandler(), new LinkUpdateDBHandler());
+		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
+				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
 	}
 	
 	public void initLayout() {
@@ -479,7 +480,7 @@ public class FXLink extends Application{
 			if (result.isPresent() && result.get() == ButtonType.YES) {
 				for (Link link : selectedLinks) {
 					try {
-						LinkHandler.deleteLink(link);
+						linkHandler.deleteLink(link);
 					} catch (SQLException sqle) {
 						deletedSuccess = false;
 					}
@@ -1271,7 +1272,7 @@ public class FXLink extends Application{
 					Alert alert = new Alert(Alert.AlertType.WARNING, "The selected link will be deleted. Continue?", ButtonType.YES, ButtonType.NO);
 					Optional<ButtonType> result = alert.showAndWait();
 					if (result.isPresent() && result.get() == ButtonType.YES){
-						LinkHandler.deleteLink(selectedLink);
+						linkHandler.deleteLink(selectedLink);
 						refreshLinkTable();
 					}
 				} catch (SQLException e1) {

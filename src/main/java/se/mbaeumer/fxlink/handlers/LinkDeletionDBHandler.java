@@ -11,7 +11,7 @@ public class LinkDeletionDBHandler {
 	public static final String SQL_BASE_DELETE = "DELETE FROM Link";
 	public static final String SQL_WHERE_CLAUSE = " WHERE id=?";
 
-	public static String constructSqlString(Link link){
+	public String constructSqlString(Link link){
 		if (link == null){
 			return null;
 		}
@@ -22,7 +22,7 @@ public class LinkDeletionDBHandler {
 		return sql;
 	}
 
-	public static void deleteLink(String sql, GenericDBHandler dbh) throws SQLException{
+	public void deleteLink(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);

@@ -11,10 +11,7 @@ import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.LinkHandler;
 import se.mbaeumer.fxlink.api.SuggestionDataHandler;
 import se.mbaeumer.fxlink.api.SuggestionHandler;
-import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
-import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
-import se.mbaeumer.fxlink.handlers.LinkTagReadDBHandler;
-import se.mbaeumer.fxlink.handlers.LinkUpdateDBHandler;
+import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -70,7 +67,8 @@ public class ImportResultReportStage extends Stage {
 		this.initRootPane();
 		this.initScene();
 
-		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(), new LinkCreationDBHandler(), new LinkUpdateDBHandler());
+		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
+				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
 		this.importReport = report;
 		this.initLayout();
 		this.initSizes();

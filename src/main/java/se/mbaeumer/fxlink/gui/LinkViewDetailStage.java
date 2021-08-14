@@ -10,10 +10,7 @@ import java.util.List;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import se.mbaeumer.fxlink.api.*;
-import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
-import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
-import se.mbaeumer.fxlink.handlers.LinkTagReadDBHandler;
-import se.mbaeumer.fxlink.handlers.LinkUpdateDBHandler;
+import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.*;
 import se.mbaeumer.fxlink.util.*;
 import javafx.beans.value.ChangeListener;
@@ -74,7 +71,8 @@ public class LinkViewDetailStage extends Stage {
 		super();
 		this.link = link;
 
-		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(), new LinkCreationDBHandler(), new LinkUpdateDBHandler());
+		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
+				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
 		
 		this.initScene();
 		this.makeModal();

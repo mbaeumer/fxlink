@@ -5,13 +5,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
-import se.mbaeumer.fxlink.api.ManagedItemHandler;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.sql.*;
 import java.util.List;
 
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ManagedItemDBHandlerTest {

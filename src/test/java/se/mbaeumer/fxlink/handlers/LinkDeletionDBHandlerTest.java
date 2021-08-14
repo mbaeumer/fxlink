@@ -2,6 +2,7 @@ package se.mbaeumer.fxlink.handlers;
 
 import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import se.mbaeumer.fxlink.models.Link;
 
@@ -10,15 +11,23 @@ import se.mbaeumer.fxlink.models.Link;
  */
 public class LinkDeletionDBHandlerTest extends TestCase{
 
+
+    private LinkDeletionDBHandler linkDeletionDBHandler;
+
+    @Before
+    public void setUp(){
+        linkDeletionDBHandler = new LinkDeletionDBHandler();
+    }
+
     @Test
     public void testReturnNullIfLinkIsNull(){
-        Assert.assertNull("Should be null", LinkDeletionDBHandler.constructSqlString(null));
+        Assert.assertNull("Should be null", linkDeletionDBHandler.constructSqlString(null));
     }
 
     @Test
     public void testConstructSqlString(){
         String expected = "DELETE FROM Link WHERE id=1";
-        String actual = LinkDeletionDBHandler.constructSqlString(createLink());
+        String actual = linkDeletionDBHandler.constructSqlString(createLink());
         assertTrue("The strings do not match", expected.equalsIgnoreCase(actual));
     }
 
