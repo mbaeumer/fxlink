@@ -597,12 +597,6 @@ public class FXLink extends Application{
 		this.flowSelection.setHgap(10);
 		this.flowSelection.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 		this.flowGeneral.getChildren().add(this.flowSelection);
-		System.out.println(this.flowFilter.layoutXProperty().getValue());
-		System.out.println(this.flowFilter.layoutYProperty().getValue());
-		System.out.println(this.flowActions.layoutXProperty().getValue());
-		System.out.println(this.flowActions.layoutYProperty().getValue());
-		System.out.println(this.flowSelection.layoutXProperty().getValue());
-		System.out.println(this.flowSelection.layoutYProperty().getValue());
 		FlowPane.setMargin(flowSelection, new Insets(5));
 		this.createSelectAllButton();
 		this.createDeselectAllButton();
