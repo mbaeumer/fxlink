@@ -4,6 +4,14 @@ public class CategoryCount {
     private String category;
     private int count;
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public String getCategory() {
         return category;
     }
