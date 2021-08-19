@@ -37,8 +37,38 @@ public class SuggestionHandlerTest {
         //Link link = new Link("", "www.test.com", "");
         suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper, linkReadDBHandler);
 
+        Map<String, List<CategoryCount>> originalSuggestionMap = createMap();
         List<Link> linksWithCategories = createLinkList();
         Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any())).thenReturn(linksWithCategories);
+
+        Mockito.when(suggestionDataHandler.prepareData(linksWithCategories)).thenReturn(originalSuggestionMap);
+        Mockito.when(suggestionDataHandler.removeStopWords(originalSuggestionMap)).thenReturn(removeStopWords(originalSuggestionMap));
+        List<Suggestion> suggestions = suggestionHandler.getSuggestions(link);
+        Suggestion expected = suggestions.stream().filter(suggestion -> "Kotlin".equals(suggestion.getCategory()))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+        assertTrue(expected.getCount() == 1);
+    }
+
+    @Test
+    public void testCaseInsensitive(){
+        Link link = new Link("", "http://www.java2s.com/Code/Java/JavaFX/GridPanewherecolumnstake255025ofitswidth.htm", "");
+        suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper, linkReadDBHandler);
+
+        Map<String, List<CategoryCount>> originalSuggestionMap = createMap();
+        List<Link> linksWithCategories = createLinkList();
+        Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any())).thenReturn(linksWithCategories);
+
+        Mockito.when(suggestionDataHandler.prepareData(linksWithCategories)).thenReturn(originalSuggestionMap);
+        Mockito.when(suggestionDataHandler.removeStopWords(originalSuggestionMap)).thenReturn(removeStopWords(originalSuggestionMap));
+        List<Suggestion> suggestions = suggestionHandler.getSuggestions(link);
+        Suggestion expected = suggestions.stream().filter(suggestion -> "JavaFX".equals(suggestion.getCategory()))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+        assertTrue(expected.getCount() == 1);
+    }
+
+    private Map<String, List<CategoryCount>> createMap(){
         Map<String, List<CategoryCount>> originalSuggestionMap = new HashMap<>();
         originalSuggestionMap.put("algorithms", List.of(createCaegoryCount("machine learning", 1)));
         originalSuggestionMap.put("part", List.of(createCaegoryCount("machine learning", 1)));
@@ -73,17 +103,12 @@ public class SuggestionHandlerTest {
         originalSuggestionMap.put("se", List.of(createCaegoryCount("product tips", 1)));
         originalSuggestionMap.put("indusiadesign", List.of(createCaegoryCount("product tips", 1)));
         originalSuggestionMap.put("java", List.of(createCaegoryCount("Java", 1)));
+        originalSuggestionMap.put("javafx", List.of(createCaegoryCount("JavaFX", 1)));
         originalSuggestionMap.put("bealdung", List.of(createCaegoryCount("Java", 1), createCaegoryCount("Kotlin", 1)));
         originalSuggestionMap.put("frankel", List.of(createCaegoryCount("Kotlin", 1), createCaegoryCount("Kotlin", 1)));
         originalSuggestionMap.put("elements", List.of(createCaegoryCount("Kotlin", 1), createCaegoryCount("Kotlin", 1)));
 
-        Mockito.when(suggestionDataHandler.prepareData(linksWithCategories)).thenReturn(originalSuggestionMap);
-        Mockito.when(suggestionDataHandler.removeStopWords(originalSuggestionMap)).thenReturn(removeStopWords(originalSuggestionMap));
-        List<Suggestion> suggestions = suggestionHandler.getSuggestions(link);
-        Suggestion expected = suggestions.stream().filter(suggestion -> "Kotlin".equals(suggestion.getCategory()))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-        assertTrue(expected.getCount() == 1);
+        return originalSuggestionMap;
     }
 
     private List<Link> createLinkList(){
@@ -98,6 +123,7 @@ public class SuggestionHandlerTest {
                 "machine learning"));
         links.add(createLink("https://www.baeldung.com/elements-combination-kotlin-collections/", 5, "Kotlin"));
         links.add(createLink("https://www.baeldung.com/java-csv", 6, "Java"));
+        links.add(createLink("http://tutorials.jenkov.com/javafx/datepicker.html", 9, "JavaFX"));
         return links;
     }
 

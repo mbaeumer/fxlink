@@ -17,9 +17,11 @@ public class SuggestionDataHandlerTest {
 
     private SuggestionDataHandler suggestionDataHandler;
 
+    @Test
     public void prepareData() {
         suggestionDataHandler = new SuggestionDataHandler(new URLHelper());
         Map<String, List<CategoryCount>> suggestionMap = suggestionDataHandler.prepareData(createLinkList());
+        assertEquals(suggestionMap.keySet().size(), 43);
         System.out.println();
     }
 

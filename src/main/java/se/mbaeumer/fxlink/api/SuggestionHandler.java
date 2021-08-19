@@ -39,7 +39,7 @@ public class SuggestionHandler {
         String[] urlParts = urlHelper.getUrlParts(url);
 
         for (String word : urlParts){
-            List<CategoryCount> categoryCounts = map.get(word);
+            List<CategoryCount> categoryCounts = map.get(word.toLowerCase());
             if (categoryCounts == null){
                 continue;
             }
