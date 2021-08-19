@@ -471,12 +471,12 @@ public class ImportResultReportStage extends Stage {
 
 		for (Suggestion suggestion : suggestions){
 			Button button = new Button(suggestion.getCategory());
-			button.setOnAction(actionEvent -> doSth(actionEvent, link));
+			button.setOnAction(actionEvent -> setCategory(actionEvent, link));
 			this.flowSuggestions.getChildren().add(button);
 		}
 	}
 
-	private void doSth(ActionEvent actionEvent, Link link){
+	private void setCategory(ActionEvent actionEvent, Link link){
 		try {
 			Category category = CategoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
 			link.setCategory(category);
