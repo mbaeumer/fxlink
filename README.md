@@ -14,7 +14,7 @@ Alternatively, you can do the following:
 * Download the latest tar.gz file
 * Unpack the file
 * Download and unpack javafx-sdk [here](https://gluonhq.com/products/javafx/)
-* Run the following command: `java --module-path <path-to-javafx-sdk>  --add-modules javafx.controls,java.sql,java.desktop -jar fxlink11-0.8.1-jar-with-dependencies.jar` 
+* Run the following command: `java --module-path <path-to-javafx-sdk>  --add-modules javafx.controls,java.sql,java.desktop -jar fxlink11-<version>-jar-with-dependencies.jar` 
 
 Version 0.8.0 and earlier can be started as a usual jar file:
 ```bash 
@@ -28,6 +28,11 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
 * HSQLDB
          
 # Version/release history 
+
+## 0.8.3 - 2021-08-23
+* made suggestion generation case insensitive
+* improved event handlers
+* refactoring to improve testability
 
 ## 0.8.2 - 2021-05-18
 * added support for generating category suggestions
