@@ -60,13 +60,13 @@ public class FXLink extends Application{
 	public static final String URL = "URL";
 	public static final String DATABASE_ERROR_OCCURRED = "Database error occurred";
 	public static final String PLEASE_ENTER_A_SEARCH_TERM_AND_SELECT_AT_LEAST_ONE_CRITERIA = "Please enter a search term and select at least one criteria";
-	private static String STAGE_TITLE = "FX Link";
-	private static String DATABASE_DOES_NOT_EXIST = "The database files do not exist!";
-	private static String ITEMS = "Items";
-	private static String CATEGORY = "Category";
-	private static String RESET = "Reset";
-	private static String IMPORT_TEXT_FILE = "Import text file";
-	private Group root = new Group();
+	private static final String STAGE_TITLE = "FX Link";
+	private static final String DATABASE_DOES_NOT_EXIST = "The database files do not exist!";
+	private static final String ITEMS = "Items";
+	private static final String CATEGORY = "Category";
+	private static final String RESET = "Reset";
+	private static final String IMPORT_TEXT_FILE = "Import text file";
+	private final Group root = new Group();
 	private Scene scene;
 	private FlowPane flowGeneral;
 	private FlowPane flowFilter;
@@ -200,7 +200,7 @@ public class FXLink extends Application{
 	}
 	
 	private void createCategoryComboBox(){
-		this.cmbCategories = new ComboBox<Category>();
+		this.cmbCategories = new ComboBox<>();
 		loadCategoriesForFilter();
 		this.cmbCategories.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
             @Override
@@ -261,30 +261,26 @@ public class FXLink extends Application{
 
 	private void createResetButton(){
 		btnResetFilter = new Button(RESET);
-		this.btnResetFilter.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cmbCategories.getSelectionModel().selectFirst();
-				cmbItems.getSelectionModel().selectFirst();
-			}
+		this.btnResetFilter.setOnAction(actionEvent -> {
+			cmbCategories.getSelectionModel().selectFirst();
+			cmbItems.getSelectionModel().selectFirst();
 		});
+
 		this.flowFilter.getChildren().add(this.btnResetFilter);
 	}
 
 	private void createShowImportHistoryButton(){
 		btnShowImportHistory = new Button("Show import history");
-		this.btnShowImportHistory.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				ImportHistoryStage importHistoryStage;
-				try {
-					importHistoryStage = new ImportHistoryStage();
-					importHistoryStage.showAndWait();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+		this.btnShowImportHistory.setOnAction(actionEvent -> {
+			ImportHistoryStage importHistoryStage;
+			try {
+				importHistoryStage = new ImportHistoryStage();
+				importHistoryStage.showAndWait();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		});
+
 		this.flowFilter.getChildren().add(this.btnShowImportHistory);
 	}
 
@@ -308,42 +304,42 @@ public class FXLink extends Application{
 
 	private void createImportButton(){
 		btnImportTextFile = new Button(IMPORT_TEXT_FILE);
-		this.btnImportTextFile.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				FileChooser fc = new FileChooser();
-				fc.getExtensionFilters().add(
-						new ExtensionFilter("txt", "*.txt"));
-				File importFile = fc.showOpenDialog(null);
-				if (importFile == null){
-					arg0.consume();
-					return;
-				}
 
-				// handle duplicate imports here
-				String message = "It seems that this file has been imported already. Proceed anyway?";
-				boolean isDuplicate = false;
-				try {
-					logFileImport(importFile.getCanonicalPath());
-				} catch (SQLException | IOException  e) {
-					isDuplicate = true;
-				}
-
-				// if there seems to be a duplicate
-				if (isDuplicate){
-					Alert alert = new Alert(Alert.AlertType.WARNING, message, ButtonType.YES, ButtonType.NO);
-					Optional<ButtonType> result = alert.showAndWait();
-
-					if (result.isPresent() && result.get() == ButtonType.YES){
-						importTextFile(importFile);
-					}
-
-				}else{
-					importTextFile(importFile);
-				}
-			}
-		});
+		this.btnImportTextFile.setOnAction(this::handleImportButton);
 		this.flowActions.getChildren().add(this.btnImportTextFile);
+	}
+
+	private void handleImportButton(ActionEvent actionEvent){
+		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters().add(
+				new ExtensionFilter("txt", "*.txt"));
+		File importFile = fc.showOpenDialog(null);
+		if (importFile == null){
+			actionEvent.consume();
+			return;
+		}
+
+		// handle duplicate imports here
+		String message = "It seems that this file has been imported already. Proceed anyway?";
+		boolean isDuplicate = false;
+		try {
+			logFileImport(importFile.getCanonicalPath());
+		} catch (SQLException | IOException  e) {
+			isDuplicate = true;
+		}
+
+		// if there seems to be a duplicate
+		if (isDuplicate){
+			Alert alert = new Alert(Alert.AlertType.WARNING, message, ButtonType.YES, ButtonType.NO);
+			Optional<ButtonType> result = alert.showAndWait();
+
+			if (result.isPresent() && result.get() == ButtonType.YES){
+				importTextFile(importFile);
+			}
+
+		}else{
+			importTextFile(importFile);
+		}
 	}
 
 	private void importTextFile(File importFile) {
@@ -393,13 +389,7 @@ public class FXLink extends Application{
 			}
 
 			XMLExportHandler.exportData(path);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (XMLStreamException e1) {
-			e1.printStackTrace();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
+		}catch (IOException | XMLStreamException | SQLException e1 ) {
 			e1.printStackTrace();
 		}
 	}
@@ -435,11 +425,7 @@ public class FXLink extends Application{
 				loadCategoriesForMove();
 				cmbItems.setValue(LINKS);
 				refreshLinkTable();
-			} catch (FileNotFoundException | XMLStreamException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
+			} catch (IOException | XMLStreamException | SQLException e) {
 				e.printStackTrace();
 			}
 		}else{
@@ -552,44 +538,42 @@ public class FXLink extends Application{
 
 	private void createMoveToCategoryButton(){
 		this.btnMoveToCategory = new Button(MOVE_TO_CATEGORY);
-		this.btnMoveToCategory.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				Category category = cmbMoveToCategory.getValue();
-				for (Link link : getSelectedLinks()){
-					link.setCategory(category);
-					try {
-						linkHandler.updateLink(link);
-					}catch(SQLException | ParseException pe){
-						Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
-						alert.showAndWait();
-					}
-				}
-				filterCategories();
-			}
-		});
+		this.btnMoveToCategory.setOnAction(this::handleMoveCategory);
 		this.flowActions.getChildren().add(this.btnMoveToCategory);
+	}
+
+	private void handleMoveCategory(ActionEvent actionEvent){
+		Category category = cmbMoveToCategory.getValue();
+		for (Link link : getSelectedLinks()){
+			link.setCategory(category);
+			try {
+				linkHandler.updateLink(link);
+			}catch(SQLException | ParseException pe){
+				Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
+				alert.showAndWait();
+			}
+		}
+		filterCategories();
 	}
 
 	private void createGenerateTitleButton(){
 		this.btnGenerateTitle = new Button("Generate title");
-		this.btnGenerateTitle.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
-				for (Link link : getSelectedLinks()){
-					link.setTitle(linkTitleUtil.generateTitle(link));
-					try {
-						linkHandler.updateLink(link);
-					}catch(SQLException | ParseException pe){
-						Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
-						alert.showAndWait();
-					}
-				}
-				filterCategories();
-			}
-		});
+		this.btnGenerateTitle.setOnAction(this::handleGenerateTitle);
 		this.flowActions.getChildren().add(this.btnGenerateTitle);
+	}
+
+	private void handleGenerateTitle(ActionEvent actionEvent){
+		LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
+		for (Link link : getSelectedLinks()){
+			link.setTitle(linkTitleUtil.generateTitle(link));
+			try {
+				linkHandler.updateLink(link);
+			}catch(SQLException | ParseException pe){
+				Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
+				alert.showAndWait();
+			}
+		}
+		filterCategories();
 	}
 
 	private void createSelectionFlowPane(){
@@ -604,12 +588,9 @@ public class FXLink extends Application{
 
 	private void createSelectAllButton(){
 		this.btnSelectAll = new Button("Select all");
-		this.btnSelectAll.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				for (Link link : tblLinks.getItems()){
-					link.setSelected(true);
-				}
+		this.btnSelectAll.setOnAction(actionEvent ->  {
+			for (Link link : tblLinks.getItems()){
+				link.setSelected(true);
 			}
 		});
 
@@ -618,12 +599,9 @@ public class FXLink extends Application{
 
 	private void createDeselectAllButton(){
 		this.btnDeselectAll = new Button("Deselect all");
-		this.btnDeselectAll.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				for (Link link : tblLinks.getItems()){
-					link.setSelected(false);
-				}
+		this.btnDeselectAll.setOnAction(actionEvent -> {
+			for (Link link : tblLinks.getItems()){
+				link.setSelected(false);
 			}
 		});
 
@@ -779,12 +757,8 @@ public class FXLink extends Application{
 	
 	private void createSearchButton(){
 		this.btnSearch = new Button("Search");
-		this.btnSearch.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				runSearch();
-			}
-		});
+		this.btnSearch.setOnAction(actionEvent -> runSearch());
+
 		this.flowSearch.getChildren().add(this.btnSearch);
 	}
 
@@ -1234,44 +1208,34 @@ public class FXLink extends Application{
 		
 		// edit
 		MenuItem miEdit = new MenuItem("Edit link");
-		miEdit.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				LinkViewDetailStage linkDetail = new LinkViewDetailStage(selectedLink);
-				linkDetail.showAndWait();			
-				refreshLinkTable();
-			}
+		miEdit.setOnAction(actionEvent ->  {
+			LinkViewDetailStage linkDetail = new LinkViewDetailStage(selectedLink);
+			linkDetail.showAndWait();
+			refreshLinkTable();
 		});
 
 		// open URL
 		MenuItem miOpenURL = new MenuItem("Open link");
-		miOpenURL.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				try {					
-					BrowserLauncher.openURL(selectedLink.getURL());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+		miOpenURL.setOnAction(actionEvent ->  {
+			try {
+				BrowserLauncher.openURL(selectedLink.getURL());
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
 		});
 
 		// delete
 		MenuItem miDelete = new MenuItem("Delete link");
-		miDelete.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				try {
-					Alert alert = new Alert(Alert.AlertType.WARNING, "The selected link will be deleted. Continue?", ButtonType.YES, ButtonType.NO);
-					Optional<ButtonType> result = alert.showAndWait();
-					if (result.isPresent() && result.get() == ButtonType.YES){
-						linkHandler.deleteLink(selectedLink);
-						refreshLinkTable();
-					}
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+		miDelete.setOnAction(actionEvent ->  {
+			try {
+				Alert alert = new Alert(Alert.AlertType.WARNING, "The selected link will be deleted. Continue?", ButtonType.YES, ButtonType.NO);
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.isPresent() && result.get() == ButtonType.YES){
+					linkHandler.deleteLink(selectedLink);
+					refreshLinkTable();
 				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
 			}
 		});
 
@@ -1280,95 +1244,58 @@ public class FXLink extends Application{
 
 	private void createTagContextMenu(){
 		this.contTags = new ContextMenu();
-		
-		// edit
-		MenuItem miEdit = new MenuItem("Edit link");
-		miEdit.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				LinkViewDetailStage linkDetail = new LinkViewDetailStage(selectedLink);
-				linkDetail.showAndWait();			
-				refreshLinkTable();
-			}
-		});
 
-		// open URL
-		MenuItem miOpenURL = new MenuItem("Open link");
-		miOpenURL.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				try {					
-					BrowserLauncher.openURL(selectedLink.getURL());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-
-		// delete
 		MenuItem miDelete = new MenuItem("Delete tag");
-		miDelete.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				try {
-					List<Link> links = linkHandler.getLinksWithTag(selectedTag.getId());
-					if (links.size() > 0){
-						Alert alert = new Alert(Alert.AlertType.WARNING, "This tag is used by " + links.size() + " links. Do you really want to delete this tag?", ButtonType.YES, ButtonType.NO);
-						Optional<ButtonType> result = alert.showAndWait();
+		miDelete.setOnAction(actionEvent ->  {
+			try {
+				List<Link> links = linkHandler.getLinksWithTag(selectedTag.getId());
+				if (links.size() > 0){
+					Alert alert = new Alert(Alert.AlertType.WARNING, "This tag is used by " + links.size() + " links. Do you really want to delete this tag?", ButtonType.YES, ButtonType.NO);
+					Optional<ButtonType> result = alert.showAndWait();
 
-						if (result.isPresent() && result.get() == ButtonType.YES){
-							TagHandler.deleteTag(selectedTag);
-						}
-					}else{
+					if (result.isPresent() && result.get() == ButtonType.YES){
 						TagHandler.deleteTag(selectedTag);
-					}					
-					refreshTagTable(null);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+					}
+				}else{
+					TagHandler.deleteTag(selectedTag);
 				}
+				refreshTagTable(null);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
 			}
 		});
 
-		
 		this.contTags.getItems().addAll(miDelete);
 	}
 	
 	private void createCategoryContextMenu(){
 		this.contCategories = new ContextMenu();
 
-		// move
 		MenuItem miMove = new MenuItem("Move to another category");
-		miMove.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				MoveCategoryStage mergeStage = new MoveCategoryStage(selectedCategory);
-				mergeStage.showAndWait();
-				refreshCategoryTable(null);
-			}
+		miMove.setOnAction(actionEvent ->  {
+			MoveCategoryStage mergeStage = new MoveCategoryStage(selectedCategory);
+			mergeStage.showAndWait();
+			refreshCategoryTable(null);
 		});
 
-		// delete
 		MenuItem miDelete = new MenuItem("Delete category");
-		miDelete.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				try {
-					List<Link> links = linkHandler.getLinksByCategory(selectedCategory);
-					if (links.size() > 0){
-						Alert alert = new Alert(Alert.AlertType.WARNING, "This category is contains " + links.size() + " links. Do you really want to delete this category?", ButtonType.YES, ButtonType.NO);
-						Optional<ButtonType> result = alert.showAndWait();
+		miDelete.setOnAction(actionEvent ->  {
+			try {
+				List<Link> links = linkHandler.getLinksByCategory(selectedCategory);
+				if (links.size() > 0){
+					Alert alert = new Alert(Alert.AlertType.WARNING, "This category is contains " + links.size() + " links. Do you really want to delete this category?", ButtonType.YES, ButtonType.NO);
+					Optional<ButtonType> result = alert.showAndWait();
 
-						if (result.isPresent() && result.get() == ButtonType.YES){
-							CategoryHandler.deleteCategory(selectedCategory);
-						}
-					}else{
+					if (result.isPresent() && result.get() == ButtonType.YES){
 						CategoryHandler.deleteCategory(selectedCategory);
 					}
-					
-					refreshCategoryTable(null);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+				}else{
+					CategoryHandler.deleteCategory(selectedCategory);
 				}
+
+				refreshCategoryTable(null);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
 			}
 		});
 
