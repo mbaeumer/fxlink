@@ -61,6 +61,7 @@ public class ImportResultReportStage extends Stage {
 	private Button btnDeselectAll;
 
 	private LinkHandler linkHandler;
+	private CategoryHandler categoryHandler;
 	
 	public ImportResultReportStage(ImportResultReport report){
 		super();
@@ -69,6 +70,7 @@ public class ImportResultReportStage extends Stage {
 
 		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
 				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
+		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler());
 		this.importReport = report;
 		this.initLayout();
 		this.initSizes();
@@ -144,7 +146,7 @@ public class ImportResultReportStage extends Stage {
 		this.cmbMoveToCategory = new ComboBox<>();
 
 		ObservableList<Category> categoryList =
-				FXCollections.observableArrayList(CategoryHandler.getCategories());
+				FXCollections.observableArrayList(categoryHandler.getCategories());
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
 
 		this.cmbMoveToCategory.setItems(categoryList);
@@ -478,7 +480,7 @@ public class ImportResultReportStage extends Stage {
 
 	private void setCategory(ActionEvent actionEvent, Link link){
 		try {
-			Category category = CategoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
+			Category category = categoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
 			link.setCategory(category);
 			linkHandler.updateLink(link);
 		} catch (SQLException | ParseException throwables) {

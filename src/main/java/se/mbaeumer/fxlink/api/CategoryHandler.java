@@ -9,14 +9,20 @@ import java.util.Date;
 import java.util.List;
 
 public class CategoryHandler {
-	
-	public static List<Category> getCategories(){
-		return CategoryReadDBHandler.getAllCategories(GenericDBHandler.getInstance());
+
+	private final CategoryReadDBHandler categoryReadDBHandler;
+
+	public CategoryHandler(CategoryReadDBHandler categoryReadDBHandler) {
+		this.categoryReadDBHandler = categoryReadDBHandler;
 	}
 
-	public static Category getCategoryByName(final String categoryName) throws SQLException {
-		String sql = CategoryReadDBHandler.constructSqlString(categoryName);
-		return CategoryReadDBHandler.getCategoryByName(sql, GenericDBHandler.getInstance());
+	public List<Category> getCategories(){
+		return this.categoryReadDBHandler.getAllCategories(GenericDBHandler.getInstance());
+	}
+
+	public Category getCategoryByName(final String categoryName) throws SQLException {
+		String sql = categoryReadDBHandler.constructSqlString(categoryName);
+		return categoryReadDBHandler.getCategoryByName(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static Category createPseudoCategory(String categoryName){

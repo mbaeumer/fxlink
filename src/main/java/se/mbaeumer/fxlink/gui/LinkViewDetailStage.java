@@ -66,6 +66,7 @@ public class LinkViewDetailStage extends Stage {
 	private boolean isValidationError = false;
 
 	private LinkHandler linkHandler;
+	private CategoryHandler categoryHandler;
 	
 	public LinkViewDetailStage(Link link){
 		super();
@@ -73,6 +74,7 @@ public class LinkViewDetailStage extends Stage {
 
 		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
 				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
+		this.categoryHandler= new CategoryHandler(new CategoryReadDBHandler());
 		
 		this.initScene();
 		this.makeModal();
@@ -175,7 +177,7 @@ public class LinkViewDetailStage extends Stage {
 		this.cmbCategories = new ComboBox<>();
 
 		ObservableList<Category> categoryList =
-	            FXCollections.observableArrayList(CategoryHandler.getCategories());
+	            FXCollections.observableArrayList(categoryHandler.getCategories());
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
 		this.cmbCategories.setItems(categoryList);
 		
@@ -251,7 +253,7 @@ public class LinkViewDetailStage extends Stage {
 
 	private void setSuggestedCategory(ActionEvent actionEvent){
 		try {
-			Category category = CategoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
+			Category category = categoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
 			link.setCategory(category);
 			linkHandler.updateLink(link);
 			setCategory();

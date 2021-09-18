@@ -116,6 +116,7 @@ public class FXLink extends Application{
 	private Category selectedCategory = null;
 
 	private LinkHandler linkHandler;
+	private CategoryHandler categoryHandler;
 
 	public void start(Stage stage) {
 		DatabaseCheckUtil dbCheckUtil = new DatabaseCheckUtilImpl();
@@ -140,6 +141,7 @@ public class FXLink extends Application{
 	private void initHandlers(){
 		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
 				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
+		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler());
 	}
 	
 	public void initLayout() {
@@ -242,7 +244,7 @@ public class FXLink extends Application{
 
 	private void loadCategoriesForFilter() {
 		ObservableList<Category> categoryList =
-	            FXCollections.observableArrayList(CategoryHandler.getCategories());
+	            FXCollections.observableArrayList(categoryHandler.getCategories());
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_ALL));
 		categoryList.add(1, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
 
@@ -252,7 +254,7 @@ public class FXLink extends Application{
 
 	private void loadCategoriesForMove() {
 		ObservableList<Category> categoryList =
-				FXCollections.observableArrayList(CategoryHandler.getCategories());
+				FXCollections.observableArrayList(categoryHandler.getCategories());
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
 
 		this.cmbMoveToCategory.setItems(categoryList);
@@ -498,7 +500,7 @@ public class FXLink extends Application{
 		this.cmbMoveToCategory = new ComboBox<Category>();
 
 		ObservableList<Category> categoryList =
-				FXCollections.observableArrayList(CategoryHandler.getCategories());
+				FXCollections.observableArrayList(categoryHandler.getCategories());
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
 
 		this.cmbMoveToCategory.setItems(categoryList);
@@ -706,7 +708,7 @@ public class FXLink extends Application{
 		this.cmbCategoriesSearch = new ComboBox<Category>();
 
 		ObservableList<Category> categoryList =
-				FXCollections.observableArrayList(CategoryHandler.getCategories());
+				FXCollections.observableArrayList(categoryHandler.getCategories());
 		categoryList.add(0, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_ALL));
 		categoryList.add(1, CategoryHandler.createPseudoCategory(ValueConstants.VALUE_N_A));
 
@@ -987,7 +989,7 @@ public class FXLink extends Application{
 			}
 		});
 
-		this.tblCategories.setItems(FXCollections.observableList(CategoryHandler.getCategories()));
+		this.tblCategories.setItems(FXCollections.observableList(categoryHandler.getCategories()));
 		this.tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
 
 		this.createCategoryTableColumns();
@@ -1416,7 +1418,7 @@ public class FXLink extends Application{
 		}
 		
 		if (isCorrect){
-			tblCategories.setItems(FXCollections.observableList(CategoryHandler.getCategories()));
+			tblCategories.setItems(FXCollections.observableList(categoryHandler.getCategories()));
 	    	tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
 			this.updateStatusBar(false);
 			this.loadCategoriesForFilter();
@@ -1506,7 +1508,7 @@ public class FXLink extends Application{
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblTags);
 			this.flowGeneral.getChildren().add(3, this.tblCategories);
-			tblCategories.setItems(FXCollections.observableList(CategoryHandler.getCategories()));
+			tblCategories.setItems(FXCollections.observableList(categoryHandler.getCategories()));
 			tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
 			this.btnShowSearchPane.setText(this.getSearchPaneTitle());
 			this.btnShowSearchPane.setDisable(true);

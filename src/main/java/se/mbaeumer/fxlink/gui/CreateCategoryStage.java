@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import se.mbaeumer.fxlink.api.CategoryHandler;
+import se.mbaeumer.fxlink.handlers.CategoryReadDBHandler;
 import se.mbaeumer.fxlink.models.Category;
 
 import java.sql.SQLException;
@@ -35,8 +36,12 @@ public class CreateCategoryStage extends Stage {
     private Button btnCreate;
     private Button btnCancel;
 
+    private CategoryHandler categoryHandler;
+
     public CreateCategoryStage() {
         super();
+
+        this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler());
         this.initRootPane();
         this.initScene();
 
@@ -150,7 +155,7 @@ public class CreateCategoryStage extends Stage {
         btnCreate.setDisable(false);
         if (newValue.length() > 0) {
             try {
-                Category category = CategoryHandler.getCategoryByName(newValue);
+                Category category = categoryHandler.getCategoryByName(newValue);
                 if (category != null) {
                     lblStatus.setText("This category already exists");
                     btnCreate.setDisable(true);

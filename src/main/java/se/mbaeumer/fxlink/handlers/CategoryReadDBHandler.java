@@ -9,12 +9,11 @@ import java.util.List;
 public class CategoryReadDBHandler {
 	private static final String SELECT_BY_NAME = "select c.id as categoryId, c.name, c.description from category c where c.name='";
 
-	public static String constructSqlString(final String categoryName){
-		String sql = SELECT_BY_NAME  + categoryName + "'";
-		return sql;
+	public String constructSqlString(final String categoryName){
+		return SELECT_BY_NAME  + categoryName + "'";
 	}
 
-	public static List<Category> getAllCategories(GenericDBHandler dbh){
+	public List<Category> getAllCategories(GenericDBHandler dbh){
 		Connection connection = dbh.getConnection();				
 		List<Category> categories = new ArrayList<Category>();
 		
@@ -41,7 +40,7 @@ public class CategoryReadDBHandler {
 		return categories;
 	}
 
-	public static Category getCategoryByName(final String sql, GenericDBHandler dbh) throws SQLException{
+	public Category getCategoryByName(final String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 		Category category = null;
 

@@ -37,6 +37,8 @@ public class MoveCategoryStage extends Stage{
     private Category sourceCategory;
     private Button btnMove;
     private Button btnClose;
+    private CategoryHandler categoryHandler;
+
 
     public MoveCategoryStage(Category sourceCategory){
         super();
@@ -101,7 +103,7 @@ public class MoveCategoryStage extends Stage{
         this.cmbSourceCategories = new ComboBox<Category>();
         // get the categories
         ObservableList<Category> categoryList =
-                FXCollections.observableArrayList(CategoryHandler.getCategories());
+                FXCollections.observableArrayList(categoryHandler.getCategories());
         this.cmbSourceCategories.setItems(categoryList);
 
         this.cmbSourceCategories.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
@@ -154,7 +156,7 @@ public class MoveCategoryStage extends Stage{
     private void initTargetCategories(){
         this.cmbTargetCategories = new ComboBox<Category>();
         ObservableList<Category> categoryList =
-                FXCollections.observableArrayList(CategoryHandler.getCategories());
+                FXCollections.observableArrayList(categoryHandler.getCategories());
         this.cmbTargetCategories.setItems(categoryList);
 
         this.cmbTargetCategories.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){

@@ -35,6 +35,7 @@ public class LinkXMLWriter {
 	private String configFile;
 
 	private LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
+	private CategoryReadDBHandler categoryReadDBHandler = new CategoryReadDBHandler();
 
 	public LinkXMLWriter(String fileName) throws FileNotFoundException, XMLStreamException {
 		this.configFile = fileName;
@@ -54,7 +55,7 @@ public class LinkXMLWriter {
 	
 	private void getDataForExport() throws SQLException {
 		// get all categories
-		this.categories = CategoryReadDBHandler.getAllCategories(GenericDBHandler.getInstance());
+		this.categories = this.categoryReadDBHandler.getAllCategories(GenericDBHandler.getInstance());
 		this.links = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
 		TagDBHandler tagDBHandler = new TagDBHandler();
 
