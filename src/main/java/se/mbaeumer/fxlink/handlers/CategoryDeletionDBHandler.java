@@ -10,7 +10,7 @@ public class CategoryDeletionDBHandler {
 	public static final String SQL_BASE_DELETE = "DELETE FROM Category ";
 	public static final String WHERE_CLAUSE = "WHERE ID=?";
 
-	public static String constructSqlString(Category category){
+	public String constructSqlString(Category category){
 		if (category == null){
 			return null;
 		}
@@ -21,7 +21,7 @@ public class CategoryDeletionDBHandler {
 		return sql;
 	}
 
-	public static void deleteCategory(String sql, GenericDBHandler dbh) throws SQLException{
+	public void deleteCategory(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 
 		PreparedStatement stmt = connection.prepareStatement(sql);

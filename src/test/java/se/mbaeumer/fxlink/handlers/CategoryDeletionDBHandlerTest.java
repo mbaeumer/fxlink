@@ -11,13 +11,15 @@ import se.mbaeumer.fxlink.models.Category;
 public class CategoryDeletionDBHandlerTest extends TestCase {
     @Test
     public void testReturnNullIfCategoryIsNull(){
-        Assert.assertNull("Should return null", CategoryDeletionDBHandler.constructSqlString(null));
+        CategoryDeletionDBHandler categoryDeletionDBHandler = new CategoryDeletionDBHandler();
+        Assert.assertNull("Should return null", categoryDeletionDBHandler.constructSqlString(null));
     }
 
     @Test
     public void testConstructSqlString(){
+        CategoryDeletionDBHandler categoryDeletionDBHandler = new CategoryDeletionDBHandler();
         String expected = "DELETE FROM Category WHERE id=1";
-        String actual = CategoryDeletionDBHandler.constructSqlString(createCategory());
+        String actual = categoryDeletionDBHandler.constructSqlString(createCategory());
         System.out.println("actual: " + actual);
         System.out.println("expected: " + expected);
         assertTrue("The strings do not match", actual.equalsIgnoreCase(expected));

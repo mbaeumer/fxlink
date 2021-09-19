@@ -142,7 +142,8 @@ public class FXLink extends Application{
 		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
 				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
 		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(),
-				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler());
+				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
+				new CategoryDeletionDBHandler());
 	}
 	
 	public void initLayout() {
@@ -1290,10 +1291,10 @@ public class FXLink extends Application{
 					Optional<ButtonType> result = alert.showAndWait();
 
 					if (result.isPresent() && result.get() == ButtonType.YES){
-						CategoryHandler.deleteCategory(selectedCategory);
+						categoryHandler.deleteCategory(selectedCategory);
 					}
 				}else{
-					CategoryHandler.deleteCategory(selectedCategory);
+					categoryHandler.deleteCategory(selectedCategory);
 				}
 
 				refreshCategoryTable(null);

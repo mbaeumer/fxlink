@@ -13,11 +13,13 @@ public class CategoryHandler {
 	private final CategoryReadDBHandler categoryReadDBHandler;
 	private final CategoryCreationDBHandler categoryCreationDBHandler;
 	private final CategoryUpdateDBHandler categoryUpdateDBHandler;
+	private final CategoryDeletionDBHandler categoryDeletionDBHandler;
 
-	public CategoryHandler(CategoryReadDBHandler categoryReadDBHandler, CategoryCreationDBHandler categoryCreationDBHandler, CategoryUpdateDBHandler categoryUpdateDBHandler) {
+	public CategoryHandler(CategoryReadDBHandler categoryReadDBHandler, CategoryCreationDBHandler categoryCreationDBHandler, CategoryUpdateDBHandler categoryUpdateDBHandler, CategoryDeletionDBHandler categoryDeletionDBHandler) {
 		this.categoryReadDBHandler = categoryReadDBHandler;
 		this.categoryCreationDBHandler = categoryCreationDBHandler;
 		this.categoryUpdateDBHandler = categoryUpdateDBHandler;
+		this.categoryDeletionDBHandler = categoryDeletionDBHandler;
 	}
 
 	public List<Category> getCategories(){
@@ -49,9 +51,9 @@ public class CategoryHandler {
 		categoryUpdateDBHandler.updateCategory(sql, GenericDBHandler.getInstance());
 	}
 	
-	public static void deleteCategory(Category category) throws SQLException{
-		String sql = CategoryDeletionDBHandler.constructSqlString(category);
-		CategoryDeletionDBHandler.deleteCategory(sql, GenericDBHandler.getInstance());
+	public void deleteCategory(Category category) throws SQLException{
+		String sql = categoryDeletionDBHandler.constructSqlString(category);
+		categoryDeletionDBHandler.deleteCategory(sql, GenericDBHandler.getInstance());
 	}
 
 	public static void moveCategory(Category source, Category target) throws SQLException{
