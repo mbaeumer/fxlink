@@ -7,7 +7,7 @@ import java.sql.*;
 public class CategoryCreationDBHandler {
 	public static final String BASE_INSERT = "INSERT INTO Category VALUES(DEFAULT, ?, ?, DEFAULT, DEFAULT)";
 
-	public static String constructSqlString(Category category){
+	public String constructSqlString(Category category){
 		String sql = BASE_INSERT;
 		if (category == null){
 			return null;
@@ -18,7 +18,7 @@ public class CategoryCreationDBHandler {
 		return sql;
 	}
 
-	public static int createCategory(String sql, GenericDBHandler dbh) throws SQLException{
+	public int createCategory(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 
 		int categoryId = -1;

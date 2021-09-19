@@ -141,7 +141,8 @@ public class FXLink extends Application{
 	private void initHandlers(){
 		this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
 				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
-		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler());
+		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(),
+				new CategoryCreationDBHandler());
 	}
 	
 	public void initLayout() {
@@ -1400,7 +1401,7 @@ public class FXLink extends Application{
 			
 			if (id == -1){
 				try {
-					CategoryHandler.createCategory(category);
+					categoryHandler.createCategory(category);
 				} catch (SQLException e) {
 					Alert alert = new Alert(Alert.AlertType.ERROR, "The category MUST be unique!", ButtonType.OK);
 					alert.showAndWait();

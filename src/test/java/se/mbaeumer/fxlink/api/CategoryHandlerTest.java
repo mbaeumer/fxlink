@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import se.mbaeumer.fxlink.handlers.CategoryCreationDBHandler;
 import se.mbaeumer.fxlink.handlers.CategoryReadDBHandler;
 import se.mbaeumer.fxlink.models.Category;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -24,9 +26,12 @@ public class CategoryHandlerTest {
     @Mock
     private CategoryReadDBHandler categoryReadDBHandler;
 
+    @Mock
+    private CategoryCreationDBHandler categoryCreationDBHandler;
+
     @Before
     public void setUp(){
-        categoryHandler = new CategoryHandler(categoryReadDBHandler);
+        categoryHandler = new CategoryHandler(categoryReadDBHandler, categoryCreationDBHandler);
     }
 
     @Test
@@ -46,6 +51,17 @@ public class CategoryHandlerTest {
     }
 
 
+    @Test
+    public void testCreateCategory() {
+        Category newCategory = new Category();
+        newCategory.setName("test");
+        Mockito.when(categoryCreationDBHandler.constructSqlString(newCategory)).thenReturn("blabla");
 
-
+        try {
+            Mockito.when(categoryCreationDBHandler.createCategory(any(), any())).thenReturn(1);
+            categoryHandler.createCategory(newCategory);
+        } catch (SQLException throwables) {
+            fail("Exception occurred");
+        }
+    }
 }

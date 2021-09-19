@@ -11,9 +11,11 @@ import java.util.List;
 public class CategoryHandler {
 
 	private final CategoryReadDBHandler categoryReadDBHandler;
+	private final CategoryCreationDBHandler categoryCreationDBHandler;
 
-	public CategoryHandler(CategoryReadDBHandler categoryReadDBHandler) {
+	public CategoryHandler(CategoryReadDBHandler categoryReadDBHandler, CategoryCreationDBHandler categoryCreationDBHandler) {
 		this.categoryReadDBHandler = categoryReadDBHandler;
+		this.categoryCreationDBHandler = categoryCreationDBHandler;
 	}
 
 	public List<Category> getCategories(){
@@ -35,9 +37,9 @@ public class CategoryHandler {
 		return category;
 	}
 	
-	public static void createCategory(Category category) throws SQLException{
-		String sql = CategoryCreationDBHandler.constructSqlString(category);
-		CategoryCreationDBHandler.createCategory(sql, GenericDBHandler.getInstance());
+	public void createCategory(Category category) throws SQLException{
+		String sql = categoryCreationDBHandler.constructSqlString(category);
+		categoryCreationDBHandler.createCategory(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void updateCategory(Category category) throws ParseException, SQLException{
