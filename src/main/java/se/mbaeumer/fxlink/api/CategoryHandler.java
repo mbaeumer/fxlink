@@ -12,10 +12,12 @@ public class CategoryHandler {
 
 	private final CategoryReadDBHandler categoryReadDBHandler;
 	private final CategoryCreationDBHandler categoryCreationDBHandler;
+	private final CategoryUpdateDBHandler categoryUpdateDBHandler;
 
-	public CategoryHandler(CategoryReadDBHandler categoryReadDBHandler, CategoryCreationDBHandler categoryCreationDBHandler) {
+	public CategoryHandler(CategoryReadDBHandler categoryReadDBHandler, CategoryCreationDBHandler categoryCreationDBHandler, CategoryUpdateDBHandler categoryUpdateDBHandler) {
 		this.categoryReadDBHandler = categoryReadDBHandler;
 		this.categoryCreationDBHandler = categoryCreationDBHandler;
+		this.categoryUpdateDBHandler = categoryUpdateDBHandler;
 	}
 
 	public List<Category> getCategories(){
@@ -42,9 +44,9 @@ public class CategoryHandler {
 		categoryCreationDBHandler.createCategory(sql, GenericDBHandler.getInstance());
 	}
 	
-	public static void updateCategory(Category category) throws ParseException, SQLException{
-		String sql = CategoryUpdateDBHandler.constructSqlString(category);
-		CategoryUpdateDBHandler.updateCategory(sql, GenericDBHandler.getInstance());
+	public void updateCategory(Category category) throws ParseException, SQLException{
+		String sql = categoryUpdateDBHandler.constructSqlString(category);
+		categoryUpdateDBHandler.updateCategory(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void deleteCategory(Category category) throws SQLException{

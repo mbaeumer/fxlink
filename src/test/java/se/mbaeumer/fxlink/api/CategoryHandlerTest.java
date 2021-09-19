@@ -9,9 +9,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import se.mbaeumer.fxlink.handlers.CategoryCreationDBHandler;
 import se.mbaeumer.fxlink.handlers.CategoryReadDBHandler;
+import se.mbaeumer.fxlink.handlers.CategoryUpdateDBHandler;
 import se.mbaeumer.fxlink.models.Category;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +31,13 @@ public class CategoryHandlerTest {
     @Mock
     private CategoryCreationDBHandler categoryCreationDBHandler;
 
+    @Mock
+    private CategoryUpdateDBHandler categoryUpdateDBHandler;
+
     @Before
     public void setUp(){
-        categoryHandler = new CategoryHandler(categoryReadDBHandler, categoryCreationDBHandler);
+        categoryHandler = new CategoryHandler(categoryReadDBHandler, categoryCreationDBHandler,
+                categoryUpdateDBHandler);
     }
 
     @Test
@@ -61,6 +67,21 @@ public class CategoryHandlerTest {
             Mockito.when(categoryCreationDBHandler.createCategory(any(), any())).thenReturn(1);
             categoryHandler.createCategory(newCategory);
         } catch (SQLException throwables) {
+            fail("Exception occurred");
+        }
+    }
+
+    @Test
+    public void testUpdateCategory(){
+        Category category = new Category();
+        category.setId(1);
+        category.setName("test2");
+        Mockito.when(categoryUpdateDBHandler.constructSqlString(category)).thenReturn("blabla");
+
+        try {
+            Mockito.doNothing().when(categoryUpdateDBHandler).updateCategory(any(), any());
+            categoryHandler.updateCategory(category);
+        } catch (ParseException | SQLException e) {
             fail("Exception occurred");
         }
     }

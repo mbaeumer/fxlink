@@ -13,7 +13,7 @@ import java.util.Date;
 public class CategoryUpdateDBHandler {
 	public static String SQL_BASE_UPDATE = "UPDATE Category SET name=?, description=?, lastUpdated=? WHERE id=?";
 
-	public static String constructSqlString(Category category){
+	public String constructSqlString(Category category){
 		if (category == null){
 			return null;
 		}
@@ -31,7 +31,7 @@ public class CategoryUpdateDBHandler {
 		return sql;
 	}
 
-	public static void updateCategory(String sql, GenericDBHandler dbh) throws ParseException, SQLException{
+	public void updateCategory(String sql, GenericDBHandler dbh) throws ParseException, SQLException{
 		Connection connection = dbh.getConnection();
 
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);

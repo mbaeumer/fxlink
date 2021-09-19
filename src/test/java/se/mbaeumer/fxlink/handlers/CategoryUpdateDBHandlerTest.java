@@ -14,14 +14,16 @@ import java.util.Date;
 public class CategoryUpdateDBHandlerTest extends TestCase {
 
     public void testReturnNullIfCategoryIsNull(){
-        Assert.assertNull("should be null", CategoryUpdateDBHandler.constructSqlString(null));
+        CategoryUpdateDBHandler categoryUpdateDBHandler = new CategoryUpdateDBHandler();
+        Assert.assertNull("should be null", categoryUpdateDBHandler.constructSqlString(null));
     }
 
     public void testConstructSqlString(){
+        CategoryUpdateDBHandler categoryUpdateDBHandler = new CategoryUpdateDBHandler();
         Category category = createCategory();
         String expected = "UPDATE Category SET name='Programming', description='Some links related to programming', lastUpdated='"
         + category.getLastUpdated() + "' WHERE id=1";
-        String actual = CategoryUpdateDBHandler.constructSqlString(category);
+        String actual = categoryUpdateDBHandler.constructSqlString(category);
         System.out.println("actual: " + actual);
         System.out.println("expected: " + expected);
 
