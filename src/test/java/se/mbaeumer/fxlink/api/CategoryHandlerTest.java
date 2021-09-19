@@ -7,10 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import se.mbaeumer.fxlink.handlers.CategoryCreationDBHandler;
-import se.mbaeumer.fxlink.handlers.CategoryDeletionDBHandler;
-import se.mbaeumer.fxlink.handlers.CategoryReadDBHandler;
-import se.mbaeumer.fxlink.handlers.CategoryUpdateDBHandler;
+import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 
 import java.sql.SQLException;
@@ -38,10 +35,14 @@ public class CategoryHandlerTest {
     @Mock
     private CategoryDeletionDBHandler categoryDeletionDBHandler;
 
+    @Mock
+    private LinkUpdateDBHandler linkUpdateDBHandler;
+
     @Before
     public void setUp(){
         categoryHandler = new CategoryHandler(categoryReadDBHandler, categoryCreationDBHandler,
-                categoryUpdateDBHandler, categoryDeletionDBHandler);
+                categoryUpdateDBHandler, categoryDeletionDBHandler,
+                linkUpdateDBHandler);
     }
 
     @Test
@@ -101,6 +102,26 @@ public class CategoryHandlerTest {
         try {
             Mockito.doNothing().when(categoryDeletionDBHandler).deleteCategory(any(), any());
             categoryHandler.deleteCategory(category);
+        } catch (SQLException throwables) {
+            fail("Exception occurred");
+        }
+    }
+
+    @Test
+    public void testMoveCategory(){
+        Category source = new Category();
+        source.setId(1);
+        source.setName("Source");
+
+        Category target = new Category();
+        target.setId(2);
+        target.setName("Target");
+
+        Mockito.when(linkUpdateDBHandler.constructSqlStringMoveLink(source, target)).thenReturn("blabla");
+
+        try {
+            Mockito.doNothing().when(linkUpdateDBHandler).moveLinks(any(), any());
+            categoryHandler.moveCategory(source, target);
         } catch (SQLException throwables) {
             fail("Exception occurred");
         }

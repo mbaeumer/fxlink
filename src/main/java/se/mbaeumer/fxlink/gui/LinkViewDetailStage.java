@@ -76,7 +76,7 @@ public class LinkViewDetailStage extends Stage {
 				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
 		this.categoryHandler= new CategoryHandler(new CategoryReadDBHandler(),
 				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
-				new CategoryDeletionDBHandler());
+				new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
 		
 		this.initScene();
 		this.makeModal();

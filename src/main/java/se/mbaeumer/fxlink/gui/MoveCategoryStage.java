@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.api.CategoryHandler;
+import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 
 import java.sql.SQLException;
@@ -39,9 +40,11 @@ public class MoveCategoryStage extends Stage{
     private Button btnClose;
     private CategoryHandler categoryHandler;
 
-
     public MoveCategoryStage(Category sourceCategory){
         super();
+        this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(),
+                new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
+                new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
         this.sourceCategory = sourceCategory;
         this.initLayout();
         this.makeModal();
@@ -200,7 +203,7 @@ public class MoveCategoryStage extends Stage{
             public void handle(ActionEvent arg0) {
                 try {
                     if (isValidMove(cmbSourceCategories.getValue(), cmbTargetCategories.getValue())) {
-                        CategoryHandler.moveCategory(cmbSourceCategories.getValue(), cmbTargetCategories.getValue());
+                        categoryHandler.moveCategory(cmbSourceCategories.getValue(), cmbTargetCategories.getValue());
                     }else{
                         Alert alert = new Alert(Alert.AlertType.ERROR, "The selected categories must not be the same!", ButtonType.OK);
                         alert.showAndWait();

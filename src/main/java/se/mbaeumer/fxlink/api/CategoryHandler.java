@@ -14,12 +14,14 @@ public class CategoryHandler {
 	private final CategoryCreationDBHandler categoryCreationDBHandler;
 	private final CategoryUpdateDBHandler categoryUpdateDBHandler;
 	private final CategoryDeletionDBHandler categoryDeletionDBHandler;
+	private final LinkUpdateDBHandler linkUpdateDBHandler;
 
-	public CategoryHandler(CategoryReadDBHandler categoryReadDBHandler, CategoryCreationDBHandler categoryCreationDBHandler, CategoryUpdateDBHandler categoryUpdateDBHandler, CategoryDeletionDBHandler categoryDeletionDBHandler) {
+	public CategoryHandler(CategoryReadDBHandler categoryReadDBHandler, CategoryCreationDBHandler categoryCreationDBHandler, CategoryUpdateDBHandler categoryUpdateDBHandler, CategoryDeletionDBHandler categoryDeletionDBHandler, LinkUpdateDBHandler linkUpdateDBHandler) {
 		this.categoryReadDBHandler = categoryReadDBHandler;
 		this.categoryCreationDBHandler = categoryCreationDBHandler;
 		this.categoryUpdateDBHandler = categoryUpdateDBHandler;
 		this.categoryDeletionDBHandler = categoryDeletionDBHandler;
+		this.linkUpdateDBHandler = linkUpdateDBHandler;
 	}
 
 	public List<Category> getCategories(){
@@ -56,9 +58,9 @@ public class CategoryHandler {
 		categoryDeletionDBHandler.deleteCategory(sql, GenericDBHandler.getInstance());
 	}
 
-	public static void moveCategory(Category source, Category target) throws SQLException{
-		String sql = LinkUpdateDBHandler.constructSqlStringMoveLink(source, target);
-		LinkUpdateDBHandler.moveLinks(sql, GenericDBHandler.getInstance());
+	public void moveCategory(Category source, Category target) throws SQLException{
+		String sql = linkUpdateDBHandler.constructSqlStringMoveLink(source, target);
+		linkUpdateDBHandler.moveLinks(sql, GenericDBHandler.getInstance());
 	}
 	
 	public static void deleteAllCategories() throws SQLException{

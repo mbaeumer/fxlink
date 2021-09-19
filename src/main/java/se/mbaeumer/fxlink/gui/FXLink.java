@@ -143,7 +143,7 @@ public class FXLink extends Application{
 				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
 		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(),
 				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
-				new CategoryDeletionDBHandler());
+				new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
 	}
 	
 	public void initLayout() {

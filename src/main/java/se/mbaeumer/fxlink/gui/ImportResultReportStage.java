@@ -72,7 +72,7 @@ public class ImportResultReportStage extends Stage {
 				new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
 		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(),
 				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
-				new CategoryDeletionDBHandler());
+				new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
 		this.importReport = report;
 		this.initLayout();
 		this.initSizes();

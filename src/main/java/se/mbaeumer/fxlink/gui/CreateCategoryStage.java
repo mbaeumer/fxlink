@@ -13,10 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import se.mbaeumer.fxlink.api.CategoryHandler;
-import se.mbaeumer.fxlink.handlers.CategoryCreationDBHandler;
-import se.mbaeumer.fxlink.handlers.CategoryDeletionDBHandler;
-import se.mbaeumer.fxlink.handlers.CategoryReadDBHandler;
-import se.mbaeumer.fxlink.handlers.CategoryUpdateDBHandler;
+import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 
 import java.sql.SQLException;
@@ -46,7 +43,7 @@ public class CreateCategoryStage extends Stage {
 
         this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(),
                 new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
-                new CategoryDeletionDBHandler());
+                new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
         this.initRootPane();
         this.initScene();
 

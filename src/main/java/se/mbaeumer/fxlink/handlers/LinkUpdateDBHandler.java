@@ -63,7 +63,7 @@ public class LinkUpdateDBHandler {
 		stmt.close();
 	}
 	
-	public static String constructSqlStringMoveLink(Category source, Category target){
+	public String constructSqlStringMoveLink(Category source, Category target){
 
 		if (source == null || target == null ){
 			return null;
@@ -77,7 +77,7 @@ public class LinkUpdateDBHandler {
 		return sql;
 	}
 
-	public static void moveLinks(String sql, GenericDBHandler dbh) throws SQLException{
+	public void moveLinks(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
