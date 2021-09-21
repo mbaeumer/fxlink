@@ -419,7 +419,7 @@ public class FXLink extends Application{
 		Alert alert = new Alert(Alert.AlertType.WARNING, THE_CURRENT_CONTENT_WILL_BE_OVERWRITTEN_CONTINUE, ButtonType.YES, ButtonType.NO);
 		Optional<ButtonType> result = alert.showAndWait();
 
-		XMLImportHandler xmlImportHandler = new XMLImportHandler();
+		XMLImportHandler xmlImportHandler = new XMLImportHandler(categoryHandler);
 		if (result.isPresent() && result.get() == ButtonType.YES) {
 			try {
 				xmlImportHandler.readData(importFile.getCanonicalPath());

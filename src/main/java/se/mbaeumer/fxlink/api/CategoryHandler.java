@@ -63,7 +63,7 @@ public class CategoryHandler {
 		linkUpdateDBHandler.moveLinks(sql, GenericDBHandler.getInstance());
 	}
 	
-	public static void deleteAllCategories() throws SQLException{
-		CategoryDeletionDBHandler.deleteAllCategories(GenericDBHandler.getInstance());
+	public void deleteAllCategories() throws SQLException{
+		categoryDeletionDBHandler.deleteAllCategories(GenericDBHandler.getInstance());
 	}
 }

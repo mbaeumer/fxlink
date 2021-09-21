@@ -108,6 +108,21 @@ public class CategoryHandlerTest {
     }
 
     @Test
+    public void testDeleteAllCategories(){
+
+        Category category = new Category();
+        category.setId(1);
+        category.setName("test2");
+
+        try {
+            Mockito.doNothing().when(categoryDeletionDBHandler).deleteAllCategories(any());
+            categoryHandler.deleteAllCategories();
+        } catch (SQLException throwables) {
+            fail("Exception occurred");
+        }
+    }
+
+    @Test
     public void testMoveCategory(){
         Category source = new Category();
         source.setId(1);

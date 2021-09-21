@@ -31,14 +31,12 @@ public class CategoryDeletionDBHandler {
 
 	}
 	
-	public static void deleteAllCategories(GenericDBHandler dbh) throws SQLException{
+	public void deleteAllCategories(GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 		
 		PreparedStatement stmt = connection.prepareStatement(SQL_BASE_DELETE);
 
 		stmt.executeUpdate();
 		stmt.close();
-		
 	}
-
 }

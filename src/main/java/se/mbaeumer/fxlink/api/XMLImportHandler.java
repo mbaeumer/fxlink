@@ -11,10 +11,12 @@ import java.sql.SQLException;
 public class XMLImportHandler {
 	
 	private LinkXMLReader reader;
-	public XMLImportHandler(){
-		
+	private CategoryHandler categoryHandler;
+
+	public XMLImportHandler(CategoryHandler categoryHandler) {
+		this.categoryHandler = categoryHandler;
 	}
-	
+
 	public void readData(String filename) throws FileNotFoundException, XMLStreamException{
 		reader = new LinkXMLReader(filename);
 		reader.readDataFromFile();
@@ -25,7 +27,7 @@ public class XMLImportHandler {
 		LinkTagHandler.deleteAllLinkTags();
 		TagHandler.deleteAllTags();
 		LinkHandler.deleteAllLinks();
-		CategoryHandler.deleteAllCategories();
+		categoryHandler.deleteAllCategories();
 
 		ImportItemHandler importItemHandler = new ImportItemHandler();
 		importItemHandler.deleteAllImportItems();
