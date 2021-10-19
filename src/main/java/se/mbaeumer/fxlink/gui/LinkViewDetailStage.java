@@ -230,8 +230,6 @@ public class LinkViewDetailStage extends Stage {
 				}
 				index++;
 			}
-		}else{
-			index = 0;
 		}
 		this.cmbCategories.getSelectionModel().select(index);
 	}
@@ -288,7 +286,6 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void initTagging(){
 		this.populateDataLists();
-
 		this.initTaggingListView();
 	}
 	

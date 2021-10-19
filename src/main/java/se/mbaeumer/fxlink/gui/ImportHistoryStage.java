@@ -67,7 +67,7 @@ public class ImportHistoryStage extends Stage {
     }
 
     private void initTableView() throws SQLException {
-        this.tvImportItems = new TableView();
+        this.tvImportItems = new TableView<>();
 
         ImportItemHandler importItemHandler = new ImportItemHandler();
 

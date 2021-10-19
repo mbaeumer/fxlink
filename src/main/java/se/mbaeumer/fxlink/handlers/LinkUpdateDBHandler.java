@@ -54,7 +54,7 @@ public class LinkUpdateDBHandler {
 		return sql;
 	}
 
-	public void updateLink(String sql, GenericDBHandler dbh) throws ParseException, SQLException{
+	public void updateLink(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);

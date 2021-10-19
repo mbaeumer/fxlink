@@ -188,31 +188,27 @@ public class ImportResultReportStage extends Stage {
 			}
 		});
 
-
 		this.cmbMoveToCategory.getSelectionModel().selectFirst();
 		this.flowGeneral.getChildren().add(this.cmbMoveToCategory);
 	}
 
 	private void createMoveToCategoryButton(){
 		this.btnMoveToCategory = new Button("Move to category");
-
-		this.btnMoveToCategory.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				Category category = cmbMoveToCategory.getValue();
-				for (Link link : getSelectedLinks()){
-					link.setCategory(category);
-					try {
-						linkHandler.updateLink(link);
-					}catch(SQLException | ParseException pe){
-						Alert alert = new Alert(Alert.AlertType.ERROR, "The link could not be updated", ButtonType.OK);
-						alert.showAndWait();
-					}
-				}
-
-			}
-		});
+		this.btnMoveToCategory.setOnAction(this::handleMoveToCategory);
 		this.flowGeneral.getChildren().add(this.btnMoveToCategory);
+	}
+
+	private void handleMoveToCategory(ActionEvent actionEvent){
+		Category category = cmbMoveToCategory.getValue();
+		for (Link link : getSelectedLinks()){
+			link.setCategory(category);
+			try {
+				linkHandler.updateLink(link);
+			}catch(SQLException | ParseException pe){
+				Alert alert = new Alert(Alert.AlertType.ERROR, "The link could not be updated", ButtonType.OK);
+				alert.showAndWait();
+			}
+		}
 	}
 
 	private List<Link> getSelectedLinks(){
@@ -235,30 +231,26 @@ public class ImportResultReportStage extends Stage {
 
 	private void initSelectAllButton(){
 		this.btnSelectAll = new Button("Select all");
-		this.btnSelectAll.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				for (Link link : importReport.getSuccessfulLinks()){
-					link.setSelected(true);
-				}
-			}
-		});
-
+		this.btnSelectAll.setOnAction(this::handleSelect);
 		this.flowSelection.getChildren().add(this.btnSelectAll);
+	}
+
+	private void handleSelect(ActionEvent actionEvent){
+		for (Link link : importReport.getSuccessfulLinks()){
+			link.setSelected(true);
+		}
 	}
 
 	private void initDeselectAllButton(){
 		this.btnDeselectAll = new Button("Deselect all");
-		this.btnDeselectAll.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				for (Link link : importReport.getSuccessfulLinks()){
-					link.setSelected(false);
-				}
-			}
-		});
-
+		this.btnDeselectAll.setOnAction(this::handleDeselect);
 		this.flowSelection.getChildren().add(this.btnDeselectAll);
+	}
+
+	private void handleDeselect(ActionEvent actionEvent){
+		for (Link link : importReport.getSuccessfulLinks()){
+			link.setSelected(false);
+		}
 	}
 
 	private void initTabPane(){
@@ -324,18 +316,18 @@ public class ImportResultReportStage extends Stage {
 		selectedCol.setCellValueFactory(c -> c.getValue().selectedProperty());
 		selectedCol.setCellFactory( tc -> new CheckBoxTableCell<>());
 
-		TableColumn urlCol = new TableColumn("Url");
+		TableColumn urlCol = new TableColumn<>("Url");
 		urlCol.setCellValueFactory(new PropertyValueFactory("url"));
 		urlCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		urlCol.setEditable(false);
 
 		// create title column
-		TableColumn titleCol = new TableColumn("Title");
+		TableColumn titleCol = new TableColumn<>("Title");
 		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
 		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		titleCol.setEditable(false);
 
-		TableColumn descriptionCol = new TableColumn("Description");
+		TableColumn descriptionCol = new TableColumn<>("Description");
 		descriptionCol.setCellValueFactory(new PropertyValueFactory("description"));
 		descriptionCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		descriptionCol.setOnEditCommit(
@@ -349,7 +341,7 @@ public class ImportResultReportStage extends Stage {
 				}
 		);
 
-		TableColumn categoryCol = new TableColumn("Category");
+		TableColumn categoryCol = new TableColumn<>("Category");
 		categoryCol.setCellValueFactory(new PropertyValueFactory<Link, Category>("category"));
 		categoryCol.setCellFactory(new Callback<TableColumn<Link, Category>, TableCell<Link, Category>>(){
 
@@ -371,7 +363,7 @@ public class ImportResultReportStage extends Stage {
 			}
 		});
 
-		TableColumn createdCol = new TableColumn("Created");
+		TableColumn createdCol = new TableColumn<>("Created");
 		createdCol.setCellValueFactory(new PropertyValueFactory("created"));
 		createdCol.setCellValueFactory(
 				new Callback<TableColumn.CellDataFeatures<Link, String>, ObservableValue<String>>() {
@@ -391,19 +383,17 @@ public class ImportResultReportStage extends Stage {
 	private void updateLink(Link link){
 		try {
 			linkHandler.updateLink(link);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+		} catch (ParseException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void setSuccessLinksTableLayout(){
-		((TableColumn)this.tvSuccessfulLinks.getColumns().get(0)).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*10)/100);
-		((TableColumn)this.tvSuccessfulLinks.getColumns().get(1)).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*20)/100);
-		((TableColumn)this.tvSuccessfulLinks.getColumns().get(2)).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*40)/100);
-		((TableColumn)this.tvSuccessfulLinks.getColumns().get(3)).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*20)/100);
-		((TableColumn)this.tvSuccessfulLinks.getColumns().get(4)).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*10)/100);
+		this.tvSuccessfulLinks.getColumns().get(0).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*10)/100);
+		this.tvSuccessfulLinks.getColumns().get(1).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*20)/100);
+		this.tvSuccessfulLinks.getColumns().get(2).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*40)/100);
+		this.tvSuccessfulLinks.getColumns().get(3).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*20)/100);
+		this.tvSuccessfulLinks.getColumns().get(4).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*10)/100);
 	}
 
 	private void initFailedLinksTableView(){
@@ -460,7 +450,7 @@ public class ImportResultReportStage extends Stage {
 	}
 
 	private void initSuggestionPane(){
-		this.flowSuggestions= new FlowPane(Orientation.HORIZONTAL);
+		this.flowSuggestions = new FlowPane(Orientation.HORIZONTAL);
 		this.flowSuggestions.setPadding(new Insets(5, 5, 0, 5));
 		this.flowGeneral.getChildren().add(this.flowSuggestions);
 	}

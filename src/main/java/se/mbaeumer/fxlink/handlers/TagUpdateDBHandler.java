@@ -31,7 +31,7 @@ public class TagUpdateDBHandler {
 		return sql;
 	}
 
-	public static void updateCategory(String sql, GenericDBHandler dbh) throws ParseException, SQLException{
+	public static void updateCategory(String sql, GenericDBHandler dbh) throws SQLException{
 		Connection connection = dbh.getConnection();
 
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);

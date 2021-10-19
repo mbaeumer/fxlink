@@ -54,7 +54,7 @@ public class LinkXMLReader {
 				.createXMLEventReader(this.fileInputStream);
 	}
 	
-	public void readDataFromFile() throws XMLStreamException, FileNotFoundException {
+	public void readDataFromFile() throws XMLStreamException {
 		while (this.xmlEventReader.hasNext()) {
 			XMLEvent event = this.xmlEventReader.nextEvent();
 			if (event.isStartElement()) {
@@ -63,7 +63,7 @@ public class LinkXMLReader {
 					this.categories = new ArrayList<Category>();
 				}else if (startElement.getName().getLocalPart() == (CATEGORY)) {
 					Category c = new Category();
-					c.setId(new Integer(startElement.getAttributeByName(
+					c.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
 					c.setName(startElement.getAttributeByName(
 							new QName("name")).getValue());
@@ -97,7 +97,7 @@ public class LinkXMLReader {
 							new QName("description")).getValue();
 					Link link = new Link(title, url, description);
 					
-					link.setId(new Integer(startElement.getAttributeByName(
+					link.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
 	
 					// TODO: Use constants instead of hard-coded strings
@@ -124,7 +124,7 @@ public class LinkXMLReader {
 							link.setCategory(null);
 						}else{
 							Category category = new Category();
-							category.setId(new Integer(categoryId));
+							category.setId(Integer.parseInt(categoryId));
 							link.setCategory(category);
 						}
 					}else{
@@ -136,7 +136,7 @@ public class LinkXMLReader {
 					this.tags = new ArrayList<Tag>();
 				}else if (startElement.getName().getLocalPart() == (TAG)) {
 					Tag tag = new Tag();
-					tag.setId(new Integer(startElement.getAttributeByName(
+					tag.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
 					tag.setName(startElement.getAttributeByName(
 							new QName("name")).getValue());
@@ -162,18 +162,18 @@ public class LinkXMLReader {
 					this.linkTags = new ArrayList<LinkTag>();
 				}else if (startElement.getName().getLocalPart() == (LINKTAG)) {
 					LinkTag linkTag = new LinkTag();
-					linkTag.setId(new Integer(startElement.getAttributeByName(
+					linkTag.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
-					linkTag.setLinkId(new Integer(startElement.getAttributeByName(
+					linkTag.setLinkId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("linkid")).getValue()));
-					linkTag.setTagId(new Integer(startElement.getAttributeByName(
+					linkTag.setTagId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("tagid")).getValue()));
 					this.linkTags.add(linkTag);
 				}else if (startElement.getName().getLocalPart() == (IMPORTITEMS)) {
 					this.importItems = new ArrayList<>();
 				}else if (startElement.getName().getLocalPart() == (IMPORTITEM)) {
 					ImportItem importItem = new ImportItem();
-					importItem.setId(new Integer(startElement.getAttributeByName(
+					importItem.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
 					importItem.setFilename(startElement.getAttributeByName(
 							new QName("filename")).getValue());

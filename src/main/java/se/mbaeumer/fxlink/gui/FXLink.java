@@ -35,7 +35,6 @@ import se.mbaeumer.fxlink.util.*;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -466,13 +465,13 @@ public class FXLink extends Application{
 		if (selectedLinks.size() > 0) {
 			Alert alert = new Alert(Alert.AlertType.WARNING, THE_SELECTED_LINKS_WILL_BE_DELETED_CONTINUE, ButtonType.YES, ButtonType.NO);
 			Optional<ButtonType> result = alert.showAndWait();
-			boolean deletedSuccess = true;
 			if (result.isPresent() && result.get() == ButtonType.YES) {
 				for (Link link : selectedLinks) {
 					try {
 						linkHandler.deleteLink(link);
 					} catch (SQLException sqle) {
-						deletedSuccess = false;
+						alert = new Alert(Alert.AlertType.ERROR, "The link could not be deleted", ButtonType.OK);
+						alert.showAndWait();
 					}
 				}
 			}
@@ -1098,7 +1097,6 @@ public class FXLink extends Application{
 	
 		this.tblTags.prefWidthProperty().bind(this.scene.widthProperty());
 		this.tblTags.prefWidthProperty().addListener(new ChangeListener<Object>() {
-			@SuppressWarnings("rawtypes")
 			@Override
 			public void changed(ObservableValue ov, Object oldValue, Object newValue){
 				setTagTableLayout();
