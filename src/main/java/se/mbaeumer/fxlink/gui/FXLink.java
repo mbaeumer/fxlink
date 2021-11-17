@@ -77,6 +77,7 @@ public class FXLink extends Application{
 	private ComboBox<Category> cmbCategories;
 	private Button btnResetFilter;
 	private Button btnShowImportHistory;
+	private Button btnClassify;
 	private Button btnImportTextFile;
 	private Button btnShowSearchPane;
 	private Button btnDeleteLinks;
@@ -143,6 +144,7 @@ public class FXLink extends Application{
 		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(),
 				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
 				new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
+
 	}
 	
 	public void initLayout() {
@@ -177,6 +179,7 @@ public class FXLink extends Application{
 		this.createCategoryComboBox();
 		this.createResetButton();
 		this.createShowImportHistoryButton();
+		this.createExperimentalButton();
 	}
 	
 	public void createItemLabel(){
@@ -285,6 +288,16 @@ public class FXLink extends Application{
 		});
 
 		this.flowFilter.getChildren().add(this.btnShowImportHistory);
+	}
+
+	private void createExperimentalButton(){
+		this.btnClassify = new Button("Classify");
+		this.btnClassify.setOnAction(actionEvent -> {
+			ClassifyStage classifyStage = new ClassifyStage();
+			classifyStage.showAndWait();
+		});
+
+		this.flowFilter.getChildren().add(this.btnClassify);
 	}
 
 	private void createActionFlowPane(){

@@ -114,6 +114,38 @@ public class LinkReadDBHandler {
 		return links;
 	}
 
+	public List<Link> getAllLinksWithCategory(GenericDBHandler dbh){
+		Connection connection = dbh.getConnection();
+		List<Link> links = new ArrayList<Link>();
+
+		String sql = "select l.id as linkId, l.title, l.url, l.description as linkDescription, l. created as linkCreated," +
+				" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, c.id as categoryId, c.name as category," +
+				" c.description as categoryDescription, c.created as categoryCreated, c.lastUpdated as categoryLastUpdated" +
+				" from link l left join category c on c.id = l.categoryId";
+		sql += " where categoryId is not null";
+
+		try {
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Link link = new Link(rs.getString("title"), rs.getString("url"), rs.getString("linkDescription"));
+				link.setId(rs.getInt("linkId"));
+				link.setCreated(rs.getTimestamp("linkCreated"));
+				link.setLastUpdated(rs.getTimestamp("linkLastUpdated"));
+				Category category = new Category();
+				category.setId(rs.getInt("categoryId"));
+				category.setName(rs.getString("category"));
+				link.setCategory(category);
+				links.add(link);
+			}
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return links;
+	}
+
 	public List<Link> getAllLinks(GenericDBHandler dbh){
 		Connection connection = dbh.getConnection();				
 		List<Link> links = new ArrayList<Link>();
