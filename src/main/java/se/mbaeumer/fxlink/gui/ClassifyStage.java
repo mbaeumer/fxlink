@@ -73,12 +73,6 @@ public class ClassifyStage extends Stage {
         this.initEventHandler();
         this.tvLinks.setPrefWidth(this.flowGeneral.getWidth()-15);
         this.initSuggestionFlowPane();
-
-        //double pStackOverflow = calculateSingle("Stackoverflow blog", "stackoverflow");
-        //double pBlog = calculateSingle("Stackoverflow blog", "developer");
-        //calculateCombinedHardCoded(pStackOverflow, pBlog);
-        //calculateCombinedGeneric("Stackoverflow blog", List.of("stackoverflow", "developer"));
-        //calculateCombinedGeneric("Java programming", List.of("stackoverflow", "java"));
     }
 
     private void initHandlers(){
@@ -98,9 +92,7 @@ public class ClassifyStage extends Stage {
 
     public void initTableView(){
         this.tvLinks = new TableView();
-
         this.tvLinks.setItems(FXCollections.observableList(this.allLinks));
-
         this.flowGeneral.getChildren().add(this.tvLinks);
     }
 
@@ -159,6 +151,7 @@ public class ClassifyStage extends Stage {
 
     private void initSuggestionFlowPane(){
         this.flowSuggestions = new FlowPane(Orientation.HORIZONTAL);
+        this.flowSuggestions.setHgap(5);
         this.flowGeneral.getChildren().add(this.flowSuggestions);
     }
 
@@ -205,32 +198,14 @@ public class ClassifyStage extends Stage {
     }
 
     private double calculateSingle(final String categoryName, final String word){
-        List<Link> allLinks = this.linkReadDBHandler.getAllLinksWithCategory(GenericDBHandler.getInstance());
-        List<Link> stackOvLinks = allLinks.stream()
-                .filter(link -> link.getCategory()!=null && categoryName.equals(link.getCategory().getName()))
-                .collect(Collectors.toList());
-        List<Link> linksContainStackOv = allLinks.stream()
-                .filter(link -> link.getURL().contains(word))
-                .collect(Collectors.toList());
-        List<Link> linksPBA = stackOvLinks.stream().filter(link -> link.getURL().contains(word))
-                .collect(Collectors.toList());
-        double pA = (double) stackOvLinks.size() / (double) allLinks.size();
-        double pB = (double) linksContainStackOv.size() / (double) allLinks.size();
-        double pBA = (double) linksPBA.size() / (double) stackOvLinks.size();
-
-        double result = pBA * (pA / pB);
-        System.out.println(result);
-
-        return result;
+        return 0.0;
 
         //How many links are assigned to “stackoverflow blog” → P(A)
         //How many links contain “stackoverflow”? → P(B)
         //How many links assigned to “stackoverflow blog” contain the word “stackoverflow” → P(B|A)
-
     }
 
     public Probability calculateCombinedGeneric(final String categoryName, final List<String> words){
-        //allLinks = this.linkReadDBHandler.getAllLinksWithCategory(GenericDBHandler.getInstance());
         List<Link> linksInCategory = allLinks.stream()
                 .filter(link -> link.getCategory()!=null && categoryName.equals(link.getCategory().getName()))
                 .collect(Collectors.toList());
@@ -246,8 +221,6 @@ public class ClassifyStage extends Stage {
             double pWord = smooth((double) count / (double) linksInCategory.size());
             pWords.put(word, pWord);
         }
-
-        //pWords.entrySet().stream().for
 
         double dividend = pInCategory * pWords.values().stream().reduce(1.0, (a,b) -> a*b);
         Map<String, Double> pNegated = pWords.entrySet().stream()
@@ -265,36 +238,4 @@ public class ClassifyStage extends Stage {
     public double smooth(double value){
         return value == 0 ? 0.0001 : value;
     }
-
-    public void calculateCombinedHardCoded(double pStackoverflow, double pBlog){
-        List<Link> allLinks = this.linkReadDBHandler.getAllLinksWithCategory(GenericDBHandler.getInstance());
-        List<Link> linksInStackoverflowBlog = allLinks.stream()
-                .filter(link -> link.getCategory()!=null && "Stackoverflow blog".equals(link.getCategory().getName()))
-                .collect(Collectors.toList());
-
-        double pStackoverflowBlog = (double) linksInStackoverflowBlog.size() / (double) allLinks.size();
-
-        List<Link> linksInStackOverflowBlogContainStackoverflow = linksInStackoverflowBlog.stream()
-                .filter(link -> link.getURL().contains("stackoverflow"))
-                .collect(Collectors.toList());
-        List<Link> linksInStackOverflowBlogContainBlog = linksInStackoverflowBlog.stream()
-                .filter(link -> link.getURL().contains("developer"))
-                .collect(Collectors.toList());
-
-        pStackoverflow = (double) linksInStackOverflowBlogContainStackoverflow.size() /(double) linksInStackoverflowBlog.size();
-        pBlog = (double) linksInStackOverflowBlogContainBlog.size() /(double) linksInStackoverflowBlog.size();
-        if (pBlog == 0){
-            pBlog = 0.001;
-        }
-        double numerator = pStackoverflowBlog * pStackoverflow * pBlog;
-        double pNotStackOverflowBlog = 1 - pStackoverflowBlog;
-        double pNotStackOverflow = 1 - pStackoverflow == 0 ? 0.001 : 1 - pStackoverflow;
-        double pNotBlog = 1 - pBlog == 0 ? 0.001 : 1 - pBlog;
-        double denominator = pStackoverflowBlog * pStackoverflow * pBlog + pNotStackOverflowBlog * pNotStackOverflow * pNotBlog;
-
-        double result = numerator/denominator;
-        System.out.println(result);
-    }
-
-
 }
