@@ -45,6 +45,7 @@ public class ClassifyStage extends Stage {
         ChangeListener<Number> widthListener = (observable, old, newValue) -> {
             this.tvLinks.setPrefWidth(this.flowGeneral.getWidth()-15);
             this.flowSuggestions.setPrefWidth(this.flowGeneral.getWidth()-15);
+            this.setColumnWidths();
         };
         this.widthProperty().addListener(widthListener);
     }
@@ -71,6 +72,7 @@ public class ClassifyStage extends Stage {
         this.initTableView();
         this.createTableViewColumns();
         this.initEventHandler();
+        this.setColumnWidths();
         this.tvLinks.setPrefWidth(this.flowGeneral.getWidth()-15);
         this.initSuggestionFlowPane();
     }
@@ -106,11 +108,6 @@ public class ClassifyStage extends Stage {
         titleCol.setCellValueFactory(new PropertyValueFactory("title"));
         titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        // create description column
-        TableColumn descriptionCol = new TableColumn("Description");
-        descriptionCol.setCellValueFactory(new PropertyValueFactory("description"));
-        descriptionCol.setCellFactory(TextFieldTableCell.forTableColumn());
-
         TableColumn categoryCol = new TableColumn("Category");
         categoryCol.setCellValueFactory(new PropertyValueFactory<Link, Category>("category"));
         categoryCol.setCellFactory(new Callback<TableColumn<Link, Category>, TableCell<Link, Category>>(){
@@ -133,8 +130,7 @@ public class ClassifyStage extends Stage {
             }
         });
 
-        this.tvLinks.getColumns().addAll(urlCol, titleCol, descriptionCol, categoryCol);
-
+        this.tvLinks.getColumns().addAll(urlCol, titleCol, categoryCol);
     }
 
     public void initEventHandler(){
@@ -147,6 +143,12 @@ public class ClassifyStage extends Stage {
                         showSuggestions(probabilities);
                     }
                 });
+    }
+
+    private void setColumnWidths(){
+        this.tvLinks.getColumns().get(0).setPrefWidth((this.tvLinks.getPrefWidth()*35)/100);
+        this.tvLinks.getColumns().get(1).setPrefWidth((this.tvLinks.getPrefWidth()*35)/100);
+        this.tvLinks.getColumns().get(2).setPrefWidth((this.tvLinks.getPrefWidth()*30)/100);
     }
 
     private void initSuggestionFlowPane(){
