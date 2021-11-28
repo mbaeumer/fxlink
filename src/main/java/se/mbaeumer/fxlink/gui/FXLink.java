@@ -79,6 +79,7 @@ public class FXLink extends Application{
 	private Button btnShowImportHistory;
 	private Button btnClassify;
 	private Button btnExportCsv;
+	private Button btnVisualize;
 	private Button btnImportTextFile;
 	private Button btnShowSearchPane;
 	private Button btnDeleteLinks;
@@ -181,6 +182,7 @@ public class FXLink extends Application{
 		this.createResetButton();
 		this.createShowImportHistoryButton();
 		this.createExperimentalButton();
+		this.createVisualizationButton();
 		this.createCsvExportButton();
 	}
 	
@@ -300,6 +302,16 @@ public class FXLink extends Application{
 		});
 
 		this.flowFilter.getChildren().add(this.btnClassify);
+	}
+
+	private void createVisualizationButton(){
+		this.btnVisualize = new Button("Visualize");
+		this.btnVisualize.setOnAction(actionEvent -> {
+			VisualizationStage visualizationStage = new VisualizationStage();
+			visualizationStage.showAndWait();
+		});
+
+		this.flowFilter.getChildren().add(this.btnVisualize);
 	}
 
 	private void createCsvExportButton(){
