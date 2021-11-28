@@ -139,8 +139,10 @@ public class ClassifyStage extends Stage {
                     @Override
                     public void handle(MouseEvent me) {
                         Link link = tvLinks.getSelectionModel().getSelectedItem();
-                        List<Probability> probabilities = classify(link);
-                        showSuggestions(probabilities);
+                        if (link != null) {
+                            List<Probability> probabilities = classify(link);
+                            showSuggestions(probabilities);
+                        }
                     }
                 });
     }
@@ -220,7 +222,8 @@ public class ClassifyStage extends Stage {
                     .filter(link -> link.getURL().contains(word))
                     .collect(Collectors.toList()).size();
 
-            double pWord = smooth((double) count / (double) linksInCategory.size());
+            //count = count == 0 ? count + 1 : count;
+            double pWord = ((double) count  + 1) / ((double) linksInCategory.size() + allLinksWithCategories.size());
             pWords.put(word, pWord);
         }
 
