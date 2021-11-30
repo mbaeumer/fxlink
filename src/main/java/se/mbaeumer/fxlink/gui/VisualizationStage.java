@@ -20,7 +20,6 @@ import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.LinkHandler;
 import se.mbaeumer.fxlink.handlers.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class VisualizationStage extends Stage {
@@ -62,7 +61,7 @@ public class VisualizationStage extends Stage {
         this.scene = new Scene(this.flowGeneral, width, height);
         this.scene.setFill(Color.WHITESMOKE);
 
-        this.setTitle("Import history");
+        this.setTitle("Data overview");
         this.setScene(this.scene);
 
         this.initHandlers();
@@ -72,15 +71,6 @@ public class VisualizationStage extends Stage {
         this.initChartFlowPane();
         this.initBarChart();
         this.initSizes();
-        /*
-        this.initData();
-        this.initTableView();
-        this.createTableViewColumns();
-        this.initEventHandler();
-        this.setColumnWidths();
-        this.tvLinks.setPrefWidth(this.flowGeneral.getWidth()-15);
-        this.initSuggestionFlowPane();
-         */
     }
 
     private void initHandlers(){
@@ -96,14 +86,12 @@ public class VisualizationStage extends Stage {
         this.flowNumbers.setHgap(5);
         this.flowNumbers.setVgap(10);
         this.flowNumbers.setPadding(new Insets(5, 10, 5, 10));
-        //this.flowNumbers.setEffect(this.createShadow());
-        //this.flowNumbers.setBackground(createBackground());
         this.flowGeneral.getChildren().add(this.flowNumbers);
     }
 
     private void initLinkLabel(){
         this.lblLinks = new Label();
-        this.lblLinks.setText("Number of links: " + String.valueOf(this.linkHandler.getLinks().size()));
+        this.lblLinks.setText("Number of links: " + this.linkHandler.getLinks().size());
         this.lblLinks.setFont(Font.font("Cambria", 32));
         this.lblLinks.setBackground(createBackground());
         this.lblLinks.setEffect(this.createShadow());
@@ -113,7 +101,7 @@ public class VisualizationStage extends Stage {
 
     private void initCategoryLabel(){
         this.lblCategories = new Label();
-        this.lblCategories.setText("Number of categories: " + String.valueOf(this.categoryHandler.getCategories().size()));
+        this.lblCategories.setText("Number of categories: " + this.categoryHandler.getCategories().size());
         this.lblCategories.setFont(Font.font("Cambria", 32));
         this.lblCategories.setBackground(createBackground());
         this.lblCategories.setEffect(createShadow());
@@ -135,29 +123,16 @@ public class VisualizationStage extends Stage {
     private void initBarChart(){
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
-        this.bc = new BarChart<String,Number>(xAxis,yAxis);
+        this.bc = new BarChart<>(xAxis,yAxis);
 
         XYChart.Series series1 = new XYChart.Series();
 
-        Map<String, Long> values = new HashMap<>();
-        int i = 5;
-        values.put("one", Long.valueOf(i));
-        values.put("two", Long.valueOf(i));
-        values.put("three", Long.valueOf(i));
-
-        values = this.linkHandler.getCategoryCounts();
+        Map<String, Long> values = this.linkHandler.getCategoryCounts();
 
         values.entrySet().stream()
                 .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
 
-        //values.entrySet()
-        /*
-        for (int i=0; i<csvDataRows.size(); i++){
-            series1.getData().add(new XYChart.Data(getDateString(csvDataRows.get(i).getDateTime()), csvDataRows.get(i).getNumber()));
-        }
-        series1.setName("Number of new cases/day in " + cmbCountries.getSelectionModel().getSelectedItem());
-
-         */
+        series1.setName("Number of links per category");
         bc.getData().addAll(series1);
         this.flowBarChart.getChildren().add(bc);
     }
