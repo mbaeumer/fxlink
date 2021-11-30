@@ -8,6 +8,8 @@ import se.mbaeumer.fxlink.util.ValueConstants;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LinkHandler {
 
@@ -66,5 +68,13 @@ public class LinkHandler {
 	
 	public static void deleteAllLinks() throws SQLException{
 		LinkDeletionDBHandler.deleteAllLinks(GenericDBHandler.getInstance());
+	}
+
+	public Map<String, Long> getCategoryCounts(){
+		List<Link> links = this.linkReadDBHandler.getAllLinksWithCategory(GenericDBHandler.getInstance());
+		List<String> categoryNames = links.stream()
+				.map(link -> link.getCategory().getName()).collect(Collectors.toList());
+
+		return categoryNames.stream().collect(Collectors.groupingBy(c -> c, Collectors.counting()));
 	}
 }

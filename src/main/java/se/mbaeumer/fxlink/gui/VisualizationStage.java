@@ -4,6 +4,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
@@ -16,12 +20,17 @@ import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.LinkHandler;
 import se.mbaeumer.fxlink.handlers.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class VisualizationStage extends Stage {
     private Scene scene;
     private FlowPane flowGeneral;
     private FlowPane flowNumbers;
+    private FlowPane flowBarChart;
     private Label lblLinks;
     private Label lblCategories;
+    private BarChart<String,Number> bc;
 
     private LinkHandler linkHandler;
     private CategoryHandler categoryHandler;
@@ -32,10 +41,7 @@ public class VisualizationStage extends Stage {
         this.initScene();
 
         ChangeListener<Number> widthListener = (observable, old, newValue) -> {
-            this.flowNumbers.setPrefWidth(this.flowGeneral.getWidth()-15);
-            this.lblLinks.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
-            this.lblCategories.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
-            //this.setColumnWidths();
+            initSizes();
         };
         this.widthProperty().addListener(widthListener);
 
@@ -63,6 +69,8 @@ public class VisualizationStage extends Stage {
         this.initNumberFlowPane();
         this.initLinkLabel();
         this.initCategoryLabel();
+        this.initChartFlowPane();
+        this.initBarChart();
         this.initSizes();
         /*
         this.initData();
@@ -113,6 +121,47 @@ public class VisualizationStage extends Stage {
         this.flowNumbers.getChildren().add(this.lblCategories);
     }
 
+    private void initChartFlowPane(){
+        this.flowBarChart = new FlowPane();
+        this.flowBarChart.setOrientation(Orientation.HORIZONTAL);
+        this.flowBarChart.setHgap(5);
+        this.flowBarChart.setVgap(10);
+        this.flowBarChart.setPadding(new Insets(5, 10, 5, 10));
+        this.flowBarChart.setEffect(this.createShadow());
+        this.flowBarChart.setBackground(createBackground());
+        this.flowGeneral.getChildren().add(this.flowBarChart);
+    }
+
+    private void initBarChart(){
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        this.bc = new BarChart<String,Number>(xAxis,yAxis);
+
+        XYChart.Series series1 = new XYChart.Series();
+
+        Map<String, Long> values = new HashMap<>();
+        int i = 5;
+        values.put("one", Long.valueOf(i));
+        values.put("two", Long.valueOf(i));
+        values.put("three", Long.valueOf(i));
+
+        values = this.linkHandler.getCategoryCounts();
+
+        values.entrySet().stream()
+                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
+
+        //values.entrySet()
+        /*
+        for (int i=0; i<csvDataRows.size(); i++){
+            series1.getData().add(new XYChart.Data(getDateString(csvDataRows.get(i).getDateTime()), csvDataRows.get(i).getNumber()));
+        }
+        series1.setName("Number of new cases/day in " + cmbCountries.getSelectionModel().getSelectedItem());
+
+         */
+        bc.getData().addAll(series1);
+        this.flowBarChart.getChildren().add(bc);
+    }
+
     private DropShadow createShadow(){
         return new DropShadow(5, Color.GRAY);
     }
@@ -127,5 +176,7 @@ public class VisualizationStage extends Stage {
         this.flowNumbers.setPrefWidth(this.flowGeneral.getWidth()-15);
         this.lblLinks.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
         this.lblCategories.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
+        this.flowBarChart.setPrefWidth(this.flowGeneral.getWidth()-15);
+        this.bc.setPrefWidth(this.flowBarChart.getWidth()-15);
     }
 }
