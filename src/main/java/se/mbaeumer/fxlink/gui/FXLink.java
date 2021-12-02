@@ -183,7 +183,7 @@ public class FXLink extends Application{
 		this.createShowImportHistoryButton();
 		this.createExperimentalButton();
 		this.createVisualizationButton();
-		this.createCsvExportButton();
+		//this.createCsvExportButton();
 	}
 	
 	public void createItemLabel(){
@@ -295,7 +295,7 @@ public class FXLink extends Application{
 	}
 
 	private void createExperimentalButton(){
-		this.btnClassify = new Button("Classify");
+		this.btnClassify = new Button("Classification");
 		this.btnClassify.setOnAction(actionEvent -> {
 			ClassifyStage classifyStage = new ClassifyStage();
 			classifyStage.showAndWait();
@@ -305,7 +305,7 @@ public class FXLink extends Application{
 	}
 
 	private void createVisualizationButton(){
-		this.btnVisualize = new Button("Visualize");
+		this.btnVisualize = new Button("Visualization");
 		this.btnVisualize.setOnAction(actionEvent -> {
 			VisualizationStage visualizationStage = new VisualizationStage();
 			visualizationStage.showAndWait();
