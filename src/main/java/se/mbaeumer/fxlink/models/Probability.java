@@ -27,6 +27,6 @@ public class Probability {
 
     @Override
     public String toString(){
-        return this.categoryName + " (" + String.format("%8.5f",this.probability) + ")";
+        return this.categoryName + " (" + String.format("%8.3e",this.probability) + ")";
     }
 }

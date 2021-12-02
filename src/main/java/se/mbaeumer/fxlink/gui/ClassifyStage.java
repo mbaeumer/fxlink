@@ -64,7 +64,7 @@ public class ClassifyStage extends Stage {
         this.scene = new Scene(this.flowGeneral, width, height);
         this.scene.setFill(Color.WHITESMOKE);
 
-        this.setTitle("Import history");
+        this.setTitle("Classification demo");
         this.setScene(this.scene);
 
         this.initHandlers();
@@ -179,9 +179,6 @@ public class ClassifyStage extends Stage {
                 .sorted(Comparator.comparing(Probability::getProbability).reversed())
                 //.filter(p -> p.getProbability() > 0.05)
                 .collect(Collectors.toList());
-                //.stream()
-                //.sorted(Comparator.comparing(Probability::getProbability).reversed())
-                //.collect(Collectors.toList());
         return sorted;
     }
 
@@ -222,7 +219,6 @@ public class ClassifyStage extends Stage {
                     .filter(link -> link.getURL().contains(word))
                     .collect(Collectors.toList()).size();
 
-            //count = count == 0 ? count + 1 : count;
             double pWord = ((double) count  + 1) / ((double) linksInCategory.size() + allLinksWithCategories.size());
             pWords.put(word, pWord);
         }
