@@ -177,7 +177,7 @@ public class ClassifyStage extends Stage {
         List<Probability> sorted = probabilities.stream()
                 .filter(probability -> !Double.isNaN(probability.getProbability()))
                 .sorted(Comparator.comparing(Probability::getProbability).reversed())
-                //.filter(p -> p.getProbability() > 0.05)
+                .filter(p -> p.getProbability() > 0.00)
                 .collect(Collectors.toList());
         return sorted;
     }
