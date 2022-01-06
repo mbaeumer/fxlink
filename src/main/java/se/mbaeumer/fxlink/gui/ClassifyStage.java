@@ -14,8 +14,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.LinkHandler;
+import se.mbaeumer.fxlink.api.NaiveBayesClassifier;
 import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
@@ -23,7 +23,6 @@ import se.mbaeumer.fxlink.models.Probability;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ClassifyStage extends Stage {
     private Scene scene;
@@ -31,12 +30,8 @@ public class ClassifyStage extends Stage {
     private TableView<Link> tvLinks;
     private FlowPane flowSuggestions;
     private LinkHandler linkHandler;
-    private LinkReadDBHandler linkReadDBHandler;
-    private CategoryHandler categoryHandler;
-    private URLHelper urlHelper;
+    private NaiveBayesClassifier naiveBayesClassifier;
     private List<Link> allLinks;
-    private List<Link> allLinksWithCategories;
-    private List<Category> categories;
 
     public ClassifyStage() {
         super();
@@ -80,16 +75,11 @@ public class ClassifyStage extends Stage {
     private void initHandlers(){
         this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
                 new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
-        this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(), new CategoryCreationDBHandler(),
-                new CategoryUpdateDBHandler(), new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
-        this.linkReadDBHandler = new LinkReadDBHandler();
-        this.urlHelper = new URLHelper();
+        this.naiveBayesClassifier = new NaiveBayesClassifier(new URLHelper(), new LinkReadDBHandler(), this.linkHandler);
     }
 
     private void initData(){
         this.allLinks = this.linkHandler.getLinks();
-        this.allLinksWithCategories = this.linkReadDBHandler.getAllLinksWithCategory(GenericDBHandler.getInstance());
-        this.categories = this.categoryHandler.getCategories();
     }
 
     public void initTableView(){
@@ -103,7 +93,6 @@ public class ClassifyStage extends Stage {
         urlCol.setCellValueFactory(new PropertyValueFactory("url"));
         urlCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        // create filename column
         TableColumn titleCol = new TableColumn("Title");
         titleCol.setCellValueFactory(new PropertyValueFactory("title"));
         titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -140,7 +129,7 @@ public class ClassifyStage extends Stage {
                     public void handle(MouseEvent me) {
                         Link link = tvLinks.getSelectionModel().getSelectedItem();
                         if (link != null) {
-                            List<Probability> probabilities = classify(link);
+                            List<Probability> probabilities = naiveBayesClassifier.classify(link);
                             showSuggestions(probabilities);
                         }
                     }
@@ -165,78 +154,5 @@ public class ClassifyStage extends Stage {
             Button button = new Button(probability.toString());
             flowSuggestions.getChildren().add(button);
         }
-    }
-
-    public List<Probability> classify(final Link link){
-        List<String> words = splitUrl(link);
-        List<Probability> probabilities = new ArrayList<>();
-        for (Category category : categories){
-            probabilities.add(calculateCombinedGeneric(category.getName(), words));
-        }
-
-        List<Probability> sorted = probabilities.stream()
-                .filter(probability -> !Double.isNaN(probability.getProbability()))
-                .sorted(Comparator.comparing(Probability::getProbability).reversed())
-                .filter(p -> p.getProbability() > 0.00)
-                .collect(Collectors.toList());
-        return sorted;
-    }
-
-    private List<String> splitUrl(final Link link){
-        String url = urlHelper.withoutProtocol(link.getURL());
-        url = urlHelper.withoutPrefix(url);
-        String[] urlParts = urlHelper.getUrlParts(url);
-        List<String> words = new ArrayList<>(Arrays.asList(urlParts));
-
-        List<String> toExclude = words.stream().filter(key -> "for".equals(key)
-                || key.length() <=1 || "of".equals(key) || "with".equals(key)
-                || "the".equals(key) || "to".equals(key)
-                || "com".equals(key) || "de".equals(key) || key.matches(".*\\d.*")
-                || "html".equals(key) || "htm".equals(key)).collect(Collectors.toList());
-        words.removeAll(toExclude);
-
-        return words;
-    }
-
-    private double calculateSingle(final String categoryName, final String word){
-        return 0.0;
-
-        //How many links are assigned to “stackoverflow blog” → P(A)
-        //How many links contain “stackoverflow”? → P(B)
-        //How many links assigned to “stackoverflow blog” contain the word “stackoverflow” → P(B|A)
-    }
-
-    public Probability calculateCombinedGeneric(final String categoryName, final List<String> words){
-        List<Link> linksInCategory = allLinks.stream()
-                .filter(link -> link.getCategory()!=null && categoryName.equals(link.getCategory().getName()))
-                .collect(Collectors.toList());
-
-        double pInCategory = (double) linksInCategory.size() / (double) allLinksWithCategories.size();
-
-        Map<String, Double> pWords = new HashMap<>();
-        for (String word : words){
-            int count = linksInCategory.stream()
-                    .filter(link -> link.getURL().contains(word))
-                    .collect(Collectors.toList()).size();
-
-            double pWord = ((double) count  + 1) / ((double) linksInCategory.size() + allLinksWithCategories.size());
-            pWords.put(word, pWord);
-        }
-
-        double dividend = pInCategory * pWords.values().stream().reduce(1.0, (a,b) -> a*b);
-        Map<String, Double> pNegated = pWords.entrySet().stream()
-                .collect(Collectors.toMap(
-                        e -> e.getKey(),
-                        e -> smooth(1 - e.getValue())
-        ));
-        double part2 = pNegated.values().stream().reduce(1.0, (a,b) -> a*b);
-        double denominator = (dividend + part2);
-        double result = dividend / denominator;
-
-        return new Probability(categoryName, result*100.00);
-    }
-
-    public double smooth(double value){
-        return value == 0 ? 0.0001 : value;
     }
 }
