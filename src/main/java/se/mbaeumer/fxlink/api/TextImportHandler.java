@@ -18,8 +18,8 @@ public class TextImportHandler {
 	
 	private List<Link> importedLinks = new ArrayList();
 	private List<FailedLink> failedLinks = new ArrayList();
-
 	private LinkCreationDBHandler linkCreationDBHandler = new LinkCreationDBHandler();
+	private TitleHandler titleHandler;
 	
 	public List<Link> getImportedLinks() {
 		return importedLinks;
@@ -72,7 +72,7 @@ public class TextImportHandler {
 	}
 
 	private String createTitle(String url){
-		LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
-		return linkTitleUtil.generateTitle(new Link("", url,""));
+		titleHandler = new TitleHandler(new LinkTitleUtilImpl(), new YoutubeCrawler());
+		return titleHandler.generateTitle(new Link("", url,""));
 	}
 }
