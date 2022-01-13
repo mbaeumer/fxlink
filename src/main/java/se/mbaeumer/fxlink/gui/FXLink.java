@@ -119,6 +119,7 @@ public class FXLink extends Application{
 
 	private LinkHandler linkHandler;
 	private CategoryHandler categoryHandler;
+	private TitleHandler titleHandler;
 
 	public void start(Stage stage) {
 		DatabaseCheckUtil dbCheckUtil = new DatabaseCheckUtilImpl();
@@ -146,6 +147,7 @@ public class FXLink extends Application{
 		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(),
 				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
 				new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
+		this.titleHandler = new TitleHandler(new LinkTitleUtilImpl(), new YoutubeCrawler());
 
 	}
 	
@@ -605,9 +607,8 @@ public class FXLink extends Application{
 	}
 
 	private void handleGenerateTitle(ActionEvent actionEvent){
-		LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
 		for (Link link : getSelectedLinks()){
-			link.setTitle(linkTitleUtil.generateTitle(link));
+			link.setTitle(this.titleHandler.generateTitle(link));
 			try {
 				linkHandler.updateLink(link);
 			}catch(SQLException | ParseException pe){
