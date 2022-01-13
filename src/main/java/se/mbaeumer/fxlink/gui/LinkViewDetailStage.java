@@ -67,7 +67,8 @@ public class LinkViewDetailStage extends Stage {
 
 	private LinkHandler linkHandler;
 	private CategoryHandler categoryHandler;
-	
+	private TitleHandler titleHandler;
+
 	public LinkViewDetailStage(Link link){
 		super();
 		this.link = link;
@@ -77,6 +78,7 @@ public class LinkViewDetailStage extends Stage {
 		this.categoryHandler= new CategoryHandler(new CategoryReadDBHandler(),
 				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
 				new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
+		this.titleHandler = new TitleHandler(new LinkTitleUtilImpl(), new YoutubeCrawler());
 		
 		this.initScene();
 		this.makeModal();
@@ -422,8 +424,7 @@ public class LinkViewDetailStage extends Stage {
 	}
 
 	private void generateTitle(ActionEvent actionEvent){
-		LinkTitleUtil linkTitleUtil = new LinkTitleUtilImpl();
-		link.setTitle(linkTitleUtil.generateTitle(link));
+		link.setTitle(this.titleHandler.generateTitle(link));
 		txtTitle.setText(link.getTitle());
 	}
 	
