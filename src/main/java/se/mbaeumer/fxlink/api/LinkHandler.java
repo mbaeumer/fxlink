@@ -71,10 +71,15 @@ public class LinkHandler {
 	}
 
 	public Map<String, Long> getCategoryCounts(){
-		List<Link> links = this.linkReadDBHandler.getAllLinksWithCategory(GenericDBHandler.getInstance());
-		List<String> categoryNames = links.stream()
+		List<Link> linksWithCategory = this.linkReadDBHandler.getAllLinksWithCategory(GenericDBHandler.getInstance());
+		List<String> categoryNames = linksWithCategory.stream()
 				.map(link -> link.getCategory().getName()).collect(Collectors.toList());
 
-		return categoryNames.stream().collect(Collectors.groupingBy(c -> c, Collectors.counting()));
+		Map<String, Long> categoryCounts = categoryNames.stream().collect(Collectors.groupingBy(c -> c, Collectors.counting()));
+
+		Long linkCountWithoutCategory = this.linkReadDBHandler.getAllLinksWithNoCategory(GenericDBHandler.getInstance()).stream().count();
+		categoryCounts.put("N/A", linkCountWithoutCategory);
+
+		return categoryCounts;
 	}
 }
