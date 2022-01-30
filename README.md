@@ -29,6 +29,14 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+
+## 0.8.4 - 2022-01-31
+* started with experimental machine learning using Naive Bayes
+* added a new stage for visualizations
+* added support for generating titles for youtube links
+* updated the search to allow searches within a specific category
+* Minor refactoring to improve testability 
+
 ## 0.8.3 - 2021-08-23
 * made suggestion generation case insensitive
 * improved event handlers
