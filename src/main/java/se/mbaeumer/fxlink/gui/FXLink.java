@@ -837,10 +837,11 @@ public class FXLink extends Application{
 	}
 
 	private void runSearch(){
+		SearchHandler searchHandler = new SearchHandler(new LinkSearchDBHandler());
 		if (isSearchTermGiven() && isCriteriaSelected()){
 			this.lblSearchError.setVisible(false);
 			try {
-				List<Link> links = SearchHandler.findLinks(tfSearchTerm.getText(), chkSearchURL.isSelected(),
+				List<Link> links = searchHandler.findLinks(tfSearchTerm.getText(), chkSearchURL.isSelected(),
 						chkSearchTitle.isSelected(), chkSearchDescription.isSelected(), cmbCategoriesSearch.getValue());
 				refreshSearchResult(links);
 			} catch (SQLException e) {

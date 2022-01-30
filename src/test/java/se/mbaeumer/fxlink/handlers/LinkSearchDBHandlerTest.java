@@ -1,6 +1,5 @@
 package se.mbaeumer.fxlink.handlers;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,11 +8,12 @@ import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.util.Date;
 
-public class LinkSearchDBHandlerTest extends TestCase {
+public class LinkSearchDBHandlerTest{
 	private String searchTerm = null;
 	private boolean isUrl = false;
 	private boolean isTitle = false;
 	private boolean isDescription = false;
+	private LinkSearchDBHandler linkSearchDBHandler;
 	
 	@Before
 	public void setUp(){
@@ -21,23 +21,24 @@ public class LinkSearchDBHandlerTest extends TestCase {
 		isUrl = false;
 		isTitle = false;
 		isDescription = false;
+		linkSearchDBHandler = new LinkSearchDBHandler();
 	}
 	
 	@Test
 	public void testReturnNullIfSearchStringIsNull(){
-		Assert.assertNull("The method should return null", LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertNull("The method should return null", linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 	
 	@Test
 	public void testReturnNullIfSearchStringIsEmpty(){
 		searchTerm = "";
-		Assert.assertNull("The method should return null", LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertNull("The method should return null", linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 
 	@Test
 	public void testReturnNullIfNoCriteriaIsSelected(){
 		searchTerm = "test";
-		Assert.assertNull("The method should return null", LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertNull("The method should return null", linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 	
 	@Test
@@ -46,7 +47,7 @@ public class LinkSearchDBHandlerTest extends TestCase {
 		isUrl = true;
 		String expectedSqlString = LinkSearchDBHandler.BASE_QUERY + LinkSearchDBHandler.WHERE + "("
 				+ LinkSearchDBHandler.URL_CRITERIA_START + searchTerm + LinkSearchDBHandler.URL_CRITERIA_END + ")";
-		Assert.assertEquals(expectedSqlString, LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 	
 	@Test
@@ -55,7 +56,7 @@ public class LinkSearchDBHandlerTest extends TestCase {
 		isTitle = true;
 		String expectedSqlString = LinkSearchDBHandler.BASE_QUERY + LinkSearchDBHandler.WHERE + "("
 				+ LinkSearchDBHandler.TITLE_CRITERIA_START + searchTerm + LinkSearchDBHandler.TITLE_CRITERIA_END + ")";
-		Assert.assertEquals(expectedSqlString, LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 	
 	@Test
@@ -64,7 +65,7 @@ public class LinkSearchDBHandlerTest extends TestCase {
 		isDescription = true;
 		String expectedSqlString = LinkSearchDBHandler.BASE_QUERY + LinkSearchDBHandler.WHERE + "("
 				+ LinkSearchDBHandler.DESCRIPTION_CRITERIA_START + searchTerm + LinkSearchDBHandler.DESCRIPTION_CRITERIA_END + ")";
-		Assert.assertEquals(expectedSqlString, LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 
 	@Test
@@ -80,7 +81,7 @@ public class LinkSearchDBHandlerTest extends TestCase {
 				+ LinkSearchDBHandler.TITLE_CRITERIA_START + searchTerm + LinkSearchDBHandler.TITLE_CRITERIA_END
 				+ LinkSearchDBHandler.OR
 				+ LinkSearchDBHandler.DESCRIPTION_CRITERIA_START + searchTerm + LinkSearchDBHandler.DESCRIPTION_CRITERIA_END + ")";
-		Assert.assertEquals(expectedSqlString, LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 
 	@Test
@@ -93,7 +94,7 @@ public class LinkSearchDBHandlerTest extends TestCase {
 				+ LinkSearchDBHandler.URL_CRITERIA_START + searchTerm + LinkSearchDBHandler.URL_CRITERIA_END
 				+ LinkSearchDBHandler.OR
 				+ LinkSearchDBHandler.TITLE_CRITERIA_START + searchTerm + LinkSearchDBHandler.TITLE_CRITERIA_END + ")";
-		Assert.assertEquals(expectedSqlString, LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 
 	@Test
@@ -106,7 +107,7 @@ public class LinkSearchDBHandlerTest extends TestCase {
 				+ LinkSearchDBHandler.URL_CRITERIA_START + searchTerm + LinkSearchDBHandler.URL_CRITERIA_END
 				+ LinkSearchDBHandler.OR
 				+ LinkSearchDBHandler.DESCRIPTION_CRITERIA_START + searchTerm + LinkSearchDBHandler.DESCRIPTION_CRITERIA_END + ")";
-		Assert.assertEquals(expectedSqlString, LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 
 	@Test
@@ -119,7 +120,7 @@ public class LinkSearchDBHandlerTest extends TestCase {
 				+ LinkSearchDBHandler.TITLE_CRITERIA_START + searchTerm + LinkSearchDBHandler.TITLE_CRITERIA_END
 				+ LinkSearchDBHandler.OR
 				+ LinkSearchDBHandler.DESCRIPTION_CRITERIA_START + searchTerm + LinkSearchDBHandler.DESCRIPTION_CRITERIA_END + ")";
-		Assert.assertEquals(expectedSqlString, LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
+		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 
 	@Test
@@ -133,7 +134,7 @@ public class LinkSearchDBHandlerTest extends TestCase {
 				+ LinkSearchDBHandler.OR
 				+ LinkSearchDBHandler.DESCRIPTION_CRITERIA_START + searchTerm + LinkSearchDBHandler.DESCRIPTION_CRITERIA_END + ")"
 				+ LinkSearchDBHandler.AND + LinkSearchDBHandler.CATEGORY_ID + LinkSearchDBHandler.IS_NULL;
-		Assert.assertEquals(expectedSqlString, LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_N_A)));
+		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_N_A)));
 	}
 
 	@Test
@@ -147,7 +148,7 @@ public class LinkSearchDBHandlerTest extends TestCase {
 				+ LinkSearchDBHandler.OR
 				+ LinkSearchDBHandler.DESCRIPTION_CRITERIA_START + searchTerm + LinkSearchDBHandler.DESCRIPTION_CRITERIA_END + ")"
 				+ LinkSearchDBHandler.AND + LinkSearchDBHandler.CATEGORY_ID + LinkSearchDBHandler.EQUALS + "?";
-		Assert.assertEquals(expectedSqlString, LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createCategoryWithNameJava()));
+		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createCategoryWithNameJava()));
 	}
 
 	private Category createPseudoCategory(String categoryName){

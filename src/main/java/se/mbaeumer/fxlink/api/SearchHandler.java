@@ -9,9 +9,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class SearchHandler {
-	public static List<Link> findLinks(String searchTerm, boolean isUrl, boolean isTitle, boolean isDescription, Category category) throws SQLException{
-		String sql = LinkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, category);
-		List<Link> result = LinkSearchDBHandler.findAllMatchingLinks(GenericDBHandler.getInstance(), sql, category);
-		return result;
+	private final LinkSearchDBHandler linkSearchDBHandler;
+
+	public SearchHandler(LinkSearchDBHandler linkSearchDBHandler) {
+		this.linkSearchDBHandler = linkSearchDBHandler;
+	}
+
+	public List<Link> findLinks(String searchTerm, boolean isUrl, boolean isTitle, boolean isDescription, Category category) throws SQLException{
+		String sql = linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, category);
+		return linkSearchDBHandler.findAllMatchingLinks(GenericDBHandler.getInstance(), sql, category);
 	}
 }

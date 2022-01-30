@@ -27,7 +27,7 @@ public class LinkSearchDBHandler {
 	public static String IS_NULL = "IS NULL";
 	public static String EQUALS = "= ";
 	
-	public static String constructSearchString(String searchTerm, boolean isUrl, boolean isTitle, boolean isDescription, Category category){
+	public String constructSearchString(String searchTerm, boolean isUrl, boolean isTitle, boolean isDescription, Category category){
 		String sql = "";
 		if (searchTerm == null || "".equals(searchTerm)){
 			return null;
@@ -76,12 +76,10 @@ public class LinkSearchDBHandler {
 		return sql;
 	}
 	
-	public static List<Link> findAllMatchingLinks(GenericDBHandler dbh, String sql, Category category) throws SQLException{
+	public List<Link> findAllMatchingLinks(GenericDBHandler dbh, String sql, Category category) throws SQLException{
 		Connection connection = dbh.getConnection();				
 		List<Link> links = new ArrayList<>();
 		
-		//Statement stmt = connection.createStatement();
-		//ResultSet rs = stmt.executeQuery(sql);
 		PreparedStatement stmt = connection.prepareStatement(sql);
 		if (category != null && !ValueConstants.VALUE_ALL.equals(category.getName())) {
 			stmt.setInt(1, category.getId());
