@@ -15,16 +15,13 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.CsvExportHandler;
-import se.mbaeumer.fxlink.api.XMLExportHandler;
 import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.SelectableCategory;
 import se.mbaeumer.fxlink.util.URLHelper;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,7 +73,6 @@ public class CsvExportStage extends Stage {
         this.initActionPane();
         this.initExportButton();
         this.initCloseButton();
-
     }
 
     private void initHandlers(){

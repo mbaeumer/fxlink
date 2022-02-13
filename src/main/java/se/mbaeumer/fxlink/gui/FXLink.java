@@ -319,16 +319,8 @@ public class FXLink extends Application{
 	private void createCsvExportButton(){
 		this.btnExportCsv = new Button("CSV Export");
 		this.btnExportCsv.setOnAction(actionEvent -> {
-			/*
-			CsvExportHandler csvExportHandler =
-					new CsvExportHandler(new LinkReadDBHandler(), new URLHelper());
-			csvExportHandler.getData();
-
-			 */
 			CsvExportStage csvExportStage = new CsvExportStage();
 			csvExportStage.showAndWait();
-			//ClassifyStage classifyStage = new ClassifyStage();
-			//classifyStage.showAndWait();
 		});
 		this.flowFilter.getChildren().add(this.btnExportCsv);
 	}
@@ -861,8 +853,6 @@ public class FXLink extends Application{
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createLinkTableView(){
 		this.tblLinks = new TableView();
-
-		//LinkHandler linkHandler = new LinkHandler(new LinkReadDBHandler());
 
 		this.tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinks()));
 		this.tblLinks.getItems().add(LinkHandler.createPseudoLink());
