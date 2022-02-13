@@ -2,6 +2,7 @@ package se.mbaeumer.fxlink.api;
 
 import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
+import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.URLHelper;
 
@@ -23,12 +24,13 @@ public class CsvExportHandler {
         this.urlHelper = urlHelper;
     }
 
-    public void getData(){
-        List<Link> links = linkReadDBHandler.getAllLinksWithCategory(GenericDBHandler.getInstance());
+    public void getData(final String filename, List<Category> categories){
+        List<Link> links = new ArrayList<>();
+        for (Category category : categories){
+            links.addAll(linkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(), category.getId()));
+        }
 
-        final String filename = "/Users/martinbaumer/Downloads/fxlink-data-stackoverflog.csv";
         File csvOutputFile = new File(filename);
-        //PrintWriter pwr = new PrintWriter(csvOutputFile);
 
         try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
             pw.println("category,text");
@@ -43,11 +45,8 @@ public class CsvExportHandler {
     public String convertToCSV(Link data) {
         List<String> words = splitUrl(data);
         StringBuilder sb = new StringBuilder();
-        String categoryName = "Stackoverflow blog".equals(data.getCategory().getName()) ? "Stackoverflow blog" : "None";
-        if ("Stackoverflow blog".equals(data.getCategory().getName())){
-            System.out.println("found " + categoryName);
-        }
-        sb.append(categoryName).append(",");
+
+        sb.append(data.getCategory().getName()).append(",");
         String wordsAsString = words.stream().collect(Collectors.joining(" "));
         sb.append(wordsAsString);
 

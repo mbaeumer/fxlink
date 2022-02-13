@@ -185,7 +185,7 @@ public class FXLink extends Application{
 		this.createShowImportHistoryButton();
 		this.createExperimentalButton();
 		this.createVisualizationButton();
-		//this.createCsvExportButton();
+		this.createCsvExportButton();
 	}
 	
 	public void createItemLabel(){
@@ -319,9 +319,14 @@ public class FXLink extends Application{
 	private void createCsvExportButton(){
 		this.btnExportCsv = new Button("CSV Export");
 		this.btnExportCsv.setOnAction(actionEvent -> {
+			/*
 			CsvExportHandler csvExportHandler =
 					new CsvExportHandler(new LinkReadDBHandler(), new URLHelper());
 			csvExportHandler.getData();
+
+			 */
+			CsvExportStage csvExportStage = new CsvExportStage();
+			csvExportStage.showAndWait();
 			//ClassifyStage classifyStage = new ClassifyStage();
 			//classifyStage.showAndWait();
 		});
