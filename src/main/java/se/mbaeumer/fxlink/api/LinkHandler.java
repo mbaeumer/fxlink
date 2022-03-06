@@ -7,6 +7,8 @@ import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,5 +83,37 @@ public class LinkHandler {
 		categoryCounts.put("N/A", linkCountWithoutCategory);
 
 		return categoryCounts;
+	}
+
+	public Map<Object, Long> getWeekdayCount(){
+		List<Link> allLinks = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
+		List<Date> dates = allLinks.stream().map(link -> link.getCreated()).collect(Collectors.toList());
+		Map<Object, Long> weekDayCount = dates.stream()
+				.map(date -> getWeekDayOfDate(date))
+				.collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+		return weekDayCount;
+	}
+
+	public Map<Object, Long> getHourCount(){
+		List<Link> allLinks = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
+		List<Date> dates = allLinks.stream().map(link -> link.getLastUpdated()).collect(Collectors.toList());
+
+		List<Integer> hours = dates.stream()
+				.map(date -> getHourOfDate(date))
+				.collect(Collectors.toList());
+		return hours.stream()
+				.collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+	}
+
+	private int getWeekDayOfDate(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar.get(Calendar.DAY_OF_WEEK);
+	}
+
+	private int getHourOfDate(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar.get(Calendar.HOUR_OF_DAY);
 	}
 }

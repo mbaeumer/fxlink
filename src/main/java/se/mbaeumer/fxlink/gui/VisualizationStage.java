@@ -1,14 +1,14 @@
 package se.mbaeumer.fxlink.gui;
 
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -21,22 +21,38 @@ import se.mbaeumer.fxlink.api.LinkHandler;
 import se.mbaeumer.fxlink.handlers.*;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class VisualizationStage extends Stage {
     private Scene scene;
+    private ScrollPane scrollPane;
     private FlowPane flowGeneral;
     private FlowPane flowNumbers;
     private FlowPane flowBarChart;
     private Label lblLinks;
     private Label lblCategories;
-    private BarChart<String,Number> bc;
+    private BarChart<String,Number> bcCategory;
+
+    private FlowPane flowPieChart;
+    private BarChart<Object, Long> bcHour;
 
     private LinkHandler linkHandler;
     private CategoryHandler categoryHandler;
+    private Map<Integer, String> weekdays = Map.ofEntries(
+            Map.entry(1, "Sunday"),
+            Map.entry(2, "Monday"),
+            Map.entry(3, "Tuesday"),
+            Map.entry(4, "Wednesday"),
+            Map.entry(5, "Thursday"),
+            Map.entry(6, "Friday"),
+            Map.entry(7, "Saturday")
+            );
 
     public VisualizationStage() {
         super();
+
         this.initRootPane();
+        this.initScrollPane();
         this.initScene();
 
         ChangeListener<Number> widthListener = (observable, old, newValue) -> {
@@ -44,6 +60,10 @@ public class VisualizationStage extends Stage {
         };
         this.widthProperty().addListener(widthListener);
 
+    }
+
+    private void initScrollPane(){
+        this.scrollPane = new ScrollPane(this.flowGeneral);
     }
 
     private void initRootPane(){
@@ -58,7 +78,7 @@ public class VisualizationStage extends Stage {
     private void initScene() {
         int width = 700;
         int height = 450;
-        this.scene = new Scene(this.flowGeneral, width, height);
+        this.scene = new Scene(this.scrollPane, width, height);
         this.scene.setFill(Color.WHITESMOKE);
 
         this.setTitle("Data overview");
@@ -68,8 +88,11 @@ public class VisualizationStage extends Stage {
         this.initNumberFlowPane();
         this.initLinkLabel();
         this.initCategoryLabel();
-        this.initChartFlowPane();
-        this.initBarChart();
+        this.initBarChartFlowPane();
+        this.initCategoryBarChart();
+        this.initPieChartFlowPane();
+        this.initWeekdayPieChart();
+        this.initHourBarChart();
         this.initSizes();
     }
 
@@ -109,7 +132,7 @@ public class VisualizationStage extends Stage {
         this.flowNumbers.getChildren().add(this.lblCategories);
     }
 
-    private void initChartFlowPane(){
+    private void initBarChartFlowPane(){
         this.flowBarChart = new FlowPane();
         this.flowBarChart.setOrientation(Orientation.HORIZONTAL);
         this.flowBarChart.setHgap(5);
@@ -120,10 +143,22 @@ public class VisualizationStage extends Stage {
         this.flowGeneral.getChildren().add(this.flowBarChart);
     }
 
-    private void initBarChart(){
+    private void initPieChartFlowPane(){
+        this.flowPieChart = new FlowPane();
+        this.flowPieChart.setOrientation(Orientation.HORIZONTAL);
+
+        this.flowPieChart.setHgap(5);
+        this.flowPieChart.setVgap(10);
+        this.flowPieChart.setPadding(new Insets(5, 10, 5, 10));
+        this.flowPieChart.setEffect(this.createShadow());
+
+        this.flowGeneral.getChildren().add(this.flowPieChart);
+    }
+
+    private void initCategoryBarChart(){
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
-        this.bc = new BarChart<>(xAxis,yAxis);
+        this.bcCategory = new BarChart<>(xAxis,yAxis);
 
         XYChart.Series series1 = new XYChart.Series();
 
@@ -133,8 +168,43 @@ public class VisualizationStage extends Stage {
                 .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
 
         series1.setName("Number of links per category");
-        bc.getData().addAll(series1);
-        this.flowBarChart.getChildren().add(bc);
+        bcCategory.getData().addAll(series1);
+        this.flowBarChart.getChildren().add(bcCategory);
+    }
+
+    private void initWeekdayPieChart(){
+        PieChart pieChart = new PieChart();
+        Map<Object, Long> weekDayCount = this.linkHandler.getWeekdayCount();
+
+        ObservableList<PieChart.Data> data =
+                FXCollections.observableArrayList(weekDayCount.entrySet().stream()
+                .map(entry -> {return new PieChart.Data(this.weekdays.get(entry.getKey()), entry.getValue());})
+                .collect(Collectors.toList()));
+
+        pieChart.setData(data);
+        pieChart.setTitle("Weekdays");
+
+        this.flowPieChart.getChildren().add(pieChart);
+
+    }
+
+    private void initHourBarChart(){
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        this.bcHour = new BarChart(xAxis,yAxis);
+
+        XYChart.Series series1 = new XYChart.Series();
+
+        Map<Object, Long> values = this.linkHandler.getHourCount();
+
+        values.entrySet().stream()
+                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey().toString(), stringIntegerEntry.getValue())));
+
+        series1.setName("Hours");
+        this.bcHour.getData().addAll(series1);
+
+        this.flowPieChart.getChildren().add(this.bcHour);
+
     }
 
     private DropShadow createShadow(){
@@ -148,10 +218,14 @@ public class VisualizationStage extends Stage {
     }
 
     private void initSizes(){
+        System.out.println("Scroll pane: " + scrollPane.getWidth());
+        System.out.println("Flow pane: " + flowGeneral.getWidth());
+        this.flowGeneral.setPrefWidth(this.scrollPane.getWidth() - 15);
         this.flowNumbers.setPrefWidth(this.flowGeneral.getWidth()-15);
         this.lblLinks.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
         this.lblCategories.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
         this.flowBarChart.setPrefWidth(this.flowGeneral.getWidth()-15);
-        this.bc.setPrefWidth(this.flowBarChart.getWidth()-15);
+        this.flowPieChart.setPrefWidth(this.flowGeneral.getWidth()-15);
+        this.bcCategory.setPrefWidth(this.flowBarChart.getWidth()-15);
     }
 }

@@ -13,8 +13,7 @@ import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -124,5 +123,47 @@ public class LinkHandlerTest {
         Mockito.when(linkDeletionDBHandler.constructSqlString(link)).thenReturn("delete from link");
         Mockito.doNothing().when(linkDeletionDBHandler).deleteLink(any(), any());
         linkHandler.deleteLink(link);
+    }
+
+    @Test
+    public void getWeekDayCount(){
+        Mockito.when(linkReadDBHandler.getAllLinks(any()))
+                .thenReturn(createListOfLinksWithDifferentCreationDates());
+        Map<Object, Long> weekDayCounts = linkHandler.getWeekdayCount();
+        Long actualCount = weekDayCounts.get(1);
+        assertEquals(2, actualCount.longValue());
+    }
+
+    private List<Link> createListOfLinksWithDifferentCreationDates(){
+        List<Link> links = new ArrayList<>();
+        Link link = createLink("", "www.gp.se", "");
+        link.setCreated(createCreationDate(20, 2, 2022));
+        links.add(link);
+        link = createLink("", "www.spiegel.de", "");
+        link.setCreated(createCreationDate(20, 2, 2022));
+        links.add(link);
+        link = createLink("", "www.kicker.de", "");
+        link.setCreated(createCreationDate(23, 2, 2022));
+        links.add(link);
+        link = createLink("", "www.stackoverflow.blog", "");
+        link.setCreated(createCreationDate(26, 2, 2022));
+        links.add(link);
+
+        return links;
+
+    }
+
+    private Link createLink(String title, String url, String description){
+        return new Link(title, url, description);
+    }
+
+    private Date createCreationDate(int day, int month, int year){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
+
+        return calendar.getTime();
+
     }
 }
