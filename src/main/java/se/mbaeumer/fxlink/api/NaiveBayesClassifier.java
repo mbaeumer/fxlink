@@ -4,6 +4,7 @@ import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.Probability;
+import se.mbaeumer.fxlink.util.LinkSplitter;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class NaiveBayesClassifier {
 
-    private final URLHelper urlHelper;
+    private final LinkSplitter linkSplitter;
     private final LinkReadDBHandler linkReadDBHandler;
     private final LinkHandler linkHandler;
     private CategoryHandler categoryHandler;
@@ -20,8 +21,8 @@ public class NaiveBayesClassifier {
     private List<Link> allLinksWithCategories;
     private List<Category> categories;
 
-    public NaiveBayesClassifier(URLHelper urlHelper, LinkReadDBHandler linkReadDBHandler, LinkHandler linkHandler) {
-        this.urlHelper = urlHelper;
+    public NaiveBayesClassifier(LinkSplitter linkSplitter, LinkReadDBHandler linkReadDBHandler, LinkHandler linkHandler) {
+        this.linkSplitter = linkSplitter;
         this.linkReadDBHandler = linkReadDBHandler;
         this.linkHandler = linkHandler;
 
@@ -49,9 +50,7 @@ public class NaiveBayesClassifier {
     }
 
     private List<String> splitUrl(final Link link){
-        String url = urlHelper.withoutProtocol(link.getURL());
-        url = urlHelper.withoutPrefix(url);
-        String[] urlParts = urlHelper.getUrlParts(url);
+        String[] urlParts = linkSplitter.splitToData(link);
         List<String> words = new ArrayList<>(Arrays.asList(urlParts));
 
         List<String> toExclude = words.stream().filter(key -> "for".equals(key)

@@ -6,17 +6,15 @@ import se.mbaeumer.fxlink.models.CategoryCount;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.Suggestion;
 import se.mbaeumer.fxlink.util.LinkSplitter;
-import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SuggestionHandler {
 
-    private SuggestionDataHandler suggestionDataHandler;
-    private URLHelper urlHelper;
-    private LinkSplitter linkSplitter;
-    private LinkReadDBHandler linkReadDBHandler;
+    private final SuggestionDataHandler suggestionDataHandler;
+    private final LinkSplitter linkSplitter;
+    private final LinkReadDBHandler linkReadDBHandler;
 
     public SuggestionHandler(SuggestionDataHandler suggestionDataHandler, LinkSplitter linkSplitter, LinkReadDBHandler linkReadDBHandler) {
         this.suggestionDataHandler = suggestionDataHandler;

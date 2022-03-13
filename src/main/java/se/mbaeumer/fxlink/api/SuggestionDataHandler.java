@@ -10,8 +10,7 @@ import java.util.stream.Collectors;
 
 public class SuggestionDataHandler {
 
-    private URLHelper urlHelper;
-    private LinkSplitter linkSplitter;
+    private final LinkSplitter linkSplitter;
 
     public SuggestionDataHandler(LinkSplitter linkSplitter) {
         this.linkSplitter = linkSplitter;
