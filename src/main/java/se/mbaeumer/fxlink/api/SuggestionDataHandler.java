@@ -2,6 +2,7 @@ package se.mbaeumer.fxlink.api;
 
 import se.mbaeumer.fxlink.models.CategoryCount;
 import se.mbaeumer.fxlink.models.Link;
+import se.mbaeumer.fxlink.util.LinkSplitter;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
@@ -10,17 +11,16 @@ import java.util.stream.Collectors;
 public class SuggestionDataHandler {
 
     private URLHelper urlHelper;
+    private LinkSplitter linkSplitter;
 
-    public SuggestionDataHandler(URLHelper urlHelper) {
-        this.urlHelper = urlHelper;
+    public SuggestionDataHandler(LinkSplitter linkSplitter) {
+        this.linkSplitter = linkSplitter;
     }
 
     public Map<String, List<CategoryCount>> prepareData(final List<Link> links){
         Map<String, List<CategoryCount>> hash = new HashMap();
         for (Link link : links){
-            String url = urlHelper.withoutProtocol(link.getURL());
-            url = urlHelper.withoutPrefix(url);
-            String[] urlParts = urlHelper.getUrlParts(url);
+            String[] urlParts = linkSplitter.splitToData(link);
             for (String word : urlParts){
                 List<CategoryCount> categoryCounts = hash.get(word);
 

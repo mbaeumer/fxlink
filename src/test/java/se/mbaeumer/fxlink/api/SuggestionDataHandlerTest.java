@@ -4,6 +4,7 @@ import org.junit.Test;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.CategoryCount;
 import se.mbaeumer.fxlink.models.Link;
+import se.mbaeumer.fxlink.util.LinkSplitter;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class SuggestionDataHandlerTest {
 
     @Test
     public void prepareData() {
-        suggestionDataHandler = new SuggestionDataHandler(new URLHelper());
+        suggestionDataHandler = new SuggestionDataHandler(new LinkSplitter(new URLHelper()));
         Map<String, List<CategoryCount>> suggestionMap = suggestionDataHandler.prepareData(createLinkList());
         assertEquals(suggestionMap.keySet().size(), 43);
         System.out.println();

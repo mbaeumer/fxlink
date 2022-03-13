@@ -5,6 +5,7 @@ import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.models.CategoryCount;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.Suggestion;
+import se.mbaeumer.fxlink.util.LinkSplitter;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
@@ -14,11 +15,12 @@ public class SuggestionHandler {
 
     private SuggestionDataHandler suggestionDataHandler;
     private URLHelper urlHelper;
+    private LinkSplitter linkSplitter;
     private LinkReadDBHandler linkReadDBHandler;
 
-    public SuggestionHandler(SuggestionDataHandler suggestionDataHandler, URLHelper urlHelper, LinkReadDBHandler linkReadDBHandler) {
+    public SuggestionHandler(SuggestionDataHandler suggestionDataHandler, LinkSplitter linkSplitter, LinkReadDBHandler linkReadDBHandler) {
         this.suggestionDataHandler = suggestionDataHandler;
-        this.urlHelper = urlHelper;
+        this.linkSplitter = linkSplitter;
         this.linkReadDBHandler = linkReadDBHandler;
     }
 
@@ -34,9 +36,7 @@ public class SuggestionHandler {
 
     public List<Suggestion> createSuggestions(final Map<String, List<CategoryCount>> map, final Link link){
         List<Suggestion> suggestions = new ArrayList<>();
-        String url = urlHelper.withoutProtocol(link.getURL());
-        url = urlHelper.withoutPrefix(url);
-        String[] urlParts = urlHelper.getUrlParts(url);
+        String[] urlParts = linkSplitter.splitToData(link);
 
         for (String word : urlParts){
             List<CategoryCount> categoryCounts = map.get(word.toLowerCase());

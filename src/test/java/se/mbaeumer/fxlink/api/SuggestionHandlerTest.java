@@ -10,6 +10,7 @@ import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.CategoryCount;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.Suggestion;
+import se.mbaeumer.fxlink.util.LinkSplitter;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
@@ -35,7 +36,8 @@ public class SuggestionHandlerTest {
     public void getSuggestions() {
         Link link = new Link("", "https://www.baeldung.com/jackson-kotlin", "");
         //Link link = new Link("", "www.test.com", "");
-        suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper, linkReadDBHandler);
+        LinkSplitter linkSplitter = new LinkSplitter(this.urlHelper);
+        suggestionHandler = new SuggestionHandler(suggestionDataHandler, linkSplitter, linkReadDBHandler);
 
         Map<String, List<CategoryCount>> originalSuggestionMap = createMap();
         List<Link> linksWithCategories = createLinkList();
@@ -53,7 +55,8 @@ public class SuggestionHandlerTest {
     @Test
     public void testCaseInsensitive(){
         Link link = new Link("", "http://www.java2s.com/Code/Java/JavaFX/GridPanewherecolumnstake255025ofitswidth.htm", "");
-        suggestionHandler = new SuggestionHandler(suggestionDataHandler, urlHelper, linkReadDBHandler);
+        LinkSplitter linkSplitter = new LinkSplitter(this.urlHelper);
+        suggestionHandler = new SuggestionHandler(suggestionDataHandler, linkSplitter, linkReadDBHandler);
 
         Map<String, List<CategoryCount>> originalSuggestionMap = createMap();
         List<Link> linksWithCategories = createLinkList();
