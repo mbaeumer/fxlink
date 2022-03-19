@@ -3,7 +3,7 @@ package se.mbaeumer.fxlink.api;
 import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.models.Link;
-import se.mbaeumer.fxlink.util.URLHelper;
+import se.mbaeumer.fxlink.util.LinkSplitter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,21 +11,19 @@ import java.util.stream.Collectors;
 public class WordCountHandler {
 
     private final LinkReadDBHandler linkReadDBHandler;
-    private final URLHelper urlHelper;
+    private final LinkSplitter linkSplitter;
 
-    public WordCountHandler(LinkReadDBHandler linkReadDBHandler, URLHelper urlHelper) {
+    public WordCountHandler(LinkReadDBHandler linkReadDBHandler, LinkSplitter linkSplitter) {
         this.linkReadDBHandler = linkReadDBHandler;
-        this.urlHelper = urlHelper;
+        this.linkSplitter = linkSplitter;
     }
 
-    public void getWordCount(){
+    public Map<String, Integer> getWordCount(){
         // read all links
         List<Link> allLinks = linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
         List<String> wordList = new ArrayList<>();
         for (Link link : allLinks){
-            String url = urlHelper.withoutProtocol(link.getURL());
-            url = urlHelper.withoutPrefix(url);
-            String[] urlParts = urlHelper.getUrlParts(url);
+            String[] urlParts = linkSplitter.splitToData(link);
             wordList.addAll(Arrays.asList(urlParts));
         }
         // create word list
@@ -47,8 +45,14 @@ public class WordCountHandler {
 
         wordCount.keySet().removeAll(toExclude);
 
-        Set set = wordCount.entrySet().stream().filter(e -> e.getValue() > 2).collect(Collectors.toSet());
-        System.out.println();
+        Map<String, Integer> set = wordCount.entrySet()
+                .stream()
+                .filter(e -> e.getValue() > 2)
+                .collect(Collectors.toMap(
+                        e -> e.getKey(),
+                        e -> e.getValue()
+                ));
+        return set;
 
     }
 
