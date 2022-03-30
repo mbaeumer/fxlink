@@ -109,7 +109,6 @@ public class VisualizationStage extends Stage {
         this.initPieChartFlowPane();
         this.initWeekdayPieChart();
         this.initHourBarChart();
-        //this.initSizes();
     }
 
     private void initHandlers(){
@@ -189,7 +188,6 @@ public class VisualizationStage extends Stage {
         }
 
         this.initCategoryBarChart(min);
-        //this.adjustSizes();
     }
 
     private void initPieChartFlowPane(){
@@ -284,8 +282,6 @@ public class VisualizationStage extends Stage {
         return series1;
     }
 
-
-
     private void initWeekdayPieChart(){
         PieChart pieChart = new PieChart();
         Map<Object, Long> weekDayCount = this.linkHandler.getWeekdayCount();
@@ -299,7 +295,6 @@ public class VisualizationStage extends Stage {
         pieChart.setTitle("Weekdays");
 
         this.flowPieChart.getChildren().add(pieChart);
-
     }
 
     private void initHourBarChart(){
@@ -318,7 +313,6 @@ public class VisualizationStage extends Stage {
         this.bcHour.getData().addAll(series1);
 
         this.flowPieChart.getChildren().add(this.bcHour);
-
     }
 
     private DropShadow createShadow(){
@@ -354,28 +348,4 @@ public class VisualizationStage extends Stage {
         System.out.println("Flow barchart pref: " + flowCategoryCount.getPrefWidth());
         System.out.println("barchart category: " + bcCategory.getWidth());
     }
-
-    private void initSizes(){
-        System.out.println("initSizes");
-        System.out.println("Scroll pane: " + scrollPane.getWidth());
-        System.out.println("Flow pane: " + flowGeneral.getWidth());
-        System.out.println("Flow barchart: " + flowCategoryCount.getWidth());
-        System.out.println("Flow barchart pref width: " + flowCategoryCount.getPrefWidth());
-        System.out.println("cmb pref width" + cmbMinCategoryCount.getPrefWidth());
-        System.out.println("barchart: " + bcCategory.getWidth());
-        this.flowNumbers.setPrefWidth(this.flowGeneral.getWidth()-15);
-        this.lblLinks.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
-        this.lblCategories.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
-        this.flowCategoryCount.setPrefWidth(this.flowGeneral.getWidth()-15);
-        this.flowWordCount.setPrefWidth(this.flowGeneral.getWidth()-15);
-        this.flowPieChart.setPrefWidth(this.flowGeneral.getWidth()-15);
-        this.bcCategory.setPrefWidth(this.flowCategoryCount.getWidth()-15);
-        this.bcWordCount.setPrefWidth(this.flowWordCount.getWidth()-15);
-        System.out.println("barchart: " + bcCategory.getWidth());
-        this.cmbMinCategoryCount.setPrefWidth(this.flowCategoryCount.getWidth()-15);
-    }
-
-
-
-
 }
