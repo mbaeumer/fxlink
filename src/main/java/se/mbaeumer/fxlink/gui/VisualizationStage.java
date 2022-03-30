@@ -109,7 +109,7 @@ public class VisualizationStage extends Stage {
         this.initPieChartFlowPane();
         this.initWeekdayPieChart();
         this.initHourBarChart();
-        this.initSizes();
+        //this.initSizes();
     }
 
     private void initHandlers(){
@@ -189,7 +189,7 @@ public class VisualizationStage extends Stage {
         }
 
         this.initCategoryBarChart(min);
-        this.adjustSizes();
+        //this.adjustSizes();
     }
 
     private void initPieChartFlowPane(){
@@ -332,13 +332,9 @@ public class VisualizationStage extends Stage {
     }
 
     private void adjustSizes(){
-        System.out.println("Scroll pane: " + scrollPane.getWidth());
-        System.out.println("Flow pane: " + flowGeneral.getWidth());
-        System.out.println("Flow barchart: " + flowCategoryCount.getWidth());
-        System.out.println("Flow barchart pref: " + flowCategoryCount.getPrefWidth());
-        System.out.println("barchart: " + bcCategory.getWidth());
-        this.flowGeneral.setPrefWidth(this.scrollPane.getWidth() - 15);
-        this.flowNumbers.setPrefWidth(this.flowGeneral.getWidth()-15);
+        logWidth();
+        this.flowGeneral.setPrefWidth(this.scrollPane.getWidth()-15.0);
+        this.flowNumbers.setPrefWidth(this.flowGeneral.getWidth()-15.0);
         this.lblLinks.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
         this.lblCategories.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
         this.flowCategoryCount.setPrefWidth(this.flowGeneral.getWidth()-15);
@@ -347,15 +343,25 @@ public class VisualizationStage extends Stage {
         this.bcCategory.setPrefWidth(this.flowCategoryCount.getWidth()-15);
         this.sliderWordCount.setPrefWidth(this.flowWordCount.getWidth()-15);
         this.bcWordCount.setPrefWidth(this.flowWordCount.getWidth()-15);
-        System.out.println("barchart: " + bcCategory.getWidth());
         this.cmbMinCategoryCount.setPrefWidth(this.flowCategoryCount.getWidth()-15);
     }
 
+    private void logWidth(){
+        System.out.println("Scroll pane: " + scrollPane.getWidth());
+        System.out.println("Flow general pane: " + flowGeneral.getWidth());
+        System.out.println("Flow general pane pref: " + flowGeneral.getPrefWidth());
+        System.out.println("Flow barchart: " + flowCategoryCount.getWidth());
+        System.out.println("Flow barchart pref: " + flowCategoryCount.getPrefWidth());
+        System.out.println("barchart category: " + bcCategory.getWidth());
+    }
+
     private void initSizes(){
+        System.out.println("initSizes");
         System.out.println("Scroll pane: " + scrollPane.getWidth());
         System.out.println("Flow pane: " + flowGeneral.getWidth());
         System.out.println("Flow barchart: " + flowCategoryCount.getWidth());
-        System.out.println("Flow barchart pref: " + flowCategoryCount.getPrefWidth());
+        System.out.println("Flow barchart pref width: " + flowCategoryCount.getPrefWidth());
+        System.out.println("cmb pref width" + cmbMinCategoryCount.getPrefWidth());
         System.out.println("barchart: " + bcCategory.getWidth());
         this.flowNumbers.setPrefWidth(this.flowGeneral.getWidth()-15);
         this.lblLinks.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
