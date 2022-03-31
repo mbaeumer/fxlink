@@ -45,19 +45,16 @@ public class WordCountHandler {
 
         wordCount.keySet().removeAll(toExclude);
 
-        Map<String, Integer> set = wordCount.entrySet()
+        return wordCount.entrySet()
                 .stream()
-                .filter(e -> e.getValue() > 2)
+                .filter(e -> e.getValue() >= 2)
                 .collect(Collectors.toMap(
                         e -> e.getKey(),
                         e -> e.getValue()
                 ));
-        return set;
-
     }
 
     public boolean matchString(final String s){
         return s.matches(".*\\d.*");
     }
-
 }

@@ -1,5 +1,6 @@
 package se.mbaeumer.fxlink.api;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -164,6 +165,45 @@ public class LinkHandlerTest {
         calendar.set(Calendar.YEAR, year);
 
         return calendar.getTime();
+    }
 
+    private List<Link> createListOfLinksWithDifferentTimestamps(){
+        List<Link> links = new ArrayList<>();
+        Link link = createLink("", "www.gp.se", "");
+        link.setLastUpdated(createTime(22, 0));
+        links.add(link);
+        link = createLink("", "www.spiegel.de", "");
+        link.setLastUpdated(createTime(22, 0));
+        links.add(link);
+        link = createLink("", "www.kicker.de", "");
+        link.setLastUpdated(createTime(13, 0));
+        links.add(link);
+        link = createLink("", "www.stackoverflow.blog", "");
+        link.setLastUpdated(createTime(19, 0));
+        links.add(link);
+
+        return links;
+
+    }
+
+
+    private Date createTime(int hour, int min){
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, min);
+
+        return calendar.getTime();
+    }
+
+    @Test
+    public void getHourCount() {
+        Mockito.when(linkReadDBHandler.getAllLinks(any()))
+                .thenReturn(createListOfLinksWithDifferentTimestamps());
+
+        Map<Object, Long> hourCount = linkHandler.getHourCount();
+        Assert.assertEquals(3, hourCount.entrySet().size());
+        Long aLong = hourCount.get(22);
+        Assert.assertEquals(2, aLong.longValue());
     }
 }

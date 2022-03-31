@@ -743,7 +743,7 @@ public class FXLink extends Application{
 	}
 
 	private void createSearchCategoryComboBox(){
-		this.cmbCategoriesSearch = new ComboBox<Category>();
+		this.cmbCategoriesSearch = new ComboBox<>();
 
 		ObservableList<Category> categoryList =
 				FXCollections.observableArrayList(categoryHandler.getCategories());
