@@ -79,6 +79,7 @@ public class FXLink extends Application{
 	private Button btnShowImportHistory;
 	private Button btnClassify;
 	private Button btnExportCsv;
+	private Button btnDeleteAll;
 	private Button btnVisualize;
 	private Button btnImportTextFile;
 	private Button btnShowSearchPane;
@@ -186,6 +187,7 @@ public class FXLink extends Application{
 		this.createExperimentalButton();
 		this.createVisualizationButton();
 		this.createCsvExportButton();
+		this.createDeleteAllButton();
 	}
 	
 	public void createItemLabel(){
@@ -323,6 +325,30 @@ public class FXLink extends Application{
 			csvExportStage.showAndWait();
 		});
 		this.flowFilter.getChildren().add(this.btnExportCsv);
+	}
+
+	private void createDeleteAllButton(){
+		this.btnDeleteAll = new Button("Clear database");
+		this.btnDeleteAll.setOnAction(actionEvent -> {
+			Alert alert = new Alert(Alert.AlertType.WARNING, "This will empty all tables in the database. Continue?", ButtonType.YES, ButtonType.NO);
+			Optional<ButtonType> result = alert.showAndWait();
+
+			if (result.isPresent() && result.get() == ButtonType.YES){
+				try {
+					XMLImportHandler xmlImportHandler = new XMLImportHandler(categoryHandler);
+					xmlImportHandler.truncateDatabase();
+					loadCategoriesForFilter();
+					loadCategoriesForMove();
+					cmbItems.setValue(LINKS);
+					refreshLinkTable();
+				}catch (SQLException ex){
+					Alert alertError = new Alert(Alert.AlertType.ERROR, "An error occurred!", ButtonType.OK);
+					alertError.showAndWait();
+				}
+			}
+		});
+
+		this.flowFilter.getChildren().add(this.btnDeleteAll);
 	}
 
 	private void createActionFlowPane(){
@@ -546,7 +572,7 @@ public class FXLink extends Application{
 		this.cmbMoveToCategory.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
 			@Override
 			public ListCell<Category> call(ListView<Category> p) {
-				final ListCell<Category> cell = new ListCell<Category>(){
+				final ListCell<Category> cell = new ListCell<>(){
 					@Override
 					protected void updateItem(Category t, boolean bln) {
 						super.updateItem(t, bln);
@@ -561,7 +587,7 @@ public class FXLink extends Application{
 			}
 		});
 
-		this.cmbMoveToCategory.setButtonCell(new ListCell<Category>() {
+		this.cmbMoveToCategory.setButtonCell(new ListCell<>() {
 			@Override
 			protected void updateItem(Category t, boolean bln) {
 				super.updateItem(t, bln);
@@ -755,7 +781,7 @@ public class FXLink extends Application{
 		this.cmbCategoriesSearch.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
 			@Override
 			public ListCell<Category> call(ListView<Category> p) {
-				final ListCell<Category> cell = new ListCell<Category>(){
+				final ListCell<Category> cell = new ListCell<>(){
 					@Override
 					protected void updateItem(Category t, boolean bln) {
 						super.updateItem(t, bln);
@@ -770,7 +796,7 @@ public class FXLink extends Application{
 			}
 		});
 
-		this.cmbCategoriesSearch.setButtonCell(new ListCell<Category>() {
+		this.cmbCategoriesSearch.setButtonCell(new ListCell<>() {
 			@Override
 			protected void updateItem(Category t, boolean bln) {
 				super.updateItem(t, bln);
@@ -785,7 +811,6 @@ public class FXLink extends Application{
 		this.cmbCategoriesSearch.getSelectionModel().selectFirst(); //select the first element
 		this.cmbCategoriesSearch.valueProperty().addListener(
 				new ChangeListener<Category>(){
-					@SuppressWarnings("rawtypes")
 					@Override
 					public void changed(ObservableValue ov, Category c1, Category c2){
 						runSearch();
