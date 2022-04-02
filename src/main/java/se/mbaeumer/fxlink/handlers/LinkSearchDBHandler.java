@@ -81,7 +81,7 @@ public class LinkSearchDBHandler {
 		List<Link> links = new ArrayList<>();
 		
 		PreparedStatement stmt = connection.prepareStatement(sql);
-		if (category != null && !ValueConstants.VALUE_ALL.equals(category.getName())) {
+		if (category.getId() != -1 && !ValueConstants.VALUE_ALL.equals(category.getName())) {
 			stmt.setInt(1, category.getId());
 		}
 
