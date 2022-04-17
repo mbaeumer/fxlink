@@ -4,6 +4,7 @@ import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
+import se.mbaeumer.fxlink.util.StopWordHandler;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.io.File;
@@ -18,10 +19,12 @@ public class CsvExportHandler {
 
     private final LinkReadDBHandler linkReadDBHandler;
     private final URLHelper urlHelper;
+    private final StopWordHandler stopWordHandler;
 
-    public CsvExportHandler(LinkReadDBHandler linkReadDBHandler, URLHelper urlHelper) {
+    public CsvExportHandler(LinkReadDBHandler linkReadDBHandler, URLHelper urlHelper, StopWordHandler stopWordHandler) {
         this.linkReadDBHandler = linkReadDBHandler;
         this.urlHelper = urlHelper;
+        this.stopWordHandler = stopWordHandler;
     }
 
     public void getData(final String filename, List<Category> categories){
@@ -59,13 +62,16 @@ public class CsvExportHandler {
         String[] urlParts = urlHelper.getUrlParts(url);
         List<String> words = new ArrayList<>(Arrays.asList(urlParts));
 
+        words = stopWordHandler.removeStopWordsFromList(words);
+
+        /*
         List<String> toExclude = words.stream().filter(key -> "for".equals(key)
                 || key.length() <=1 || "of".equals(key) || "with".equals(key)
                 || "the".equals(key) || "to".equals(key)
                 || "com".equals(key) || "de".equals(key) || key.matches(".*\\d.*")
                 || "html".equals(key) || "htm".equals(key)).collect(Collectors.toList());
         words.removeAll(toExclude);
-
+        */
         return words;
     }
 }

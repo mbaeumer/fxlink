@@ -18,6 +18,7 @@ import se.mbaeumer.fxlink.api.CsvExportHandler;
 import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.SelectableCategory;
+import se.mbaeumer.fxlink.util.StopWordHandler;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.io.File;
@@ -153,7 +154,7 @@ public class CsvExportStage extends Stage {
                     .map(selectableCategory -> mapToCategory(selectableCategory))
                     .collect(Collectors.toList());
             CsvExportHandler csvExportHandler =
-                    new CsvExportHandler(new LinkReadDBHandler(), new URLHelper());
+                    new CsvExportHandler(new LinkReadDBHandler(), new URLHelper(), new StopWordHandler());
             csvExportHandler.getData(path, categories);
 
         }catch (IOException e ) {
