@@ -1,5 +1,7 @@
 package se.mbaeumer.fxlink.util;
 
+import se.mbaeumer.fxlink.models.CategoryCount;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,8 +25,12 @@ public class StopWordHandler {
         return words;
     }
 
-    public Map removeStopWordsFromMap(Map aMap){
+    public Map removeStopWordsFromMap(Map<String, List<CategoryCount>> aMap){
         aMap.keySet().removeAll(STOP_WORDS_SET);
+        Set<String> toExclude = aMap.keySet().stream()
+                .filter(word -> word.matches(".*\\d.*"))
+                .collect(Collectors.toSet());
+        aMap.keySet().removeAll(toExclude);
         return aMap;
     }
 }

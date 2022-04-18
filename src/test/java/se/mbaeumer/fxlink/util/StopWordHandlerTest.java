@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
 public class StopWordHandlerTest {
 
     @Test
@@ -54,5 +52,33 @@ public class StopWordHandlerTest {
         Map actualMap = stopWordHandler.removeStopWordsFromMap(map);
         Assert.assertNull(actualMap.get("of"));
         Assert.assertNotNull(actualMap.get("java"));
+    }
+
+    @Test
+    public void removeNumericStringsFromMap() {
+        Map map = new HashMap(Map.ofEntries(
+                Map.entry("of", 2),
+                Map.entry("java", 5),
+                Map.entry("stackoverflow", 7),
+                Map.entry("the", 4),
+                Map.entry("123", 7)));
+
+        StopWordHandler stopWordHandler = new StopWordHandler();
+        Map actualMap = stopWordHandler.removeStopWordsFromMap(map);
+        Assert.assertNull(actualMap.get("123"));
+    }
+
+    @Test
+    public void removeAlphaNumericStringsFromMap() {
+        Map map = new HashMap(Map.ofEntries(
+                Map.entry("of", 2),
+                Map.entry("java", 5),
+                Map.entry("stackoverflow", 7),
+                Map.entry("the", 4),
+                Map.entry("a123", 7)));
+
+        StopWordHandler stopWordHandler = new StopWordHandler();
+        Map actualMap = stopWordHandler.removeStopWordsFromMap(map);
+        Assert.assertNull(actualMap.get("a123"));
     }
 }

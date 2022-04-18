@@ -5,6 +5,7 @@ import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.Probability;
 import se.mbaeumer.fxlink.util.LinkSplitter;
+import se.mbaeumer.fxlink.util.StopWordHandler;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
@@ -16,15 +17,18 @@ public class NaiveBayesClassifier {
     private final LinkReadDBHandler linkReadDBHandler;
     private final LinkHandler linkHandler;
     private CategoryHandler categoryHandler;
+    private StopWordHandler stopWordHandler;
 
     private List<Link> allLinks;
     private List<Link> allLinksWithCategories;
     private List<Category> categories;
 
-    public NaiveBayesClassifier(LinkSplitter linkSplitter, LinkReadDBHandler linkReadDBHandler, LinkHandler linkHandler) {
+    public NaiveBayesClassifier(LinkSplitter linkSplitter, LinkReadDBHandler linkReadDBHandler, LinkHandler linkHandler,
+                                StopWordHandler stopWordHandler) {
         this.linkSplitter = linkSplitter;
         this.linkReadDBHandler = linkReadDBHandler;
         this.linkHandler = linkHandler;
+        this.stopWordHandler = stopWordHandler;
 
         this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(), new CategoryCreationDBHandler(),
                 new CategoryUpdateDBHandler(), new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
@@ -53,6 +57,9 @@ public class NaiveBayesClassifier {
         String[] urlParts = linkSplitter.splitToData(link);
         List<String> words = new ArrayList<>(Arrays.asList(urlParts));
 
+        /* TODO: Use StopWordHandler here */
+        return stopWordHandler.removeStopWordsFromList(words);
+        /*
         List<String> toExclude = words.stream().filter(key -> "for".equals(key)
                 || key.length() <=1 || "of".equals(key) || "with".equals(key)
                 || "the".equals(key) || "to".equals(key)
@@ -61,6 +68,8 @@ public class NaiveBayesClassifier {
         words.removeAll(toExclude);
 
         return words;
+
+         */
     }
     public Probability calculateCombinedGeneric(final String categoryName, final List<String> words){
         List<Link> linksInCategory = allLinks.stream()

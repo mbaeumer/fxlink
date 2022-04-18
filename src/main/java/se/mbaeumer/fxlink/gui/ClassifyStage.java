@@ -21,6 +21,7 @@ import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.Probability;
 import se.mbaeumer.fxlink.util.LinkSplitter;
+import se.mbaeumer.fxlink.util.StopWordHandler;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
@@ -76,7 +77,8 @@ public class ClassifyStage extends Stage {
     private void initHandlers(){
         this.linkHandler = new LinkHandler(new LinkReadDBHandler(), new LinkTagReadDBHandler(),
                 new LinkCreationDBHandler(), new LinkUpdateDBHandler(), new LinkDeletionDBHandler());
-        this.naiveBayesClassifier = new NaiveBayesClassifier(new LinkSplitter(new URLHelper()), new LinkReadDBHandler(), this.linkHandler);
+        this.naiveBayesClassifier = new NaiveBayesClassifier(new LinkSplitter(new URLHelper()), new LinkReadDBHandler(),
+                this.linkHandler, new StopWordHandler());
     }
 
     private void initData(){

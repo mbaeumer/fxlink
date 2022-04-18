@@ -45,6 +45,7 @@ public class SuggestionDataHandler {
 
     public Map<String, List<CategoryCount>> removeStopWords(final Map<String, List<CategoryCount>> map){
 
+        /* TODO: Use StopWordHandler here */
         Set<String> toExclude = map.keySet().stream()
                 .filter(key -> "for".equals(key) || key.length() <=1 || "of".equals(key) || "with".equals(key)
                         || "com".equals(key) || "de".equals(key) || key.matches("\\d+")
