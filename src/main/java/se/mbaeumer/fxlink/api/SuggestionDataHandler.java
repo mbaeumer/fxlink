@@ -3,6 +3,7 @@ package se.mbaeumer.fxlink.api;
 import se.mbaeumer.fxlink.models.CategoryCount;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.LinkSplitter;
+import se.mbaeumer.fxlink.util.StopWordHandler;
 import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
@@ -11,9 +12,11 @@ import java.util.stream.Collectors;
 public class SuggestionDataHandler {
 
     private final LinkSplitter linkSplitter;
+    private final StopWordHandler stopWordHandler;
 
-    public SuggestionDataHandler(LinkSplitter linkSplitter) {
+    public SuggestionDataHandler(LinkSplitter linkSplitter, StopWordHandler stopWordHandler) {
         this.linkSplitter = linkSplitter;
+        this.stopWordHandler = stopWordHandler;
     }
 
     public Map<String, List<CategoryCount>> prepareData(final List<Link> links){
@@ -46,6 +49,8 @@ public class SuggestionDataHandler {
     public Map<String, List<CategoryCount>> removeStopWords(final Map<String, List<CategoryCount>> map){
 
         /* TODO: Use StopWordHandler here */
+        return stopWordHandler.removeStopWordsFromMap(map);
+        /*
         Set<String> toExclude = map.keySet().stream()
                 .filter(key -> "for".equals(key) || key.length() <=1 || "of".equals(key) || "with".equals(key)
                         || "com".equals(key) || "de".equals(key) || key.matches("\\d+")
@@ -54,6 +59,8 @@ public class SuggestionDataHandler {
         map.keySet().removeAll(toExclude);
 
         return map;
+
+         */
     }
 
     private List<CategoryCount> initList(final String categoryName){

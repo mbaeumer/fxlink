@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.util.LinkSplitter;
+import se.mbaeumer.fxlink.util.StopWordHandler;
 import se.mbaeumer.fxlink.util.URLHelper;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
@@ -459,7 +460,7 @@ public class ImportResultReportStage extends Stage {
 	private void initSuggestions(final Link link){
 		this.flowSuggestions.getChildren().clear();
 		URLHelper urlHelper = new URLHelper();
-		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(new LinkSplitter(urlHelper));
+		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(new LinkSplitter(urlHelper), new StopWordHandler());
 		LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
 		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, new LinkSplitter(urlHelper), linkReadDBHandler);
 		List<Suggestion> suggestions = suggestionHandler.getSuggestions(link);

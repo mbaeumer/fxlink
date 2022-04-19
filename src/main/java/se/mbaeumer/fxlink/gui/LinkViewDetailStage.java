@@ -267,7 +267,7 @@ public class LinkViewDetailStage extends Stage {
 	private List<Suggestion> initSuggestionData(){
 		URLHelper urlHelper = new URLHelper();
 		LinkSplitter linkSplitter = new LinkSplitter(urlHelper);
-		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(linkSplitter);
+		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(linkSplitter, new StopWordHandler());
 		LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
 		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, linkSplitter, linkReadDBHandler);
 		return suggestionHandler.getSuggestions(this.link);
