@@ -4,10 +4,8 @@ import se.mbaeumer.fxlink.models.CategoryCount;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.LinkSplitter;
 import se.mbaeumer.fxlink.util.StopWordHandler;
-import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SuggestionDataHandler {
 
