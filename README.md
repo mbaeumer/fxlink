@@ -29,6 +29,11 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.8.5 - 2022-04-21
+* added basic support for csv export
+* added multiple visualizations/charts
+* added support for truncating the database (for lazy developers)
+* multiple smaller refactorings
 
 ## 0.8.4 - 2022-01-31
 * started with experimental machine learning using Naive Bayes
