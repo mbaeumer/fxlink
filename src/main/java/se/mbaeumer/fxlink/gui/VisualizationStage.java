@@ -7,10 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -18,6 +15,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import se.mbaeumer.fxlink.api.CategoryHandler;
 import se.mbaeumer.fxlink.api.LinkHandler;
 import se.mbaeumer.fxlink.api.WordCountHandler;
@@ -219,8 +217,18 @@ public class VisualizationStage extends Stage {
         filteredValues.entrySet().stream()
                 .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
 
+
+
         series1.setName("Number of links per category");
         bcCategory.getData().addAll(series1);
+
+        for (XYChart.Series<String,Number> serie: bcCategory.getData()){
+            for (XYChart.Data<String, Number> item: serie.getData()){
+                Tooltip tooltip = new Tooltip(item.getXValue() + ":" + item.getYValue());
+                tooltip.setShowDelay(Duration.seconds(1));
+                Tooltip.install(item.getNode(), tooltip);
+            }
+        }
         this.flowCategoryCount.getChildren().add(bcCategory);
     }
 
