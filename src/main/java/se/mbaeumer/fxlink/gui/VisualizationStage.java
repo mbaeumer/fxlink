@@ -255,6 +255,14 @@ public class VisualizationStage extends Stage {
         this.sliderWordCount.valueProperty().addListener((observable, oldValue, newValue) -> {
             XYChart.Series wordCountSeries = this.createWordCountSeries(newValue.intValue());
             this.bcWordCount.getData().setAll(wordCountSeries);
+
+            for (XYChart.Series<String,Number> serie: bcWordCount.getData()){
+                for (XYChart.Data<String, Number> item: serie.getData()){
+                    Tooltip tooltip = new Tooltip(item.getXValue() + ":" + item.getYValue());
+                    tooltip.setShowDelay(Duration.seconds(1));
+                    Tooltip.install(item.getNode(), tooltip);
+                }
+            }
         });
 
         this.flowWordCount.getChildren().add(this.sliderWordCount);
@@ -269,6 +277,9 @@ public class VisualizationStage extends Stage {
         this.bcWordCount = new BarChart<>(xAxis,yAxis);
         this.bcWordCount.getData().clear();
         this.bcWordCount.getData().addAll(createWordCountSeries(minWordCount));
+
+
+
         this.flowWordCount.getChildren().add(bcWordCount);
     }
 
@@ -346,9 +357,11 @@ public class VisualizationStage extends Stage {
         this.sliderWordCount.setPrefWidth(this.flowWordCount.getWidth()-15);
         this.bcWordCount.setPrefWidth(this.flowWordCount.getWidth()-15);
         this.cmbMinCategoryCount.setPrefWidth(this.flowCategoryCount.getWidth()-15);
+        logWidth();
     }
 
     private void logWidth(){
+        System.out.println("---------Resizing-----------");
         System.out.println("Scroll pane: " + scrollPane.getWidth());
         System.out.println("Flow general pane: " + flowGeneral.getWidth());
         System.out.println("Flow general pane pref: " + flowGeneral.getPrefWidth());
