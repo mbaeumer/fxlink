@@ -35,6 +35,7 @@ public class VisualizationStage extends Stage {
     private FlowPane flowCategoryCount;
     private FlowPane flowWordCount;
     private ComboBox<String> cmbMinCategoryCount;
+    private Slider sliderCategoryCount;
     private Label lblLinks;
     private Label lblCategories;
     private BarChart<String,Number> bcCategory;
@@ -99,7 +100,8 @@ public class VisualizationStage extends Stage {
         this.initLinkLabel();
         this.initCategoryLabel();
         this.initCategoryCountFlowPane();
-        this.initComboBox();
+        //this.initComboBox();
+        this.initSlider();
         this.initCategoryBarChart(0);
         this.initWordCountFlowPane();
         this.initWordCountSlider();
@@ -171,6 +173,35 @@ public class VisualizationStage extends Stage {
         this.flowCategoryCount.getChildren().add(this.cmbMinCategoryCount);
     }
 
+    private void initSlider(){
+        this.sliderCategoryCount = new Slider();
+
+        this.sliderCategoryCount.setMin(0);
+        this.sliderCategoryCount.setMax(100);
+        this.sliderCategoryCount.setValue(5);
+        this.sliderCategoryCount.setMajorTickUnit(10);
+        this.sliderCategoryCount.setShowTickLabels(true);
+
+        this.sliderCategoryCount.valueProperty().addListener((observable, oldValue, newValue) -> {
+            XYChart.Series<String, Number> categoryCountSeries = this.getCategoryCountSeries(newValue.intValue());
+
+            this.bcCategory.getData().setAll(categoryCountSeries);
+
+            for (XYChart.Series<String,Number> serie: bcCategory.getData()){
+                for (XYChart.Data<String, Number> item: serie.getData()){
+                    Tooltip tooltip = new Tooltip(item.getXValue() + ":" + item.getYValue());
+                    tooltip.setShowDelay(Duration.seconds(1));
+                    Tooltip.install(item.getNode(), tooltip);
+                }
+            }
+
+        });
+
+        this.flowCategoryCount.getChildren().add(this.sliderCategoryCount);
+
+
+    }
+
     private void handleComboBoxChange(final String value){
         int min = 0;
         if (">5".equals(value)){
@@ -205,21 +236,11 @@ public class VisualizationStage extends Stage {
         this.flowCategoryCount.getChildren().remove(this.bcCategory);
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
+        xAxis.setCenterShape(true);
+        xAxis.setAnimated(false);
         this.bcCategory = new BarChart<>(xAxis,yAxis);
 
-        XYChart.Series<String, Number> series1 = new XYChart.Series();
-
-        Map<String, Long> allCategoryCounts = this.linkHandler.getCategoryCounts();
-        Map<String, Long> filteredValues = allCategoryCounts.entrySet()
-                .stream().filter(entry -> entry.getValue() >= minValue)
-                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-
-        filteredValues.entrySet().stream()
-                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
-
-
-
-        series1.setName("Number of links per category");
+        XYChart.Series<String, Number> series1 = getCategoryCountSeries(minValue);
         bcCategory.getData().addAll(series1);
 
         for (XYChart.Series<String,Number> serie: bcCategory.getData()){
@@ -230,6 +251,21 @@ public class VisualizationStage extends Stage {
             }
         }
         this.flowCategoryCount.getChildren().add(bcCategory);
+    }
+
+    private XYChart.Series<String, Number> getCategoryCountSeries(int minValue) {
+        XYChart.Series<String, Number> series1 = new XYChart.Series();
+
+        Map<String, Long> allCategoryCounts = this.linkHandler.getCategoryCounts();
+        Map<String, Long> filteredValues = allCategoryCounts.entrySet()
+                .stream().filter(entry -> entry.getValue() >= minValue)
+                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+
+        filteredValues.entrySet().stream()
+                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
+
+        series1.setName("Number of links per category");
+        return series1;
     }
 
     private void initWordCountFlowPane(){
@@ -351,12 +387,13 @@ public class VisualizationStage extends Stage {
         this.lblLinks.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
         this.lblCategories.setPrefWidth((this.flowNumbers.getWidth()-20.0)/2.0);
         this.flowCategoryCount.setPrefWidth(this.flowGeneral.getWidth()-15);
+        this.sliderCategoryCount.setPrefWidth(this.flowCategoryCount.getWidth()-15);
         this.flowWordCount.setPrefWidth(this.flowGeneral.getWidth()-15);
         this.flowPieChart.setPrefWidth(this.flowGeneral.getWidth()-15);
         this.bcCategory.setPrefWidth(this.flowCategoryCount.getWidth()-15);
         this.sliderWordCount.setPrefWidth(this.flowWordCount.getWidth()-15);
         this.bcWordCount.setPrefWidth(this.flowWordCount.getWidth()-15);
-        this.cmbMinCategoryCount.setPrefWidth(this.flowCategoryCount.getWidth()-15);
+        //this.cmbMinCategoryCount.setPrefWidth(this.flowCategoryCount.getWidth()-15);
         logWidth();
     }
 
