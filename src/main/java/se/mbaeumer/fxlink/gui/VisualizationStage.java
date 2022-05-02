@@ -207,7 +207,7 @@ public class VisualizationStage extends Stage {
         final NumberAxis yAxis = new NumberAxis();
         this.bcCategory = new BarChart<>(xAxis,yAxis);
 
-        XYChart.Series series1 = new XYChart.Series();
+        XYChart.Series<String, Number> series1 = new XYChart.Series();
 
         Map<String, Long> allCategoryCounts = this.linkHandler.getCategoryCounts();
         Map<String, Long> filteredValues = allCategoryCounts.entrySet()
