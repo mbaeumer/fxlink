@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
@@ -68,6 +69,9 @@ public class LinkViewDetailStage extends Stage {
 	private LinkHandler linkHandler;
 	private CategoryHandler categoryHandler;
 	private TitleHandler titleHandler;
+	private NaiveBayesClassifier naiveBayesClassifier;
+
+	private List<Probability> suggestions;
 
 	public LinkViewDetailStage(Link link){
 		super();
@@ -79,6 +83,8 @@ public class LinkViewDetailStage extends Stage {
 				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
 				new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
 		this.titleHandler = new TitleHandler(new LinkTitleUtilImpl(), new YoutubeCrawler());
+		this.naiveBayesClassifier = new NaiveBayesClassifier(new LinkSplitter(new URLHelper()), new LinkReadDBHandler(),
+				this.linkHandler, new StopWordHandler());
 		
 		this.initScene();
 		this.makeModal();
@@ -242,10 +248,19 @@ public class LinkViewDetailStage extends Stage {
 		this.flowSuggestions = new FlowPane(Orientation.HORIZONTAL);
 		this.flowSuggestions.setPadding(new Insets(5, 5, 0, 5));
 
+		/*
 		List<Suggestion> suggestions = initSuggestionData();
 
 		for (Suggestion suggestion : suggestions){
 			Button button = new Button(suggestion.getCategory());
+			button.setOnAction(this::setSuggestedCategory);
+			this.flowSuggestions.getChildren().add(button);
+		}
+		 */
+		suggestions = initSuggestionDataWithProbabilities();
+
+		for (Probability suggestion : suggestions){
+			Button button = new Button(suggestion.toString());
 			button.setOnAction(this::setSuggestedCategory);
 			this.flowSuggestions.getChildren().add(button);
 		}
@@ -255,7 +270,16 @@ public class LinkViewDetailStage extends Stage {
 
 	private void setSuggestedCategory(ActionEvent actionEvent){
 		try {
-			Category category = categoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
+			String buttonText = ((Button)actionEvent.getSource()).getText();
+			Optional<Probability> probability = suggestions
+					.stream()
+					.filter(s -> s.toString().contains(buttonText))
+					.findFirst();
+			String categoryName = null;
+			if (probability.isPresent()){
+				categoryName = probability.get().getCategoryName();
+			}
+			Category category = categoryHandler.getCategoryByName(categoryName);
 			link.setCategory(category);
 			linkHandler.updateLink(link);
 			setCategory();
@@ -271,6 +295,12 @@ public class LinkViewDetailStage extends Stage {
 		LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
 		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, linkSplitter, linkReadDBHandler);
 		return suggestionHandler.getSuggestions(this.link);
+	}
+
+	private List<Probability> initSuggestionDataWithProbabilities(){
+		List<Probability> originalList = this.naiveBayesClassifier.classify(this.link);
+		int max = originalList.size() < 10 ? originalList.size() : 10;
+		return originalList.subList(0, max);
 	}
 	
 	private void initCreationDate(){
