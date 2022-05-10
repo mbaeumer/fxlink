@@ -105,7 +105,7 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void initScene(){
 		int width = 600;
-		int height = 750;
+		int height = 850;
 		this.scene = new Scene(this.root, width, height, Color.WHITESMOKE);
 		this.setTitle("Link details");
 		this.setScene(this.scene);
@@ -161,6 +161,7 @@ public class LinkViewDetailStage extends Stage {
 		col2.setPercentWidth(80);
 		this.gridData.getColumnConstraints().addAll(col1, col2);
 		this.listAllSelectableTags.prefWidthProperty().set(this.gridData.prefWidthProperty().getValue());
+		this.listAllSelectableTags.setPrefHeight(300);
 	}
 	
 	private void initURL(){
