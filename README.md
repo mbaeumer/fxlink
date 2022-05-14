@@ -29,6 +29,10 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.8.6 - 2022-05-15
+* Changes to use Naive Bayesian Classifier
+* Improved visualisations
+
 ## 0.8.5 - 2022-04-21
 * added basic support for csv export
 * added multiple visualizations/charts
