@@ -7,10 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.input.MouseEvent;
-import se.mbaeumer.fxlink.api.CategoryHandler;
-import se.mbaeumer.fxlink.api.LinkHandler;
-import se.mbaeumer.fxlink.api.SuggestionDataHandler;
-import se.mbaeumer.fxlink.api.SuggestionHandler;
+import se.mbaeumer.fxlink.api.*;
 import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.*;
 import javafx.collections.FXCollections;
@@ -38,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ImportResultReportStage extends Stage {
 	private Scene scene;
@@ -64,7 +62,9 @@ public class ImportResultReportStage extends Stage {
 
 	private LinkHandler linkHandler;
 	private CategoryHandler categoryHandler;
-	
+	private NaiveBayesClassifier naiveBayesClassifier;
+	private List<Probability> probabilities;
+
 	public ImportResultReportStage(ImportResultReport report){
 		super();
 		this.initRootPane();
@@ -75,6 +75,8 @@ public class ImportResultReportStage extends Stage {
 		this.categoryHandler = new CategoryHandler(new CategoryReadDBHandler(),
 				new CategoryCreationDBHandler(), new CategoryUpdateDBHandler(),
 				new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
+		this.naiveBayesClassifier = new NaiveBayesClassifier(new LinkSplitter(new URLHelper()), new LinkReadDBHandler(),
+				this.linkHandler, new StopWordHandler());
 		this.importReport = report;
 		this.initLayout();
 		this.initSizes();
@@ -459,6 +461,7 @@ public class ImportResultReportStage extends Stage {
 
 	private void initSuggestions(final Link link){
 		this.flowSuggestions.getChildren().clear();
+		/*
 		URLHelper urlHelper = new URLHelper();
 		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(new LinkSplitter(urlHelper), new StopWordHandler());
 		LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
@@ -470,7 +473,42 @@ public class ImportResultReportStage extends Stage {
 			button.setOnAction(actionEvent -> setCategory(actionEvent, link));
 			this.flowSuggestions.getChildren().add(button);
 		}
+		*/
+		probabilities = initSuggestionDataWithProbabilities(link);
+
+		for (Probability suggestion : probabilities){
+			Button button = new Button(suggestion.toString());
+			button.setOnAction(actionEvent -> setSuggestedCategory(actionEvent, link));
+			this.flowSuggestions.getChildren().add(button);
+		}
 	}
+
+	private List<Probability> initSuggestionDataWithProbabilities(final Link link){
+		List<Probability> originalList = this.naiveBayesClassifier.classify(link);
+		int max = originalList.size() < 10 ? originalList.size() : 10;
+		return originalList.subList(0, max);
+	}
+
+	private void setSuggestedCategory(ActionEvent actionEvent, Link link){
+		try {
+			String buttonText = ((Button)actionEvent.getSource()).getText();
+			Optional<Probability> probability = probabilities
+					.stream()
+					.filter(s -> s.toString().contains(buttonText))
+					.findFirst();
+			String categoryName = null;
+			if (probability.isPresent()){
+				categoryName = probability.get().getCategoryName();
+			}
+			Category category = categoryHandler.getCategoryByName(categoryName);
+			link.setCategory(category);
+			linkHandler.updateLink(link);
+			//setCategory(actionEvent, link);
+		} catch (SQLException | ParseException throwables) {
+			throwables.printStackTrace();
+		}
+	}
+
 
 	private void setCategory(ActionEvent actionEvent, Link link){
 		try {
