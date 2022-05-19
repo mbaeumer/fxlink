@@ -6,7 +6,6 @@ import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.models.Probability;
 import se.mbaeumer.fxlink.util.LinkSplitter;
 import se.mbaeumer.fxlink.util.StopWordHandler;
-import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,32 +44,20 @@ public class NaiveBayesClassifier {
             probabilities.add(calculateCombinedGeneric(category.getName(), words));
         }
 
-        List<Probability> sorted = probabilities.stream()
+        return probabilities.stream()
                 .filter(probability -> !Double.isNaN(probability.getProbability()))
                 .sorted(Comparator.comparing(Probability::getProbability).reversed())
                 .filter(p -> p.getProbability() > 0.00)
                 .collect(Collectors.toList());
-        return sorted;
     }
 
     private List<String> splitUrl(final Link link){
         String[] urlParts = linkSplitter.splitToData(link);
         List<String> words = new ArrayList<>(Arrays.asList(urlParts));
 
-        /* TODO: Use StopWordHandler here */
         return stopWordHandler.removeStopWordsFromList(words);
-        /*
-        List<String> toExclude = words.stream().filter(key -> "for".equals(key)
-                || key.length() <=1 || "of".equals(key) || "with".equals(key)
-                || "the".equals(key) || "to".equals(key)
-                || "com".equals(key) || "de".equals(key) || key.matches(".*\\d.*")
-                || "html".equals(key) || "htm".equals(key)).collect(Collectors.toList());
-        words.removeAll(toExclude);
-
-        return words;
-
-         */
     }
+
     public Probability calculateCombinedGeneric(final String categoryName, final List<String> words){
         List<Link> linksInCategory = allLinks.stream()
                 .filter(link -> link.getCategory()!=null && categoryName.equals(link.getCategory().getName()))
