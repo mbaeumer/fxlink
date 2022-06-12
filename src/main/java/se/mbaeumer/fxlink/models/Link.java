@@ -46,6 +46,11 @@ public class Link {
 	public boolean isSelected(){return selected.get();}
 	public void setSelected(boolean selected){this.selected.set(selected);}
 
+	protected IntegerProperty followUpRank = new SimpleIntegerProperty(this, "followUpRank");
+	public IntegerProperty followUpRankProperty(){return this.followUpRank;}
+	public int getFollowUpRank(){return this.followUpRank.get();}
+	public void setFollowUpRank(int followUpRank){this.followUpRank.set(followUpRank);}
+
 	public Link(String title, String url, String description){
 		this.title.set(title);
 		this.url.set(url);

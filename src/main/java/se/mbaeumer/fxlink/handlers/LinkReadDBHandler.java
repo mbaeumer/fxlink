@@ -13,7 +13,7 @@ public class LinkReadDBHandler {
 		List<Link> links = new ArrayList<Link>();
 		
 		String sql = "select l.id as linkId, l.title, l.url, l.description as linkDescription, l. created as linkCreated," + 
-		" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, c.id as categoryId, c.name as category," + 
+		" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, l.followuprank, c.id as categoryId, c.name as category," +
 		" c.description as categoryDescription, c.created as categoryCreated, c.lastUpdated as categoryLastUpdated" +
 		" from link l left join category c on c.id = l.categoryId";
 		
@@ -25,6 +25,7 @@ public class LinkReadDBHandler {
 				link.setId(rs.getInt("linkId"));
 				link.setCreated(rs.getTimestamp("linkCreated"));
 				link.setLastUpdated(rs.getTimestamp("linkLastUpdated"));
+				link.setFollowUpRank(rs.getInt("followuprank"));
 				
 				int categoryId = rs.getInt("categoryId");
 				if (categoryId > 0){
@@ -49,7 +50,7 @@ public class LinkReadDBHandler {
 		List<Link> links = new ArrayList<Link>();
 		
 		String sql = "select l.id as linkId, l.url, l.title, l.description as linkDescription, l. created as linkCreated," + 
-		" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, c.id as categoryId, c.name as category," + 
+		" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, l.followuprank, c.id as categoryId, c.name as category," +
 		" c.description as categoryDescription, c.created as categoryCreated, c.lastUpdated as categoryLastUpdated" +
 		" from link l left join category c on c.id = l.categoryId";
 		
@@ -68,6 +69,7 @@ public class LinkReadDBHandler {
 				link.setId(rs.getInt("linkId"));
 				link.setCreated(rs.getTimestamp("linkCreated"));
 				link.setLastUpdated(rs.getTimestamp("linkLastUpdated"));
+				link.setFollowUpRank(rs.getInt("followuprank"));
 				Category category = new Category();
 				category.setId(rs.getInt("categoryId"));
 				category.setName(rs.getString("category"));
@@ -87,7 +89,7 @@ public class LinkReadDBHandler {
 		List<Link> links = new ArrayList<Link>();
 		
 		String sql = "select l.id as linkId, l.title, l.url, l.description as linkDescription, l. created as linkCreated," + 
-		" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, c.id as categoryId, c.name as category," + 
+		" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, l.followuprank, c.id as categoryId, c.name as category," +
 		" c.description as categoryDescription, c.created as categoryCreated, c.lastUpdated as categoryLastUpdated" +
 		" from link l left join category c on c.id = l.categoryId";		
 		sql += " where categoryId is null";
@@ -100,6 +102,7 @@ public class LinkReadDBHandler {
 				link.setId(rs.getInt("linkId"));
 				link.setCreated(rs.getTimestamp("linkCreated"));
 				link.setLastUpdated(rs.getTimestamp("linkLastUpdated"));
+				link.setFollowUpRank(rs.getInt("followuprank"));
 				Category category = new Category();
 				category.setId(rs.getInt("categoryId"));
 				category.setName(rs.getString("category"));
@@ -119,7 +122,7 @@ public class LinkReadDBHandler {
 		List<Link> links = new ArrayList<Link>();
 
 		String sql = "select l.id as linkId, l.title, l.url, l.description as linkDescription, l. created as linkCreated," +
-				" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, c.id as categoryId, c.name as category," +
+				" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, l.followuprank, c.id as categoryId, c.name as category," +
 				" c.description as categoryDescription, c.created as categoryCreated, c.lastUpdated as categoryLastUpdated" +
 				" from link l left join category c on c.id = l.categoryId";
 		sql += " where categoryId is not null";
@@ -132,6 +135,7 @@ public class LinkReadDBHandler {
 				link.setId(rs.getInt("linkId"));
 				link.setCreated(rs.getTimestamp("linkCreated"));
 				link.setLastUpdated(rs.getTimestamp("linkLastUpdated"));
+				link.setFollowUpRank(rs.getInt("followuprank"));
 				Category category = new Category();
 				category.setId(rs.getInt("categoryId"));
 				category.setName(rs.getString("category"));
@@ -151,7 +155,7 @@ public class LinkReadDBHandler {
 		List<Link> links = new ArrayList<Link>();
 		
 		String sql = "select l.id as linkId, l.title, l.url, l.description as linkDescription, l. created as linkCreated," + 
-		" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, c.id as categoryId, c.name as category," + 
+		" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, l.followuprank, c.id as categoryId, c.name as category," +
 		" c.description as categoryDescription, c.created as categoryCreated, c.lastUpdated as categoryLastUpdated" +
 		" from link l left join category c on c.id = l.categoryId";
 		
@@ -163,6 +167,7 @@ public class LinkReadDBHandler {
 				link.setId(rs.getInt("linkId"));
 				link.setCreated(rs.getTimestamp("linkCreated"));
 				link.setLastUpdated(rs.getTimestamp("linkLastUpdated"));
+				link.setFollowUpRank(rs.getInt("followuprank"));
 				int categoryId = rs.getInt("categoryId");
 				if (categoryId > 0){
 					Category category = new Category();

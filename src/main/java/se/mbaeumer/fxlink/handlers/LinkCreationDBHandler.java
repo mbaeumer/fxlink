@@ -9,7 +9,8 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public class LinkCreationDBHandler {
-	public static final String BASE_INSERT = "INSERT INTO Link VALUES(DEFAULT, TITLE_PLACEHOLDER, URL_PLACEHOLDER, DESCRIPTION_PLACEHOLDER, ";
+	public static final String BASE_INSERT = "INSERT INTO Link VALUES(DEFAULT, TITLE_PLACEHOLDER, URL_PLACEHOLDER, " +
+			"DESCRIPTION_PLACEHOLDER, RANK_PLACEHOLDER, ";
 	public static final String DEFAULT_CATEGORY = "DEFAULT, ";
 	public static final String CATEGORY_SET = "CATEGORY_PLACEHOLDER, ";
 	public static final String QUERY_PART_DATE = "DEFAULT, DATE_PLACEHOLDER)";
@@ -21,9 +22,15 @@ public class LinkCreationDBHandler {
 			return null;
 		}
 
+		String rankValue = Integer.toString(link.getFollowUpRank());
+		if (link.getFollowUpRank() <= 0){
+			rankValue = "DEFAULT";
+		}
+
 		sql = sql.replaceFirst(Pattern.quote("TITLE_PLACEHOLDER"), "'" + link.getTitle() + "'");
 		sql = sql.replaceFirst(Pattern.quote("URL_PLACEHOLDER"), "'" + link.getURL() + "'");
 		sql = sql.replaceFirst(Pattern.quote("DESCRIPTION_PLACEHOLDER"), "'" + link.getDescription() + "'");
+		sql = sql.replaceFirst(Pattern.quote("RANK_PLACEHOLDER"), rankValue);
 
 		if (isCategorySet(link)){
 			sql += CATEGORY_SET;

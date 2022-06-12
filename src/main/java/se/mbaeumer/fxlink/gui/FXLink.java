@@ -1000,6 +1000,9 @@ public class FXLink extends Application{
 			}
 		});
 
+		TableColumn followUpRankCol = new TableColumn("Rank");
+		followUpRankCol.setCellValueFactory(new PropertyValueFactory("followUpRank"));
+
 		// create the created column
 		TableColumn createdCol = new TableColumn("Created");
 		createdCol.setCellValueFactory(new PropertyValueFactory("created"));
@@ -1028,16 +1031,27 @@ public class FXLink extends Application{
 					   });
 
 		// add all columns to the table view
-		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, categoryCol, createdCol, lastUpdatedCol);
+		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, followUpRankCol, categoryCol, createdCol, lastUpdatedCol);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	private void setLinkTableLayout(){
+		this.tblLinks.getColumns().get(0).setPrefWidth((this.tblLinks.getPrefWidth()*10)/100);
+		this.tblLinks.getColumns().get(1).setPrefWidth((this.tblLinks.getPrefWidth()*15)/100);
+		this.tblLinks.getColumns().get(2).setPrefWidth((this.tblLinks.getPrefWidth()*15)/100);
+		this.tblLinks.getColumns().get(3).setPrefWidth((this.tblLinks.getPrefWidth()*15)/100);
+		this.tblLinks.getColumns().get(4).setPrefWidth((this.tblLinks.getPrefWidth()*10)/100);
+		this.tblLinks.getColumns().get(5).setPrefWidth((this.tblLinks.getPrefWidth()*15)/100);
+		this.tblLinks.getColumns().get(6).setPrefWidth((this.tblLinks.getPrefWidth()*10)/100);
+		this.tblLinks.getColumns().get(7).setPrefWidth((this.tblLinks.getPrefWidth()*10)/100);
+
+		/*
 		for (Object o : this.tblLinks.getColumns()){
 			TableColumn tc = (TableColumn) o;
 			tc.setPrefWidth((this.tblLinks.getPrefWidth()*15)/100);
 		}
 		this.tblLinks.getColumns().get(0).setPrefWidth((this.tblLinks.getPrefWidth()*10)/100);
+		 */
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
