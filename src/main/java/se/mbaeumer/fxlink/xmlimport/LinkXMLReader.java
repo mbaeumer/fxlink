@@ -96,7 +96,8 @@ public class LinkXMLReader {
 					String description = startElement.getAttributeByName(
 							new QName("description")).getValue();
 					Link link = new Link(title, url, description);
-					
+					link.setFollowUpRank(getStringValue(startElement));
+
 					link.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
 	
@@ -212,5 +213,17 @@ public class LinkXMLReader {
 
 	public List<ImportItem> getImportItems() {
 		return importItems;
+	}
+
+	private int getStringValue(final StartElement startElement){
+		int attributeValue;
+		try {
+			String stringValue = startElement.getAttributeByName(
+					new QName("followUpRank")).getValue();
+			attributeValue = Integer.parseInt(stringValue);
+		}catch (NullPointerException | NumberFormatException ex) {
+			attributeValue = -1;
+		}
+		return attributeValue;
 	}
 }

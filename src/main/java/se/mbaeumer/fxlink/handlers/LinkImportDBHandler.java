@@ -16,7 +16,7 @@ public class LinkImportDBHandler {
 		if (link.getCategory() != null){
 			categoryId = " ?,";
 		}
-		sql = sql + categoryId + " ?, ?) ";
+		sql = sql + categoryId + " ?, ?, ?) ";
 		
 		int linkId = -1;
 		
@@ -25,19 +25,24 @@ public class LinkImportDBHandler {
 		stmt.setString(2, link.getTitle());
 		stmt.setString(3, link.getURL());
 		stmt.setString(4, link.getDescription());
-		
+
 		int parameterIndex = 5;
 		if (link.getCategory() != null){
+			int categoryid = link.getCategory().getId();
 			stmt.setInt(parameterIndex, link.getCategory().getId());
 			parameterIndex++;
 		}
+
 		
 		// created and lastUpdated
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp tsCreated = Timestamp.valueOf(df.format(link.getCreated()));
 		stmt.setTimestamp(parameterIndex, tsCreated);
+		parameterIndex++;
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(link.getLastUpdated()));
-		stmt.setTimestamp(parameterIndex + 1 , tsLastUpdated);
+		stmt.setTimestamp(parameterIndex, tsLastUpdated);
+		parameterIndex++;
+		stmt.setInt(parameterIndex, link.getFollowUpRank());
 		stmt.executeUpdate();
 		ResultSet rs = stmt.getGeneratedKeys();
 		
