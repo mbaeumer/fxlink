@@ -219,6 +219,9 @@ public class LinkXMLWriter {
 		
 		attribute = this.xmlEventFactory.createAttribute("lastUpdated", link.getLastUpdated().toString());
 		this.xmlEventWriter.add(attribute);
+
+		attribute = this.xmlEventFactory.createAttribute("followUpRank", Integer.valueOf(link.getFollowUpRank()).toString());
+		this.xmlEventWriter.add(attribute);
 	}
 	
 	private void writeTags() throws XMLStreamException {
