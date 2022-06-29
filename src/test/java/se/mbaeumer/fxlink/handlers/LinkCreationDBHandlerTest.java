@@ -31,8 +31,8 @@ public class LinkCreationDBHandlerTest extends TestCase {
     @Test
     public void testConstructSqlStringWithoutCategory(){
         Link link = createLinkWithoutCategory();
-        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "')";
+        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT)";
         String actual = linkCreationDBHandler.constructSqlString(link);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
     }
@@ -43,8 +43,8 @@ public class LinkCreationDBHandlerTest extends TestCase {
         link.setURL("https://www.youtube.com/watch?v=HZyRQ8Uhhmk");
         link.setTitle("Some youtube link");
         link.setDescription("Some youtube link");
-        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Some youtube link', 'https://www.youtube.com/watch?v=HZyRQ8Uhhmk', 'Some youtube link', DEFAULT, DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "')";
+        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Some youtube link', 'https://www.youtube.com/watch?v=HZyRQ8Uhhmk', 'Some youtube link', DEFAULT, DEFAULT,";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT)";
         String actual = linkCreationDBHandler.constructSqlString(link);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
     }
@@ -53,8 +53,8 @@ public class LinkCreationDBHandlerTest extends TestCase {
     public void testConstructSqlStringWithCategory(){
         Link link = createLinkWithoutCategory();
         link.setCategory(createSportsCategory());
-        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, 1, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "')";
+        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', 1, DEFAULT,";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT)";
         String actual = linkCreationDBHandler.constructSqlString(link);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
     }
@@ -63,8 +63,8 @@ public class LinkCreationDBHandlerTest extends TestCase {
     public void testConstructSqlStringWhenCategoryIsNA(){
         Link link = createLinkWithoutCategory();
         link.setCategory(createCategoryWithNA());
-        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "')";
+        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT)";
         String actual = linkCreationDBHandler.constructSqlString(link);
         assertTrue("actual: " + actual, actual.equalsIgnoreCase(expected));
     }
@@ -74,8 +74,8 @@ public class LinkCreationDBHandlerTest extends TestCase {
         Link link = createLinkWithoutCategory();
         link.setFollowUpRank(5);
         link.setCategory(createCategoryWithNameAll());
-        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', 5, DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "')";
+        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
+        expected += " '" + link.getLastUpdated() + "', 5)";
         String actual = linkCreationDBHandler.constructSqlString(link);
         System.out.println("expected: " + expected);
         System.out.println("actual:   " + actual);
@@ -87,8 +87,8 @@ public class LinkCreationDBHandlerTest extends TestCase {
         Link link = createLinkWithoutCategory();
         link.setFollowUpRank(-1);
         link.setCategory(createCategoryWithNameAll());
-        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "')";
+        String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT)";
         String actual = linkCreationDBHandler.constructSqlString(link);
         System.out.println("expected: " + expected);
         System.out.println("actual:   " + actual);

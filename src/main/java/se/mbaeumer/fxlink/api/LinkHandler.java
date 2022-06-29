@@ -61,6 +61,7 @@ public class LinkHandler {
 		Link link = new Link(ValueConstants.VALUE_NEW, ValueConstants.VALUE_NEW, ValueConstants.VALUE_NEW);
 		link.setId(-1);
 		link.setCategory(null);
+		link.setFollowUpRank(-1);
 		return link;
 	}
 	

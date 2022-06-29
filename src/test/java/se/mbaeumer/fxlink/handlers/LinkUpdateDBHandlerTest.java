@@ -31,9 +31,11 @@ public class LinkUpdateDBHandlerTest extends TestCase {
     @Test
     public void testConstructSqlStringWithCategory(){
         Link link = createLink();
-        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine',";
+        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1,";
         expected += "categoryId=5,lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
         String actual = linkUpdateDBHandler.constructSqlString(link);
+        System.out.println(expected);
+        System.out.println(actual);
         assertTrue("The string values do not match", actual.equalsIgnoreCase(expected));
     }
 
@@ -62,9 +64,11 @@ public class LinkUpdateDBHandlerTest extends TestCase {
     public void testConstructSqlStringWithoutCategory(){
         Link link = createLink();
         link.setCategory(null);
-        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine',categoryId=null,";
+        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1,categoryId=null,";
         expected += "lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
         String actual = linkUpdateDBHandler.constructSqlString(link);
+        System.out.println(expected);
+        System.out.println(actual);
         assertTrue("The string values do not match", actual.equalsIgnoreCase(expected));
     }
 
@@ -73,6 +77,7 @@ public class LinkUpdateDBHandlerTest extends TestCase {
         link.setId(1);
         link.setCategory(createCategory());
         link.setLastUpdated(createTimestamp());
+        link.setFollowUpRank(1);
 
         return link;
     }

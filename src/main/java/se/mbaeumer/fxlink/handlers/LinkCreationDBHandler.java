@@ -10,10 +10,10 @@ import java.util.regex.Pattern;
 
 public class LinkCreationDBHandler {
 	public static final String BASE_INSERT = "INSERT INTO Link VALUES(DEFAULT, TITLE_PLACEHOLDER, URL_PLACEHOLDER, " +
-			"DESCRIPTION_PLACEHOLDER, RANK_PLACEHOLDER, ";
+			"DESCRIPTION_PLACEHOLDER, ";
 	public static final String DEFAULT_CATEGORY = "DEFAULT, ";
 	public static final String CATEGORY_SET = "CATEGORY_PLACEHOLDER, ";
-	public static final String QUERY_PART_DATE = "DEFAULT, DATE_PLACEHOLDER)";
+	public static final String QUERY_PART_DATE = "DEFAULT, DATE_PLACEHOLDER, RANK_PLACEHOLDER)";
 
 	public String constructSqlString(Link link){
 		String sql = BASE_INSERT;
@@ -30,7 +30,7 @@ public class LinkCreationDBHandler {
 		sql = sql.replaceFirst(Pattern.quote("TITLE_PLACEHOLDER"), "'" + link.getTitle() + "'");
 		sql = sql.replaceFirst(Pattern.quote("URL_PLACEHOLDER"), "'" + link.getURL() + "'");
 		sql = sql.replaceFirst(Pattern.quote("DESCRIPTION_PLACEHOLDER"), "'" + link.getDescription() + "'");
-		sql = sql.replaceFirst(Pattern.quote("RANK_PLACEHOLDER"), rankValue);
+
 
 		if (isCategorySet(link)){
 			sql += CATEGORY_SET;
@@ -44,6 +44,7 @@ public class LinkCreationDBHandler {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
 		sql = sql.replaceFirst(Pattern.quote("DATE_PLACEHOLDER"), "'" + tsLastUpdated + "'");
+		sql = sql.replaceFirst(Pattern.quote("RANK_PLACEHOLDER"), rankValue);
 
 		return sql;
 	}
