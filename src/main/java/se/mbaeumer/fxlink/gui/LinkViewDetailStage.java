@@ -1,5 +1,6 @@
 package se.mbaeumer.fxlink.gui;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -48,6 +49,8 @@ public class LinkViewDetailStage extends Stage {
 	private TextArea taDescription;
 	private Label lblCategories = new Label("Categories");
 	private ComboBox<Category> cmbCategories;
+	private Label lblRank = new Label("Rank");
+	private NumberSpinner ntRank;
 	private Label lblSuggestions = new Label("Suggestions");
 	private FlowPane flowSuggestions;
 	private Label lblCreated = new Label("Created");
@@ -70,6 +73,7 @@ public class LinkViewDetailStage extends Stage {
 	private CategoryHandler categoryHandler;
 	private TitleHandler titleHandler;
 	private NaiveBayesClassifier naiveBayesClassifier;
+	private FollowUpRankHandler followUpRankHandler;
 
 	private List<Probability> suggestions;
 
@@ -85,6 +89,7 @@ public class LinkViewDetailStage extends Stage {
 		this.titleHandler = new TitleHandler(new LinkTitleUtilImpl(), new YoutubeCrawler());
 		this.naiveBayesClassifier = new NaiveBayesClassifier(new LinkSplitter(new URLHelper()), new LinkReadDBHandler(),
 				this.linkHandler, new StopWordHandler());
+		this.followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler());
 		
 		this.initScene();
 		this.makeModal();
@@ -147,6 +152,7 @@ public class LinkViewDetailStage extends Stage {
 		this.initTitle();
 		this.initDescription();
 		this.initCategory();
+		this.initRank();
 		this.initSuggestions();
 		this.initCreationDate();
 		this.initLastUpdated();
@@ -230,6 +236,14 @@ public class LinkViewDetailStage extends Stage {
 		this.gridData.add(this.cmbCategories, 1,3);		
 	}
 
+	private void initRank(){
+		this.gridData.add(this.lblRank, 0, 4);
+
+		this.ntRank = new NumberSpinner();
+		this.ntRank.setNumber(BigDecimal.valueOf(this.link.getFollowUpRank()));
+		this.gridData.add(this.ntRank, 1,4);
+	}
+
 	private void setCategory() {
 		int index = 0;
 		if (this.link.getCategory() != null){
@@ -244,7 +258,7 @@ public class LinkViewDetailStage extends Stage {
 	}
 
 	private void initSuggestions(){
-		this.gridData.add(this.lblSuggestions, 0, 4);
+		this.gridData.add(this.lblSuggestions, 0, 5);
 
 		this.flowSuggestions = new FlowPane(Orientation.HORIZONTAL);
 		this.flowSuggestions.setPadding(new Insets(5, 5, 0, 5));
@@ -266,7 +280,7 @@ public class LinkViewDetailStage extends Stage {
 			this.flowSuggestions.getChildren().add(button);
 		}
 
-		this.gridData.add(this.flowSuggestions, 1, 4);
+		this.gridData.add(this.flowSuggestions, 1, 5);
 	}
 
 	private void setSuggestedCategory(ActionEvent actionEvent){
@@ -305,17 +319,17 @@ public class LinkViewDetailStage extends Stage {
 	}
 	
 	private void initCreationDate(){
-		this.gridData.add(this.lblCreated, 0, 5);
+		this.gridData.add(this.lblCreated, 0, 6);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		this.lblCreatedDate = new Label(df.format(this.link.getCreated()));
-		this.gridData.add(this.lblCreatedDate, 1, 5);
+		this.gridData.add(this.lblCreatedDate, 1, 6);
 	}
 	
 	private void initLastUpdated(){
-		this.gridData.add(this.lblLastUpdated, 0, 6);
+		this.gridData.add(this.lblLastUpdated, 0, 7);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		this.lblLastUpdatedDate = new Label(df.format(this.link.getLastUpdated()));
-		this.gridData.add(this.lblLastUpdatedDate, 1, 6);
+		this.gridData.add(this.lblLastUpdatedDate, 1, 7);
 	}
 	
 	private void initTagging(){
@@ -470,12 +484,17 @@ public class LinkViewDetailStage extends Stage {
 		Link updatedLink = new Link(this.txtTitle.getText(), this.txtURL.getText(), this.taDescription.getText());
 		updatedLink.setCreated(this.link.getCreated());		
 		updatedLink.setId(this.link.getId());
+		updatedLink.setFollowUpRank(this.ntRank.getNumber().intValue());
 
 		setCategory(updatedLink);
 		if (this.link.getId() <= 0) {
+			//updatedLink.setFollowUpRank(-1);
 			linkHandler.createLink(updatedLink);
+			followUpRankHandler.updateRanks(updatedLink, -1);
 		}else {
 			linkHandler.updateLink(updatedLink);
+			followUpRankHandler.updateRanks(updatedLink, link.getFollowUpRank());
+
 		}
 		return true;
 	}
