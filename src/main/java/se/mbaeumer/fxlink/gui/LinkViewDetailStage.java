@@ -89,7 +89,7 @@ public class LinkViewDetailStage extends Stage {
 		this.titleHandler = new TitleHandler(new LinkTitleUtilImpl(), new YoutubeCrawler());
 		this.naiveBayesClassifier = new NaiveBayesClassifier(new LinkSplitter(new URLHelper()), new LinkReadDBHandler(),
 				this.linkHandler, new StopWordHandler());
-		this.followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler());
+		this.followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), this.link.getFollowUpRank());
 		
 		this.initScene();
 		this.makeModal();
@@ -239,7 +239,7 @@ public class LinkViewDetailStage extends Stage {
 	private void initRank(){
 		this.gridData.add(this.lblRank, 0, 4);
 
-		this.ntRank = new NumberSpinner();
+		this.ntRank = new NumberSpinner(this.followUpRankHandler.getHighestRank(), this.followUpRankHandler.getLowestRank());
 		this.ntRank.setNumber(BigDecimal.valueOf(this.link.getFollowUpRank()));
 		this.gridData.add(this.ntRank, 1,4);
 	}

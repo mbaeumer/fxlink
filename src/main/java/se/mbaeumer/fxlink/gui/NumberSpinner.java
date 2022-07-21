@@ -34,9 +34,13 @@ public class NumberSpinner extends HBox {
     private final Button decrementButton;
     private final NumberBinding buttonHeight;
     private final NumberBinding spacing;
+    private int highestRank;
+    private int lowestRank;
 
-    public NumberSpinner() {
+    public NumberSpinner(int highestRank, int lowestRank) {
         this(BigDecimal.ZERO, BigDecimal.ONE);
+        this.highestRank = highestRank;
+        this.lowestRank = lowestRank;
     }
 
     public NumberSpinner(BigDecimal value, BigDecimal stepWidth) {
@@ -147,9 +151,12 @@ public class NumberSpinner extends HBox {
      * increment number value by stepWidth
      */
     private void increment() {
+
         BigDecimal value = numberField.getNumber();
-        value = value.add(stepWitdhProperty.get());
-        numberField.setNumber(value);
+        if (value.intValue() < lowestRank) {
+            value = value.add(stepWitdhProperty.get());
+            numberField.setNumber(value);
+        }
     }
 
     /**

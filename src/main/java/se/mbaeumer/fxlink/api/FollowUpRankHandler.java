@@ -15,11 +15,11 @@ public class FollowUpRankHandler {
     private int highestRank;
     List<Link> linksOrderedByRank;
 
-    public FollowUpRankHandler(LinkReadDBHandler linkReadDBHandler, LinkUpdateDBHandler linkUpdateDBHandler) {
+    public FollowUpRankHandler(LinkReadDBHandler linkReadDBHandler, LinkUpdateDBHandler linkUpdateDBHandler, int currentRank) {
         this.linkReadDBHandler = linkReadDBHandler;
         this.linkUpdateDBHandler = linkUpdateDBHandler;
         try {
-            this.init();
+            this.init(currentRank);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,14 +37,14 @@ public class FollowUpRankHandler {
         return linksOrderedByRank;
     }
 
-    public void init() throws SQLException {
+    public void init(int currentRank) throws SQLException {
         linksOrderedByRank = linkReadDBHandler.getLinksOrderedByRank(GenericDBHandler.getInstance());
         highestRank = 1;
-        if (linksOrderedByRank.size() == 0) {
-            lowestRank = 1;
-        }else{
+        lowestRank = linksOrderedByRank.size();
+        if (currentRank == -1) {
             lowestRank = linksOrderedByRank.size() + 1;
         }
+
     }
 
     public void updateRanks(final Link link, final int oldRank){
