@@ -1,8 +1,6 @@
 package se.mbaeumer.fxlink.api;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -16,9 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.w
 
 @RunWith(MockitoJUnitRunner.class)
 public class FollowUpRankHandlerTest {
@@ -27,11 +23,6 @@ public class FollowUpRankHandlerTest {
     private LinkReadDBHandler linkReadDBHandler;
     @Mock
     private LinkUpdateDBHandler linkUpdateDBHandler;
-
-    @Before
-    public void setUp(){
-
-    }
 
     @Test
     public void initRanksWhenNoLinkRanked() throws SQLException {
@@ -45,7 +36,6 @@ public class FollowUpRankHandlerTest {
     public void initRanksWhenTwoLinksRankedCurrentLinkNotRanked() throws SQLException {
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
         followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
-        // TODO: Create test data for the mocked method
 
         Assert.assertEquals(1, followUpRankHandler.getHighestRank());
         Assert.assertEquals(3, followUpRankHandler.getLowestRank());
@@ -62,16 +52,14 @@ public class FollowUpRankHandlerTest {
     private List<Link> createRankedLinks(){
         List<Link> links = new ArrayList<>();
 
-        Link first = new Link("test", "www.test1.com", "");
-        first.setFollowUpRank(1);
-        links.add(first);
+        Link link = new Link("test", "www.test1.com", "");
+        link.setFollowUpRank(1);
+        links.add(link);
 
-        first = new Link("test2", "www.test2.com", "");
-        first.setFollowUpRank(2);
-        links.add(first);
+        link = new Link("test2", "www.test2.com", "");
+        link.setFollowUpRank(2);
+        links.add(link);
 
         return links;
     }
-
-
 }
