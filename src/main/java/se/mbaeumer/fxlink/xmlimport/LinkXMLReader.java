@@ -62,29 +62,19 @@ public class LinkXMLReader {
 				if (CATEGORIES.equals(startElement.getName().getLocalPart())) {
 					this.categories = new ArrayList();
 				}else if (CATEGORY.equals(startElement.getName().getLocalPart())) {
-					Category c = new Category();
-					c.setId(Integer.parseInt(startElement.getAttributeByName(
+					Category category = new Category();
+					category.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
-					c.setName(startElement.getAttributeByName(
+					category.setName(startElement.getAttributeByName(
 							new QName("name")).getValue());
-					c.setDescription(startElement.getAttributeByName(
+					category.setDescription(startElement.getAttributeByName(
 							new QName("description")).getValue());
 
-					// TODO: Use constants instead of hard-coded strings
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					Date date;
+					DateInfo dateInfo = extractDateInfo(startElement);
+					category.setCreated(dateInfo.getCreated());
+					category.setLastUpdated(dateInfo.getLastUpdated());
 
-					try {
-						date = df.parse(startElement.getAttributeByName(
-								new QName("created")).getValue());
-						c.setCreated(date);
-						date = df.parse(startElement.getAttributeByName(
-								new QName("lastUpdated")).getValue());
-						c.setLastUpdated(date);
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-					this.categories.add(c);
+					this.categories.add(category);
 
 				}else if (LINKS.equals(startElement.getName().getLocalPart())) {
 					this.links = new ArrayList();
@@ -100,21 +90,10 @@ public class LinkXMLReader {
 
 					link.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
-	
-					// TODO: Use constants instead of hard-coded strings
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					Date date;
 
-					try {
-						date = df.parse(startElement.getAttributeByName(
-								new QName("created")).getValue());
-						link.setCreated(date);
-						date = df.parse(startElement.getAttributeByName(
-								new QName("lastUpdated")).getValue());
-						link.setLastUpdated(date);
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
+					DateInfo dateInfo = new DateInfo();
+					link.setCreated(dateInfo.getCreated());
+					link.setLastUpdated(dateInfo.getLastUpdated());
 					
 					Attribute attribute = startElement.getAttributeByName(
 							new QName("categoryid"));
@@ -144,20 +123,9 @@ public class LinkXMLReader {
 					tag.setDescription(startElement.getAttributeByName(
 							new QName("description")).getValue());
 
-					// TODO: Use constants instead of hard-coded strings
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					Date date;
-
-					try {
-						date = df.parse(startElement.getAttributeByName(
-								new QName("created")).getValue());
-						tag.setCreated(date);
-						date = df.parse(startElement.getAttributeByName(
-								new QName("lastUpdated")).getValue());
-						tag.setLastUpdated(date);
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
+					DateInfo dateInfo = extractDateInfo(startElement);
+					tag.setCreated(dateInfo.getCreated());
+					tag.setLastUpdated(dateInfo.getLastUpdated());
 					this.tags.add(tag);
 				}else if (LINKTAGS.equals(startElement.getName().getLocalPart())) {
 					this.linkTags = new ArrayList();
@@ -193,6 +161,22 @@ public class LinkXMLReader {
 
 			}
 		}
+	}
+
+	public DateInfo extractDateInfo(StartElement startElement){
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		DateInfo dateInfo = new DateInfo();
+
+		try {
+			dateInfo.setCreated(df.parse(startElement.getAttributeByName(
+					new QName("created")).getValue()));
+			dateInfo.setLastUpdated(df.parse(startElement.getAttributeByName(
+					new QName("lastUpdated")).getValue()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return dateInfo;
 	}
 
 	public List<Category> getCategories() {
