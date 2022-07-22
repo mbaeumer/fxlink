@@ -86,9 +86,9 @@ public class LinkXMLReader {
 					}
 					this.categories.add(c);
 
-				}else if (startElement.getName().getLocalPart() == (LINKS)) {
+				}else if (LINKS.equals(startElement.getName().getLocalPart())) {
 					this.links = new ArrayList();
-				}else if (startElement.getName().getLocalPart() == (LINK)) {
+				}else if (LINK.equals(startElement.getName().getLocalPart())) {
 					String title = startElement.getAttributeByName(
 							new QName("title")).getValue();
 					String url = startElement.getAttributeByName(
