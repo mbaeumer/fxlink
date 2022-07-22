@@ -59,9 +59,9 @@ public class LinkXMLReader {
 			XMLEvent event = this.xmlEventReader.nextEvent();
 			if (event.isStartElement()) {
 				StartElement startElement = event.asStartElement();
-				if (startElement.getName().getLocalPart() == (CATEGORIES)) {
-					this.categories = new ArrayList<Category>();
-				}else if (startElement.getName().getLocalPart() == (CATEGORY)) {
+				if (CATEGORIES.equals(startElement.getName().getLocalPart())) {
+					this.categories = new ArrayList();
+				}else if (CATEGORY.equals(startElement.getName().getLocalPart())) {
 					Category c = new Category();
 					c.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
@@ -72,7 +72,7 @@ public class LinkXMLReader {
 
 					// TODO: Use constants instead of hard-coded strings
 					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					Date date = new Date();
+					Date date;
 
 					try {
 						date = df.parse(startElement.getAttributeByName(
@@ -87,7 +87,7 @@ public class LinkXMLReader {
 					this.categories.add(c);
 
 				}else if (startElement.getName().getLocalPart() == (LINKS)) {
-					this.links = new ArrayList<Link>();
+					this.links = new ArrayList();
 				}else if (startElement.getName().getLocalPart() == (LINK)) {
 					String title = startElement.getAttributeByName(
 							new QName("title")).getValue();
@@ -103,7 +103,7 @@ public class LinkXMLReader {
 	
 					// TODO: Use constants instead of hard-coded strings
 					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					Date date = new Date();
+					Date date;
 
 					try {
 						date = df.parse(startElement.getAttributeByName(
@@ -133,9 +133,9 @@ public class LinkXMLReader {
 					}
 					
 					this.links.add(link);
-				}else if (startElement.getName().getLocalPart() == (TAGS)) {
-					this.tags = new ArrayList<Tag>();
-				}else if (startElement.getName().getLocalPart() == (TAG)) {
+				}else if (TAGS.equals(startElement.getName().getLocalPart())) {
+					this.tags = new ArrayList();
+				}else if (TAG.equals(startElement.getName().getLocalPart())) {
 					Tag tag = new Tag();
 					tag.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
@@ -146,7 +146,7 @@ public class LinkXMLReader {
 
 					// TODO: Use constants instead of hard-coded strings
 					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					Date date = new Date();
+					Date date;
 
 					try {
 						date = df.parse(startElement.getAttributeByName(
@@ -159,9 +159,9 @@ public class LinkXMLReader {
 						e.printStackTrace();
 					}
 					this.tags.add(tag);
-				}else if (startElement.getName().getLocalPart() == (LINKTAGS)) {
-					this.linkTags = new ArrayList<LinkTag>();
-				}else if (startElement.getName().getLocalPart() == (LINKTAG)) {
+				}else if (LINKTAGS.equals(startElement.getName().getLocalPart())) {
+					this.linkTags = new ArrayList();
+				}else if (LINKTAG.equals(startElement.getName().getLocalPart())) {
 					LinkTag linkTag = new LinkTag();
 					linkTag.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
@@ -170,9 +170,9 @@ public class LinkXMLReader {
 					linkTag.setTagId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("tagid")).getValue()));
 					this.linkTags.add(linkTag);
-				}else if (startElement.getName().getLocalPart() == (IMPORTITEMS)) {
+				}else if (IMPORTITEMS.equals(startElement.getName().getLocalPart())) {
 					this.importItems = new ArrayList<>();
-				}else if (startElement.getName().getLocalPart() == (IMPORTITEM)) {
+				}else if (IMPORTITEM.equals(startElement.getName().getLocalPart())) {
 					ImportItem importItem = new ImportItem();
 					importItem.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
