@@ -32,10 +32,10 @@ public class LinkXMLWriter {
 	private List<LinkTag> linkTags;
 	private List<ImportItem> importItems;
 	
-	private String configFile;
+	private final String configFile;
 
-	private LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
-	private CategoryReadDBHandler categoryReadDBHandler = new CategoryReadDBHandler();
+	private final LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
+	private final CategoryReadDBHandler categoryReadDBHandler = new CategoryReadDBHandler();
 
 	public LinkXMLWriter(String fileName) throws FileNotFoundException, XMLStreamException {
 		this.configFile = fileName;
