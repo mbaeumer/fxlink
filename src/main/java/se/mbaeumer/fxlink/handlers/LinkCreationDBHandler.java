@@ -50,8 +50,8 @@ public class LinkCreationDBHandler {
 	}
 
 	public boolean isCategorySet(Link link){
-		return (link.getCategory() != null && link.getCategory().getName() != ValueConstants.VALUE_ALL
-				&& link.getCategory().getName() != ValueConstants.VALUE_N_A);
+		return (link.getCategory() != null && !ValueConstants.VALUE_ALL.equals(link.getCategory().getName())
+				&& !ValueConstants.VALUE_N_A.equals(link.getCategory().getName()));
 	}
 
 	public int createLink(String sql, GenericDBHandler dbh) throws SQLException{

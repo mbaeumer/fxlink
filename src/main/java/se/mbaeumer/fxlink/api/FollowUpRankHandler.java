@@ -53,10 +53,6 @@ public class FollowUpRankHandler {
                 linksOrderedByRank.remove(oldRank - 1);
             }
 
-            int insertIndex = 0;
-            if (linksOrderedByRank.size() > 0){
-                insertIndex = link.getFollowUpRank()-1;
-            }
             linksOrderedByRank.add(link.getFollowUpRank()-1, link);
         }
 

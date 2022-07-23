@@ -2,8 +2,6 @@ package se.mbaeumer.fxlink.gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -27,7 +25,7 @@ import java.sql.SQLException;
  * Created by martinbaumer on 23/03/16.
  */
 public class MoveCategoryStage extends Stage{
-    private Group root = new Group();
+    private final Group root = new Group();
     private Scene scene;
     private FlowPane flowGeneral;
     private GridPane gridData;
@@ -35,10 +33,9 @@ public class MoveCategoryStage extends Stage{
     private ComboBox<Category> cmbSourceCategories;
     private Label lblTarget;
     private ComboBox<Category> cmbTargetCategories;
-    private Category sourceCategory;
+    private final Category sourceCategory;
     private Button btnMove;
-    private Button btnClose;
-    private CategoryHandler categoryHandler;
+    private final CategoryHandler categoryHandler;
 
     public MoveCategoryStage(Category sourceCategory){
         super();
@@ -84,11 +81,6 @@ public class MoveCategoryStage extends Stage{
 		this.setResizable(false);
 	}
 
-    private void bindSizes(){
-        this.flowGeneral.prefHeightProperty().bind(this.scene.heightProperty());
-        this.flowGeneral.prefWidthProperty().bind(this.scene.widthProperty());
-    }
-
     private void initGridPane(){
         this.gridData = new GridPane();
         gridData.setHgap(10);
@@ -98,7 +90,6 @@ public class MoveCategoryStage extends Stage{
 
     private void initSourceLabel(){
         this.lblSource = new Label("Move from category");
-        //this.flowGeneral.getChildren().add(this.lblSource);
         this.gridData.add(this.lblSource, 0, 0);
     }
 
@@ -147,7 +138,6 @@ public class MoveCategoryStage extends Stage{
             index++;
         }
         this.cmbSourceCategories.getSelectionModel().select(index);
-        //this.flowGeneral.getChildren().add(this.cmbSourceCategories);
         this.gridData.add(this.cmbSourceCategories, 1, 0);
     }
 
@@ -198,37 +188,24 @@ public class MoveCategoryStage extends Stage{
 
     private void initMoveButton(){
         this.btnMove = new Button("Move");
-        this.btnMove.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent arg0) {
-                try {
-                    if (isValidMove(cmbSourceCategories.getValue(), cmbTargetCategories.getValue())) {
-                        categoryHandler.moveCategory(cmbSourceCategories.getValue(), cmbTargetCategories.getValue());
-                    }else{
-                        Alert alert = new Alert(Alert.AlertType.ERROR, "The selected categories must not be the same!", ButtonType.OK);
-                        alert.showAndWait();
-                    }
-                }catch(SQLException ex){
 
+        this.btnMove.setOnAction(actionEvent -> {
+            try {
+                if (isValidMove(cmbSourceCategories.getValue(), cmbTargetCategories.getValue())) {
+                    categoryHandler.moveCategory(cmbSourceCategories.getValue(), cmbTargetCategories.getValue());
+                }else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "The selected categories must not be the same!", ButtonType.OK);
+                    alert.showAndWait();
                 }
+            }catch(SQLException ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Database error: Could not move links!", ButtonType.OK);
+                alert.showAndWait();
             }
         });
+
         this.gridData.setAlignment(Pos.CENTER);
         this.gridData.add(this.btnMove, 0, 2);
         GridPane.setColumnSpan(this.btnMove, 2);
-    }
-
-    private void initCloseButton(){
-        this.btnClose = new Button("Close");
-
-        this.btnClose.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent arg0) {
-                close();
-            }
-        });
-
-        this.gridData.add(this.btnClose, 1, 2);
     }
 
     private boolean isValidMove(Category source, Category target){

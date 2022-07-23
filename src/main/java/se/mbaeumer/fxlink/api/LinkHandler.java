@@ -89,10 +89,9 @@ public class LinkHandler {
 	public Map<Object, Long> getWeekdayCount(){
 		List<Link> allLinks = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
 		List<Date> dates = allLinks.stream().map(link -> link.getCreated()).collect(Collectors.toList());
-		Map<Object, Long> weekDayCount = dates.stream()
+		return dates.stream()
 				.map(date -> getWeekDayOfDate(date))
 				.collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-		return weekDayCount;
 	}
 
 	public Map<Object, Long> getHourCount(){

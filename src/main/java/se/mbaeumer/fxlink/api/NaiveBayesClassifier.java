@@ -15,12 +15,12 @@ public class NaiveBayesClassifier {
     private final LinkSplitter linkSplitter;
     private final LinkReadDBHandler linkReadDBHandler;
     private final LinkHandler linkHandler;
-    private CategoryHandler categoryHandler;
-    private StopWordHandler stopWordHandler;
+    private final CategoryHandler categoryHandler;
+    private final StopWordHandler stopWordHandler;
 
-    private List<Link> allLinks;
-    private List<Link> allLinksWithCategories;
-    private List<Category> categories;
+    private final List<Link> allLinks;
+    private final List<Link> allLinksWithCategories;
+    private final List<Category> categories;
 
     public NaiveBayesClassifier(LinkSplitter linkSplitter, LinkReadDBHandler linkReadDBHandler, LinkHandler linkHandler,
                                 StopWordHandler stopWordHandler) {
