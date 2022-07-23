@@ -1044,14 +1044,6 @@ public class FXLink extends Application{
 		this.tblLinks.getColumns().get(5).setPrefWidth((this.tblLinks.getPrefWidth()*15)/100);
 		this.tblLinks.getColumns().get(6).setPrefWidth((this.tblLinks.getPrefWidth()*10)/100);
 		this.tblLinks.getColumns().get(7).setPrefWidth((this.tblLinks.getPrefWidth()*10)/100);
-
-		/*
-		for (Object o : this.tblLinks.getColumns()){
-			TableColumn tc = (TableColumn) o;
-			tc.setPrefWidth((this.tblLinks.getPrefWidth()*15)/100);
-		}
-		this.tblLinks.getColumns().get(0).setPrefWidth((this.tblLinks.getPrefWidth()*10)/100);
-		 */
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

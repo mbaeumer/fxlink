@@ -41,14 +41,6 @@ public class CsvExportStage extends Stage {
         super();
         this.initRootPane();
         this.initScene();
-        /*
-        ChangeListener<Number> widthListener = (observable, old, newValue) -> {
-            this.tvLinks.setPrefWidth(this.flowGeneral.getWidth()-15);
-            this.flowSuggestions.setPrefWidth(this.flowGeneral.getWidth()-15);
-            this.setColumnWidths();
-        };
-        this.widthProperty().addListener(widthListener);
-         */
     }
 
     private void initRootPane(){

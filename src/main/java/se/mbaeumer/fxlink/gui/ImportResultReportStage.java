@@ -461,19 +461,7 @@ public class ImportResultReportStage extends Stage {
 
 	private void initSuggestions(final Link link){
 		this.flowSuggestions.getChildren().clear();
-		/*
-		URLHelper urlHelper = new URLHelper();
-		SuggestionDataHandler suggestionDataHandler = new SuggestionDataHandler(new LinkSplitter(urlHelper), new StopWordHandler());
-		LinkReadDBHandler linkReadDBHandler = new LinkReadDBHandler();
-		SuggestionHandler suggestionHandler = new SuggestionHandler(suggestionDataHandler, new LinkSplitter(urlHelper), linkReadDBHandler);
-		List<Suggestion> suggestions = suggestionHandler.getSuggestions(link);
 
-		for (Suggestion suggestion : suggestions){
-			Button button = new Button(suggestion.getCategory());
-			button.setOnAction(actionEvent -> setCategory(actionEvent, link));
-			this.flowSuggestions.getChildren().add(button);
-		}
-		*/
 		probabilities = initSuggestionDataWithProbabilities(link);
 
 		for (Probability suggestion : probabilities){

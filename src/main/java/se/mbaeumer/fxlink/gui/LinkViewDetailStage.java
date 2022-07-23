@@ -263,15 +263,6 @@ public class LinkViewDetailStage extends Stage {
 		this.flowSuggestions = new FlowPane(Orientation.HORIZONTAL);
 		this.flowSuggestions.setPadding(new Insets(5, 5, 0, 5));
 
-		/*
-		List<Suggestion> suggestions = initSuggestionData();
-
-		for (Suggestion suggestion : suggestions){
-			Button button = new Button(suggestion.getCategory());
-			button.setOnAction(this::setSuggestedCategory);
-			this.flowSuggestions.getChildren().add(button);
-		}
-		 */
 		suggestions = initSuggestionDataWithProbabilities();
 
 		for (Probability suggestion : suggestions){

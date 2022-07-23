@@ -62,16 +62,6 @@ public class CsvExportHandler {
         String[] urlParts = urlHelper.getUrlParts(url);
         List<String> words = new ArrayList<>(Arrays.asList(urlParts));
 
-        words = stopWordHandler.removeStopWordsFromList(words);
-
-        /*
-        List<String> toExclude = words.stream().filter(key -> "for".equals(key)
-                || key.length() <=1 || "of".equals(key) || "with".equals(key)
-                || "the".equals(key) || "to".equals(key)
-                || "com".equals(key) || "de".equals(key) || key.matches(".*\\d.*")
-                || "html".equals(key) || "htm".equals(key)).collect(Collectors.toList());
-        words.removeAll(toExclude);
-        */
-        return words;
+        return stopWordHandler.removeStopWordsFromList(words);
     }
 }
