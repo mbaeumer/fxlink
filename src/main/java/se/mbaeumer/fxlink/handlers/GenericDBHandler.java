@@ -40,21 +40,6 @@ public class GenericDBHandler {
 		}
 
 		try {
-			/*
-			try {
-				try {
-					Class.forName("org.hsqldb.jdbcDriver").newInstance();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-
-			 */
-
 			this.connection = DriverManager.getConnection(
 					"jdbc:hsqldb:file:db/fxlink", "SA", "");
 		} catch (SQLException e) {
