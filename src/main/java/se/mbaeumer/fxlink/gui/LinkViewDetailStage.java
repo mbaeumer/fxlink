@@ -467,7 +467,13 @@ public class LinkViewDetailStage extends Stage {
 	
 	private boolean processInput() throws ParseException, SQLException{
 		if (!URLValidator.isValidURL(this.txtURL.getText())){
-			showAlert();
+			showAlert("The URL is incorrect!");
+			isValidationError = true;
+			return false;
+		}
+
+		if (this.ntRank.getNumber().intValue() <= 0){
+			showAlert("The rank is incorrect!");
 			isValidationError = true;
 			return false;
 		}
@@ -490,8 +496,8 @@ public class LinkViewDetailStage extends Stage {
 		return true;
 	}
 
-	private void showAlert() {
-		Alert alert = new Alert(Alert.AlertType.ERROR, "The URL is incorrect!", ButtonType.OK);
+	private void showAlert(String message) {
+		Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
 		alert.initOwner(this);
 		alert.showAndWait();
 	}
