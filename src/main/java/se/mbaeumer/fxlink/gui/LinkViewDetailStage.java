@@ -37,25 +37,25 @@ import javafx.util.StringConverter;
 
 public class LinkViewDetailStage extends Stage {
 
-	private Group root = new Group();
+	private final Group root = new Group();
 	private Scene scene;
 	private FlowPane flowGeneral;
 	private GridPane gridData;
-	private Label lblTitle = new Label("Title");	
+	private final Label lblTitle = new Label("Title");
 	private TextField txtTitle;
-	private Label lblURL = new Label("URL");	
+	private final Label lblURL = new Label("URL");
 	private TextField txtURL;
-	private Label lblDescription = new Label("Description");
+	private final Label lblDescription = new Label("Description");
 	private TextArea taDescription;
-	private Label lblCategories = new Label("Categories");
+	private final Label lblCategories = new Label("Categories");
 	private ComboBox<Category> cmbCategories;
-	private Label lblRank = new Label("Rank");
+	private final Label lblRank = new Label("Rank");
 	private NumberSpinner ntRank;
-	private Label lblSuggestions = new Label("Suggestions");
+	private final Label lblSuggestions = new Label("Suggestions");
 	private FlowPane flowSuggestions;
-	private Label lblCreated = new Label("Created");
+	private final Label lblCreated = new Label("Created");
 	private Label lblCreatedDate;
-	private Label lblLastUpdated = new Label("Last updated");
+	private final Label lblLastUpdated = new Label("Last updated");
 	private Label lblLastUpdatedDate;
 	private ListView<SelectableTag> listAllSelectableTags;
 	private List<Tag> allTags;
@@ -69,11 +69,11 @@ public class LinkViewDetailStage extends Stage {
 	private Link link;
 	private boolean isValidationError = false;
 
-	private LinkHandler linkHandler;
-	private CategoryHandler categoryHandler;
-	private TitleHandler titleHandler;
-	private NaiveBayesClassifier naiveBayesClassifier;
-	private FollowUpRankHandler followUpRankHandler;
+	private final LinkHandler linkHandler;
+	private final CategoryHandler categoryHandler;
+	private final TitleHandler titleHandler;
+	private final NaiveBayesClassifier naiveBayesClassifier;
+	private final FollowUpRankHandler followUpRankHandler;
 
 	private List<Probability> suggestions;
 

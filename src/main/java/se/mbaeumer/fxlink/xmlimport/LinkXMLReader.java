@@ -91,7 +91,7 @@ public class LinkXMLReader {
 					link.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
 
-					DateInfo dateInfo = new DateInfo();
+					DateInfo dateInfo = extractDateInfo(startElement);
 					link.setCreated(dateInfo.getCreated());
 					link.setLastUpdated(dateInfo.getLastUpdated());
 					
