@@ -472,7 +472,8 @@ public class LinkViewDetailStage extends Stage {
 			return false;
 		}
 
-		if (this.ntRank.getNumber().intValue() <= 0){
+		if (this.ntRank.getNumber().intValue() == 0
+		|| this.ntRank.getNumber().intValue() < -1){
 			showAlert("The rank is incorrect!");
 			isValidationError = true;
 			return false;
