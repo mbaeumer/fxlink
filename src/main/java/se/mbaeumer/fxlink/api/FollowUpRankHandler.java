@@ -48,12 +48,21 @@ public class FollowUpRankHandler {
     }
 
     public void updateRanks(final Link link, final int oldRank){
-        if (oldRank != link.getFollowUpRank()){
+        if (oldRank != link.getFollowUpRank() && link.getFollowUpRank() >= 1){
             if (oldRank > 0) {
                 linksOrderedByRank.remove(oldRank - 1);
             }
 
             linksOrderedByRank.add(link.getFollowUpRank()-1, link);
+        }else if (oldRank != link.getFollowUpRank() && link.getFollowUpRank() == -1){
+            linksOrderedByRank.remove(oldRank - 1);
+            try {
+                linkUpdateDBHandler.updateRank(link, -1, GenericDBHandler.getInstance());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }else if (oldRank == link.getFollowUpRank()){
+            return;
         }
 
         int rank = 1;
