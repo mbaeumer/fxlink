@@ -29,6 +29,11 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.8.7 - 2022-11-26
+* Added support to rank links
+* Bug fix related to XML import
+* Minor code improvements
+
 ## 0.8.6 - 2022-05-15
 * Changes to use Naive Bayesian Classifier
 * Improved visualisations
