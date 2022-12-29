@@ -137,49 +137,49 @@ public class LinkHandlerTest {
 
     private List<Link> createListOfLinksWithDifferentCreationDates(){
         List<Link> links = new ArrayList<>();
-        Link link = createLink("", "www.gp.se", "");
-        link.setCreated(createCreationDate(20, 2, 2022));
+        Link link = createLink("www.gp.se");
+        link.setCreated(createCreationDate(20));
         links.add(link);
-        link = createLink("", "www.spiegel.de", "");
-        link.setCreated(createCreationDate(20, 2, 2022));
+        link = createLink( "www.spiegel.de");
+        link.setCreated(createCreationDate(20));
         links.add(link);
-        link = createLink("", "www.kicker.de", "");
-        link.setCreated(createCreationDate(23, 2, 2022));
+        link = createLink( "www.kicker.de");
+        link.setCreated(createCreationDate(23));
         links.add(link);
-        link = createLink("", "www.stackoverflow.blog", "");
-        link.setCreated(createCreationDate(26, 2, 2022));
+        link = createLink( "www.stackoverflow.blog");
+        link.setCreated(createCreationDate(26));
         links.add(link);
 
         return links;
 
     }
 
-    private Link createLink(String title, String url, String description){
-        return new Link(title, url, description);
+    private Link createLink(String url){
+        return new Link("", url, "");
     }
 
-    private Date createCreationDate(int day, int month, int year){
+    private Date createCreationDate(int day){
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, day);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, 2);
+        calendar.set(Calendar.YEAR, 2022);
 
         return calendar.getTime();
     }
 
     private List<Link> createListOfLinksWithDifferentTimestamps(){
         List<Link> links = new ArrayList<>();
-        Link link = createLink("", "www.gp.se", "");
-        link.setLastUpdated(createTime(22, 0));
+        Link link = createLink( "www.gp.se");
+        link.setLastUpdated(createTime(22));
         links.add(link);
-        link = createLink("", "www.spiegel.de", "");
-        link.setLastUpdated(createTime(22, 0));
+        link = createLink( "www.spiegel.de");
+        link.setLastUpdated(createTime(22));
         links.add(link);
-        link = createLink("", "www.kicker.de", "");
-        link.setLastUpdated(createTime(13, 0));
+        link = createLink( "www.kicker.de");
+        link.setLastUpdated(createTime(13));
         links.add(link);
-        link = createLink("", "www.stackoverflow.blog", "");
-        link.setLastUpdated(createTime(19, 0));
+        link = createLink( "www.stackoverflow.blog");
+        link.setLastUpdated(createTime(19));
         links.add(link);
 
         return links;
@@ -187,11 +187,11 @@ public class LinkHandlerTest {
     }
 
 
-    private Date createTime(int hour, int min){
+    private Date createTime(int hour){
         Calendar calendar = Calendar.getInstance();
 
         calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, min);
+        calendar.set(Calendar.MINUTE, 0);
 
         return calendar.getTime();
     }

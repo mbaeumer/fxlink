@@ -105,7 +105,7 @@ public class VisualizationStage extends Stage {
         this.initCategoryBarChart(0);
         this.initWordCountFlowPane();
         this.initWordCountSlider();
-        this.initWordCountBarChart(0);
+        this.initWordCountBarChart();
         this.initPieChartFlowPane();
         this.initWeekdayPieChart();
         this.initHourBarChart();
@@ -304,7 +304,7 @@ public class VisualizationStage extends Stage {
         this.flowWordCount.getChildren().add(this.sliderWordCount);
     }
 
-    private void initWordCountBarChart(int minWordCount){
+    private void initWordCountBarChart(){
         this.flowWordCount.getChildren().remove(this.bcWordCount);
         final CategoryAxis xAxis = new CategoryAxis();
         xAxis.setCenterShape(true);
@@ -312,7 +312,7 @@ public class VisualizationStage extends Stage {
         final NumberAxis yAxis = new NumberAxis();
         this.bcWordCount = new BarChart<>(xAxis,yAxis);
         this.bcWordCount.getData().clear();
-        this.bcWordCount.getData().addAll(createWordCountSeries(minWordCount));
+        this.bcWordCount.getData().addAll(createWordCountSeries(0));
 
 
 
