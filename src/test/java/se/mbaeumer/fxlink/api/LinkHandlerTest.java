@@ -13,7 +13,6 @@ import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -102,7 +101,7 @@ public class LinkHandlerTest {
     }
 
     @Test
-    public void testUpdateLink_success() throws SQLException, ParseException{
+    public void testUpdateLink_success() throws SQLException{
         Link link = new Link("", "www.spiegel.de", "Der Spiegel");
         Mockito.when(linkUpdateDBHandler.constructSqlString(link)).thenReturn("insert into something");
         Mockito.doNothing().when(linkUpdateDBHandler).updateLink(any(), any());
@@ -110,7 +109,7 @@ public class LinkHandlerTest {
     }
 
     @Test(expected = SQLException.class)
-    public void testUpdateLink_failure() throws SQLException, ParseException {
+    public void testUpdateLink_failure() throws SQLException{
         Link link = new Link("", "www.spiegel.de", "Der Spiegel");
         Mockito.when(linkUpdateDBHandler.constructSqlString(link)).thenReturn("insert into something");
         Mockito.doThrow(SQLException.class).when(linkUpdateDBHandler).updateLink(any(), any());
