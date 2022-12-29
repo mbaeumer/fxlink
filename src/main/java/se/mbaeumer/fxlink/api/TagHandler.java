@@ -6,7 +6,6 @@ import se.mbaeumer.fxlink.models.Tag;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class TagHandler {
 		TagCreationDBHandler.createTag(sql, GenericDBHandler.getInstance());
 	}
 	
-	public static void updateTag(Tag tag) throws ParseException, SQLException{
+	public static void updateTag(Tag tag) throws SQLException{
 		String sql = TagUpdateDBHandler.constructSqlString(tag);
 		TagUpdateDBHandler.updateCategory(sql, GenericDBHandler.getInstance());
 	}

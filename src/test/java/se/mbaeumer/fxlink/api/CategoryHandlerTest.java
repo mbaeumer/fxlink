@@ -11,7 +11,6 @@ import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +85,7 @@ public class CategoryHandlerTest {
         try {
             Mockito.doNothing().when(categoryUpdateDBHandler).updateCategory(any(), any());
             categoryHandler.updateCategory(category);
-        } catch (ParseException | SQLException e) {
+        } catch (SQLException e) {
             fail("Exception occurred");
         }
     }

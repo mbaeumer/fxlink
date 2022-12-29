@@ -289,7 +289,7 @@ public class LinkViewDetailStage extends Stage {
 			link.setCategory(category);
 			linkHandler.updateLink(link);
 			setCategory();
-		} catch (SQLException | ParseException throwables) {
+		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
 	}

@@ -31,7 +31,6 @@ import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -208,7 +207,7 @@ public class ImportResultReportStage extends Stage {
 			link.setCategory(category);
 			try {
 				linkHandler.updateLink(link);
-			}catch(SQLException | ParseException pe){
+			}catch(SQLException ex){
 				Alert alert = new Alert(Alert.AlertType.ERROR, "The link could not be updated", ButtonType.OK);
 				alert.showAndWait();
 			}
@@ -387,7 +386,7 @@ public class ImportResultReportStage extends Stage {
 	private void updateLink(Link link){
 		try {
 			linkHandler.updateLink(link);
-		} catch (ParseException | SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -492,7 +491,7 @@ public class ImportResultReportStage extends Stage {
 			link.setCategory(category);
 			linkHandler.updateLink(link);
 			//setCategory(actionEvent, link);
-		} catch (SQLException | ParseException throwables) {
+		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
 	}
@@ -503,7 +502,7 @@ public class ImportResultReportStage extends Stage {
 			Category category = categoryHandler.getCategoryByName(((Button)actionEvent.getSource()).getText());
 			link.setCategory(category);
 			linkHandler.updateLink(link);
-		} catch (SQLException | ParseException throwables) {
+		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
 	}

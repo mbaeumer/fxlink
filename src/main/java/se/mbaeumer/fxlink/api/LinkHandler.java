@@ -6,7 +6,6 @@ import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -47,7 +46,7 @@ public class LinkHandler {
 		linkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
 	}
 	
-	public void updateLink(Link link) throws ParseException, SQLException{
+	public void updateLink(Link link) throws SQLException{
 		String sql = linkUpdateDBHandler.constructSqlString(link);
 		linkUpdateDBHandler.updateLink(sql, GenericDBHandler.getInstance());
 	}

@@ -4,7 +4,6 @@ import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
 
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class CategoryHandler {
 		categoryCreationDBHandler.createCategory(sql, GenericDBHandler.getInstance());
 	}
 	
-	public void updateCategory(Category category) throws ParseException, SQLException{
+	public void updateCategory(Category category) throws SQLException{
 		String sql = categoryUpdateDBHandler.constructSqlString(category);
 		categoryUpdateDBHandler.updateCategory(sql, GenericDBHandler.getInstance());
 	}

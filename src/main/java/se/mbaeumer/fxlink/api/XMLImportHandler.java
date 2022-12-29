@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class XMLImportHandler {
 	
 	private LinkXMLReader reader;
-	private CategoryHandler categoryHandler;
+	private final CategoryHandler categoryHandler;
 
 	public XMLImportHandler(CategoryHandler categoryHandler) {
 		this.categoryHandler = categoryHandler;
@@ -49,11 +49,7 @@ public class XMLImportHandler {
 	
 	private void importLinks() throws SQLException{
 		for (Link link : reader.getLinks()){
-			try {
-				LinkImportDBHandler.importLinksIntoDatabase(GenericDBHandler.getInstance(), link);
-			}catch(SQLException ex){
-				System.out.println("Import failed: " + ex.getMessage());
-			}
+			LinkImportDBHandler.importLinksIntoDatabase(GenericDBHandler.getInstance(), link);
 		}
 	}
 	

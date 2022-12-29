@@ -38,7 +38,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -615,7 +614,7 @@ public class FXLink extends Application{
 			link.setCategory(category);
 			try {
 				linkHandler.updateLink(link);
-			}catch(SQLException | ParseException pe){
+			}catch(SQLException ex){
 				Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
 				alert.showAndWait();
 			}
@@ -634,7 +633,7 @@ public class FXLink extends Application{
 			link.setTitle(this.titleHandler.generateTitle(link));
 			try {
 				linkHandler.updateLink(link);
-			}catch(SQLException | ParseException pe){
+			}catch(SQLException ex){
 				Alert alert = new Alert(Alert.AlertType.ERROR, THE_LINK_COULD_NOT_BE_UPDATED, ButtonType.OK);
 				alert.showAndWait();
 			}
@@ -1434,8 +1433,8 @@ public class FXLink extends Application{
 					link.setCategory(null);
 				}
 				linkHandler.updateLink(link);
-			} catch (ParseException | SQLException e) {
-				Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+			}catch (SQLException ex) {
+				Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
 				alert.showAndWait();
 				isCorrect = false;
 			}
@@ -1476,7 +1475,7 @@ public class FXLink extends Application{
 			}else{
 				try {
 					categoryHandler.updateCategory(category);
-				} catch (ParseException | SQLException e) {
+				} catch (SQLException ex) {
 					Alert alert = new Alert(Alert.AlertType.ERROR, "The category MUST be unique!", ButtonType.OK);
 					alert.showAndWait();
 		    		isCorrect = false;
@@ -1512,7 +1511,7 @@ public class FXLink extends Application{
 			}else{
 				try {
 					TagHandler.updateTag(tag);
-				} catch (ParseException | SQLException e) {
+				} catch (SQLException ex) {
 					Alert alert = new Alert(Alert.AlertType.ERROR, "The tag MUST be unique!", ButtonType.OK);
 					alert.showAndWait();
 		    		isCorrect = false;
