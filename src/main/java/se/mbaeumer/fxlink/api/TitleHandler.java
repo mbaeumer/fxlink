@@ -6,8 +6,8 @@ import se.mbaeumer.fxlink.util.LinkTitleUtil;
 import java.io.IOException;
 
 public class TitleHandler {
-    private LinkTitleUtil linkTitleUtil;
-    private YoutubeCrawler youtubeCrawler;
+    private final LinkTitleUtil linkTitleUtil;
+    private final YoutubeCrawler youtubeCrawler;
 
     public TitleHandler(LinkTitleUtil linkTitleUtil, YoutubeCrawler youtubeCrawler) {
         this.linkTitleUtil = linkTitleUtil;
@@ -15,15 +15,13 @@ public class TitleHandler {
     }
 
     public String generateTitle(Link link){
-        boolean youtubeSuccess = false;
+        boolean youtubeSuccess = true;
         String title = null;
-        // if it is youtube then try to generate the youtube title
         if (isYoutubeLink(link)){
             try {
                 title = youtubeCrawler.getTitle(link.getURL());
-                youtubeSuccess = true;
             } catch (IOException e) {
-
+                youtubeSuccess = false;
             }
         }
 
