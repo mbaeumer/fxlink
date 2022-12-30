@@ -47,7 +47,7 @@ public class LinkHandlerTest {
     public void testGetAllLinks(){
         Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any())).thenReturn(new ArrayList<>());
         List<Link> links = linkHandler.getLinks();
-        assertTrue(links.size() == 0);
+        assertEquals(0, links.size());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class LinkHandlerTest {
         Category category = new Category();
         category.setName(ValueConstants.VALUE_ALL);
         List<Link> links = linkHandler.getLinksByCategory(category);
-        assertTrue(links.size() == 0);
+        assertEquals(0,links.size());
         Mockito.verify(linkReadDBHandler, Mockito.times(0)).getAllLinksByCategoryId(GenericDBHandler.getInstance(), 0);
         Mockito.verify(linkReadDBHandler, Mockito.times(1)).getAllLinks(GenericDBHandler.getInstance());
     }
@@ -67,7 +67,7 @@ public class LinkHandlerTest {
         Category category = new Category();
         category.setName(ValueConstants.VALUE_N_A);
         List<Link> links = linkHandler.getLinksByCategory(category);
-        assertTrue(links.size() == 0);
+        assertEquals(0,links.size());
         Mockito.verify(linkReadDBHandler, Mockito.times(0)).getAllLinksByCategoryId(GenericDBHandler.getInstance(), 0);
         Mockito.verify(linkReadDBHandler, Mockito.times(1)).getAllLinksWithNoCategory(GenericDBHandler.getInstance());
     }
@@ -77,7 +77,7 @@ public class LinkHandlerTest {
         Mockito.when(linkTagReadDBHandler.getAllLinksByTagId(GenericDBHandler.getInstance(), 0))
                 .thenReturn(new ArrayList<>());
         List<Link> links = linkHandler.getLinksWithTag(0);
-        assertTrue(links.size() == 0);
+        assertEquals(0,links.size());
     }
 
     @Test
