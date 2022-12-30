@@ -73,7 +73,7 @@ public class FollowUpRankHandlerTest {
         followUpRankHandler.updateRanks(link, 2);
         List<Link> linksOrderedByRank = followUpRankHandler.getLinksOrderedByRank();
         Link firstLink = linksOrderedByRank.get(0);
-        Assert.assertTrue("www.test2.com".equals(firstLink.getURL()));
+        Assert.assertEquals("www.test2.com",firstLink.getURL());
         Mockito.verify(linkUpdateDBHandler, Mockito.times(2)).updateRank(any(), anyInt(), any());
     }
 

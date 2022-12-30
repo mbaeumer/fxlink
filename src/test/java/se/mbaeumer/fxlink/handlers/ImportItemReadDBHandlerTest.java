@@ -39,9 +39,9 @@ public class ImportItemReadDBHandlerTest {
 
         List<ImportItem> names = importItemReadDBHandler.getAllImportItems(sql,databaseConnectionHandler);
 
-        Assert.assertTrue("there should be three items", names.size() == 3);
-        Assert.assertTrue("the filename of the first item should be import1.txt",
-                names.get(0).getFilename().equalsIgnoreCase("import1.txt"));
+        Assert.assertEquals(3, names.size());
+        Assert.assertEquals("import1.txt",
+                names.get(0).getFilename());
     }
 
     @Test

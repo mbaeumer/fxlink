@@ -58,7 +58,7 @@ public class TagDBHandlerTest {
         Mockito.when(mockResultSet.getString("description")).thenReturn("a sample tag");
         List<Tag> tags = classUnderTest.getAllTags(sql, databaseConnectionHandler);
 
-        Assert.assertTrue("", tags.size() == 1);
+        Assert.assertEquals(1, tags.size());
         Tag tag = tags.get(0);
         Assert.assertEquals(1, tag.getId());
         Assert.assertTrue(tag.getName().equalsIgnoreCase("sample"));

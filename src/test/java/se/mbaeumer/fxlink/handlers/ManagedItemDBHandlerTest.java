@@ -47,6 +47,6 @@ public class ManagedItemDBHandlerTest {
         Mockito.when(mockResultSet.getString("name")).thenReturn("Links", "Categories", "Tags");
         List<String> names = classUnderTest.getAllManagedItems(sql, databaseConnectionHandler);
 
-        Assert.assertTrue("", names.size() == 3);
+        Assert.assertEquals(3, names.size());
     }
 }

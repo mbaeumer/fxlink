@@ -20,21 +20,21 @@ public class DatabaseSystemCheckUtilTest extends TestCase {
     public void shouldReturnOkWhenDatabaseFolderExists() throws Exception{
         DatabaseCheckUtil databaseCheckUtil = new DatabaseCheckUtilImpl();
         mockDirectoryExists();
-        assertTrue(databaseCheckUtil.checkDatabaseFolder() == DatabaseCheckResult.OK);
+        assertEquals(DatabaseCheckResult.OK, databaseCheckUtil.checkDatabaseFolder());
     }
 
     @Test
     public void shouldReturnFolderMissingWhenDatabaseFolderNotExists() throws Exception{
         DatabaseCheckUtil databaseCheckUtil = new DatabaseCheckUtilImpl();
         mockDirectoryDoesNotExist();
-        assertTrue(databaseCheckUtil.checkDatabaseFolder() == DatabaseCheckResult.DATABASE_FOLDER_MISSING);
+        assertEquals(DatabaseCheckResult.DATABASE_FOLDER_MISSING, databaseCheckUtil.checkDatabaseFolder());
     }
 
     @Test
     public void shouldReturnOkWhenDatabaseFilesExist() throws Exception{
         DatabaseCheckUtil databaseCheckUtil = new DatabaseCheckUtilImpl();
         mockFilesExist();
-        assertTrue(databaseCheckUtil.checkDatabaseFiles() == DatabaseCheckResult.OK);
+        assertEquals(DatabaseCheckResult.OK, databaseCheckUtil.checkDatabaseFiles());
     }
 
     private void mockFilesExist() throws Exception {

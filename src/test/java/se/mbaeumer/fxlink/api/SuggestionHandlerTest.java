@@ -35,7 +35,6 @@ public class SuggestionHandlerTest {
     @Test
     public void getSuggestions() {
         Link link = new Link("", "https://www.baeldung.com/jackson-kotlin", "");
-        //Link link = new Link("", "www.test.com", "");
         LinkSplitter linkSplitter = new LinkSplitter(this.urlHelper);
         suggestionHandler = new SuggestionHandler(suggestionDataHandler, linkSplitter, linkReadDBHandler);
 
@@ -49,7 +48,7 @@ public class SuggestionHandlerTest {
         Suggestion expected = suggestions.stream().filter(suggestion -> "Kotlin".equals(suggestion.getCategory()))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
-        assertTrue(expected.getCount() == 1);
+        assertEquals(1, expected.getCount());
     }
 
     @Test
@@ -68,48 +67,48 @@ public class SuggestionHandlerTest {
         Suggestion expected = suggestions.stream().filter(suggestion -> "JavaFX".equals(suggestion.getCategory()))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
-        assertTrue(expected.getCount() == 1);
+        assertEquals(1, expected.getCount());
     }
 
     private Map<String, List<CategoryCount>> createMap(){
         Map<String, List<CategoryCount>> originalSuggestionMap = new HashMap<>();
-        originalSuggestionMap.put("algorithms", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("part", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("learning", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("cold", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("medium", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("recombee", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("evaluation", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("systems", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("recommender", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("machine", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("start", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("1", List.of(createCaegoryCount("machine learning")));
-        originalSuggestionMap.put("extension", List.of(createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("functions", List.of(createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("own", List.of(createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("classes", List.of(createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("csv", List.of(createCaegoryCount("Java")));
-        originalSuggestionMap.put("collections", List.of(createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("write", List.of(createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("combination", List.of(createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("ch", List.of(createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("kotlin", List.of(createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("videos", List.of(createCaegoryCount("Recipes")));
-        originalSuggestionMap.put("sleep", List.of(createCaegoryCount("Recipes")));
-        originalSuggestionMap.put("terripous", List.of(createCaegoryCount("Recipes")));
-        originalSuggestionMap.put("buzzfeedtasty", List.of(createCaegoryCount("Recipes")));
-        originalSuggestionMap.put("facebook", List.of(createCaegoryCount("Recipes")));
-        originalSuggestionMap.put("natural", List.of(createCaegoryCount("Recipes")));
-        originalSuggestionMap.put("remedies", List.of(createCaegoryCount("Recipes")));
-        originalSuggestionMap.put("buzzfeed", List.of(createCaegoryCount("Recipes")));
-        originalSuggestionMap.put("se", List.of(createCaegoryCount("product tips")));
-        originalSuggestionMap.put("indusiadesign", List.of(createCaegoryCount("product tips")));
-        originalSuggestionMap.put("java", List.of(createCaegoryCount("Java")));
-        originalSuggestionMap.put("javafx", List.of(createCaegoryCount("JavaFX")));
-        originalSuggestionMap.put("bealdung", List.of(createCaegoryCount("Java"), createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("frankel", List.of(createCaegoryCount("Kotlin"), createCaegoryCount("Kotlin")));
-        originalSuggestionMap.put("elements", List.of(createCaegoryCount("Kotlin"), createCaegoryCount("Kotlin")));
+        originalSuggestionMap.put("algorithms", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("part", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("learning", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("cold", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("medium", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("recombee", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("evaluation", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("systems", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("recommender", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("machine", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("start", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("1", List.of(createCategoryCount("machine learning")));
+        originalSuggestionMap.put("extension", List.of(createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("functions", List.of(createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("own", List.of(createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("classes", List.of(createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("csv", List.of(createCategoryCount("Java")));
+        originalSuggestionMap.put("collections", List.of(createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("write", List.of(createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("combination", List.of(createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("ch", List.of(createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("kotlin", List.of(createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("videos", List.of(createCategoryCount("Recipes")));
+        originalSuggestionMap.put("sleep", List.of(createCategoryCount("Recipes")));
+        originalSuggestionMap.put("terripous", List.of(createCategoryCount("Recipes")));
+        originalSuggestionMap.put("buzzfeedtasty", List.of(createCategoryCount("Recipes")));
+        originalSuggestionMap.put("facebook", List.of(createCategoryCount("Recipes")));
+        originalSuggestionMap.put("natural", List.of(createCategoryCount("Recipes")));
+        originalSuggestionMap.put("remedies", List.of(createCategoryCount("Recipes")));
+        originalSuggestionMap.put("buzzfeed", List.of(createCategoryCount("Recipes")));
+        originalSuggestionMap.put("se", List.of(createCategoryCount("product tips")));
+        originalSuggestionMap.put("indusiadesign", List.of(createCategoryCount("product tips")));
+        originalSuggestionMap.put("java", List.of(createCategoryCount("Java")));
+        originalSuggestionMap.put("javafx", List.of(createCategoryCount("JavaFX")));
+        originalSuggestionMap.put("bealdung", List.of(createCategoryCount("Java"), createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("frankel", List.of(createCategoryCount("Kotlin"), createCategoryCount("Kotlin")));
+        originalSuggestionMap.put("elements", List.of(createCategoryCount("Kotlin"), createCategoryCount("Kotlin")));
 
         return originalSuggestionMap;
     }
@@ -143,7 +142,7 @@ public class SuggestionHandlerTest {
         return category;
     }
 
-    private CategoryCount createCaegoryCount(final String category){
+    private CategoryCount createCategoryCount(final String category){
         CategoryCount categoryCount = new CategoryCount(category, 1);
         return categoryCount;
     }
