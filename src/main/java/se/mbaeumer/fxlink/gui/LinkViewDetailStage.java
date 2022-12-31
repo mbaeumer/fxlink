@@ -3,7 +3,6 @@ package se.mbaeumer.fxlink.gui;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -431,7 +430,7 @@ public class LinkViewDetailStage extends Stage {
 			if (processInput()){
 				close();
 			}
-		} catch (ParseException | SQLException e) {
+		} catch (SQLException e) {
 			showErrorMessage(e);
 			isValidationError = true;
 		}
@@ -465,7 +464,7 @@ public class LinkViewDetailStage extends Stage {
 		txtTitle.setText(link.getTitle());
 	}
 	
-	private boolean processInput() throws ParseException, SQLException{
+	private boolean processInput() throws SQLException{
 		if (!URLValidator.isValidURL(this.txtURL.getText())){
 			showAlert("The URL is incorrect!");
 			isValidationError = true;
