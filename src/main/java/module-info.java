@@ -4,7 +4,6 @@ module fxlink8 {
     requires java.desktop;
     requires commons.validator;
     requires org.jsoup;
-    requires org.hsqldb;
     opens se.mbaeumer.fxlink.gui to javafx.graphics;
     opens se.mbaeumer.fxlink.models to javafx.base;
 }
