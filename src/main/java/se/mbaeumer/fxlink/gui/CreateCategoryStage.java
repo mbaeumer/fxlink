@@ -36,7 +36,7 @@ public class CreateCategoryStage extends Stage {
     private Button btnCreate;
     private Button btnCancel;
 
-    private CategoryHandler categoryHandler;
+    private final CategoryHandler categoryHandler;
 
     public CreateCategoryStage() {
         super();

@@ -39,11 +39,11 @@ import java.util.Optional;
 public class ImportResultReportStage extends Stage {
 	private Scene scene;
 	private FlowPane flowGeneral;
-	private Label lblImportFileName = new Label();
-	private Label lblSuccessfulImportsText = new Label("Successful imports");
-	private Label lblSuccessfulImportsValue = new Label();
-	private Label lblFailedImportsText = new Label("Failed imports");
-	private Label lblFailedImportsValue = new Label();
+	private final Label lblImportFileName = new Label();
+	private final Label lblSuccessfulImportsText = new Label("Successful imports");
+	private final Label lblSuccessfulImportsValue = new Label();
+	private final Label lblFailedImportsText = new Label("Failed imports");
+	private final Label lblFailedImportsValue = new Label();
 	private ComboBox<Category> cmbMoveToCategory;
 	private Button btnMoveToCategory;
 	private TabPane tabPane;

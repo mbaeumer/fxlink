@@ -10,7 +10,7 @@ import se.mbaeumer.fxlink.models.Category;
  */
 public class CategoryCreationDBHandlerTest extends TestCase {
 
-    private Category nullCategory = null;
+    private final Category nullCategory = null;
 
     private CategoryCreationDBHandler categoryCreationDBHandler;
 
