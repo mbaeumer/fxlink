@@ -14,6 +14,7 @@ public class TitleHandler {
         this.youtubeCrawler = youtubeCrawler;
     }
 
+    // TODO: Add test case for this method
     public String generateTitle(Link link){
         boolean youtubeSuccess = true;
         String title = null;
@@ -23,6 +24,8 @@ public class TitleHandler {
             } catch (IOException e) {
                 youtubeSuccess = false;
             }
+        }else{
+            title = linkTitleUtil.generateTitle(link);
         }
 
         if (!youtubeSuccess){
