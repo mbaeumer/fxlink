@@ -77,8 +77,6 @@ public class LinkCreationDBHandlerTest{
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
         expected += " '" + link.getLastUpdated() + "', 5)";
         String actual = linkCreationDBHandler.constructSqlString(link);
-        System.out.println("expected: " + expected);
-        System.out.println("actual:   " + actual);
         Assert.assertEquals(actual, expected);
     }
 
@@ -90,8 +88,6 @@ public class LinkCreationDBHandlerTest{
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
         expected += " '" + link.getLastUpdated() + "', DEFAULT)";
         String actual = linkCreationDBHandler.constructSqlString(link);
-        System.out.println("expected: " + expected);
-        System.out.println("actual:   " + actual);
         Assert.assertEquals(actual, expected);
     }
 
