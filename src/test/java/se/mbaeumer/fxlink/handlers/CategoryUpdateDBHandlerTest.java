@@ -1,7 +1,7 @@
 package se.mbaeumer.fxlink.handlers;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import se.mbaeumer.fxlink.models.Category;
 
 import java.sql.Timestamp;
@@ -11,13 +11,15 @@ import java.util.Date;
 /**
  * Created by martinbaumer on 02/01/17.
  */
-public class CategoryUpdateDBHandlerTest extends TestCase {
+public class CategoryUpdateDBHandlerTest{
 
+    @Test
     public void testReturnNullIfCategoryIsNull(){
         CategoryUpdateDBHandler categoryUpdateDBHandler = new CategoryUpdateDBHandler();
         Assert.assertNull("should be null", categoryUpdateDBHandler.constructSqlString(null));
     }
 
+    @Test
     public void testConstructSqlString(){
         CategoryUpdateDBHandler categoryUpdateDBHandler = new CategoryUpdateDBHandler();
         Category category = createCategory();
@@ -27,7 +29,7 @@ public class CategoryUpdateDBHandlerTest extends TestCase {
         System.out.println("actual: " + actual);
         System.out.println("expected: " + expected);
 
-        assertTrue("The strings do not match", actual.equalsIgnoreCase(expected));
+        Assert.assertEquals(actual,expected);
     }
 
     private Category createCategory(){

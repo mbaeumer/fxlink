@@ -1,6 +1,6 @@
 package se.mbaeumer.fxlink.handlers;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.mbaeumer.fxlink.models.Category;
@@ -8,7 +8,7 @@ import se.mbaeumer.fxlink.models.Category;
 /**
  * Created by martinbaumer on 30/12/16.
  */
-public class CategoryCreationDBHandlerTest extends TestCase {
+public class CategoryCreationDBHandlerTest{
 
     private final Category nullCategory = null;
 
@@ -21,14 +21,14 @@ public class CategoryCreationDBHandlerTest extends TestCase {
 
     @Test
     public void testReturnNullIfCategoryIsNull(){
-        assertNull(categoryCreationDBHandler.constructSqlString(nullCategory));
+        Assert.assertNull(categoryCreationDBHandler.constructSqlString(nullCategory));
     }
 
     @Test
     public void testConstructSqlString(){
         String expected = "INSERT INTO Category VALUES(DEFAULT, 'Programming', 'Some links related to programming', DEFAULT, DEFAULT)";
         String actual = categoryCreationDBHandler.constructSqlString(createCategory());
-        assertTrue("actual result: " + actual, expected.equalsIgnoreCase(actual));
+        Assert.assertEquals(actual, expected);
     }
 
     private Category createCategory(){

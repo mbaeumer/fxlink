@@ -49,7 +49,7 @@ public class ImportItemReadDBHandlerTest {
         importItemReadDBHandler = new ImportItemReadDBHandler();
 
         String actual = importItemReadDBHandler.getFilename("/Users/martinbaumer/Documents/links/work-mac/test.txt");
-        Assert.assertTrue("Unexpected filename", "test.txt".equals(actual));
+        Assert.assertEquals("test.txt",actual);
     }
 
     @Test(expected = IllegalArgumentException.class)

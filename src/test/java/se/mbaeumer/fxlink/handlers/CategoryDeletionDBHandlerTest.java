@@ -1,14 +1,15 @@
 package se.mbaeumer.fxlink.handlers;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 import se.mbaeumer.fxlink.models.Category;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by martinbaumer on 11/01/17.
  */
-public class CategoryDeletionDBHandlerTest extends TestCase {
+public class CategoryDeletionDBHandlerTest{
     @Test
     public void testReturnNullIfCategoryIsNull(){
         CategoryDeletionDBHandler categoryDeletionDBHandler = new CategoryDeletionDBHandler();
@@ -18,11 +19,9 @@ public class CategoryDeletionDBHandlerTest extends TestCase {
     @Test
     public void testConstructSqlString(){
         CategoryDeletionDBHandler categoryDeletionDBHandler = new CategoryDeletionDBHandler();
-        String expected = "DELETE FROM Category WHERE id=1";
+        String expected = "DELETE FROM Category WHERE ID=1";
         String actual = categoryDeletionDBHandler.constructSqlString(createCategory());
-        System.out.println("actual: " + actual);
-        System.out.println("expected: " + expected);
-        assertTrue("The strings do not match", actual.equalsIgnoreCase(expected));
+        assertEquals(actual,expected);
     }
 
     private Category createCategory(){
