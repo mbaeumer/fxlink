@@ -16,8 +16,8 @@ import java.util.List;
 
 public class TextImportHandler {
 	
-	private List<Link> importedLinks = new ArrayList();
-	private List<FailedLink> failedLinks = new ArrayList();
+	private final List<Link> importedLinks = new ArrayList<>();
+	private final List<FailedLink> failedLinks = new ArrayList<>();
 	private LinkCreationDBHandler linkCreationDBHandler = new LinkCreationDBHandler();
 	private TitleHandler titleHandler;
 	
