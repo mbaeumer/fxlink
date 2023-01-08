@@ -1,6 +1,5 @@
 package se.mbaeumer.fxlink.handlers;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,7 @@ import java.util.Date;
 /**
  * Created by martinbaumer on 31/12/16.
  */
-public class LinkUpdateDBHandlerTest extends TestCase {
+public class LinkUpdateDBHandlerTest{
 
     private LinkUpdateDBHandler linkUpdateDBHandler;
 
@@ -34,19 +33,17 @@ public class LinkUpdateDBHandlerTest extends TestCase {
         String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1,";
         expected += "categoryId=5,lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
         String actual = linkUpdateDBHandler.constructSqlString(link);
-        System.out.println(expected);
-        System.out.println(actual);
-        assertTrue("The string values do not match", actual.equalsIgnoreCase(expected));
+        Assert.assertEquals(actual, expected);
     }
 
     @Test
     public void testReturnNullIfSourceIsNull(){
-        assertNull("", linkUpdateDBHandler.constructSqlStringMoveLink(null, createCategory()));
+        Assert.assertNull("", linkUpdateDBHandler.constructSqlStringMoveLink(null, createCategory()));
     }
 
     @Test
     public void testReturnNullIfTargetIsNull(){
-        assertNull("", linkUpdateDBHandler.constructSqlStringMoveLink(null, createCategory()));
+        Assert.assertNull("", linkUpdateDBHandler.constructSqlStringMoveLink(null, createCategory()));
     }
 
     @Test
@@ -56,7 +53,7 @@ public class LinkUpdateDBHandlerTest extends TestCase {
         target.setId(6);
         String expected = "UPDATE Link SET categoryId=6 WHERE categoryId=5";
         String actual = linkUpdateDBHandler.constructSqlStringMoveLink(source, target);
-        assertTrue("The strings do not match", expected.equalsIgnoreCase(actual));
+        Assert.assertEquals(expected, actual);
 
     }
 
@@ -69,7 +66,7 @@ public class LinkUpdateDBHandlerTest extends TestCase {
         String actual = linkUpdateDBHandler.constructSqlString(link);
         System.out.println(expected);
         System.out.println(actual);
-        assertTrue("The string values do not match", actual.equalsIgnoreCase(expected));
+        Assert.assertEquals(actual, expected);
     }
 
     private Link createLink(){
