@@ -1,6 +1,6 @@
 package se.mbaeumer.fxlink.util;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -15,26 +15,26 @@ import java.io.File;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(DatabaseCheckUtilImpl.class)
-public class DatabaseSystemCheckUtilTest extends TestCase {
+public class DatabaseSystemCheckUtilTest{
     @Test
     public void shouldReturnOkWhenDatabaseFolderExists() throws Exception{
         DatabaseCheckUtil databaseCheckUtil = new DatabaseCheckUtilImpl();
         mockDirectoryExists();
-        assertEquals(DatabaseCheckResult.OK, databaseCheckUtil.checkDatabaseFolder());
+        Assert.assertEquals(DatabaseCheckResult.OK, databaseCheckUtil.checkDatabaseFolder());
     }
 
     @Test
     public void shouldReturnFolderMissingWhenDatabaseFolderNotExists() throws Exception{
         DatabaseCheckUtil databaseCheckUtil = new DatabaseCheckUtilImpl();
         mockDirectoryDoesNotExist();
-        assertEquals(DatabaseCheckResult.DATABASE_FOLDER_MISSING, databaseCheckUtil.checkDatabaseFolder());
+        Assert.assertEquals(DatabaseCheckResult.DATABASE_FOLDER_MISSING, databaseCheckUtil.checkDatabaseFolder());
     }
 
     @Test
     public void shouldReturnOkWhenDatabaseFilesExist() throws Exception{
         DatabaseCheckUtil databaseCheckUtil = new DatabaseCheckUtilImpl();
         mockFilesExist();
-        assertEquals(DatabaseCheckResult.OK, databaseCheckUtil.checkDatabaseFiles());
+        Assert.assertEquals(DatabaseCheckResult.OK, databaseCheckUtil.checkDatabaseFiles());
     }
 
     private void mockFilesExist() throws Exception {
@@ -59,5 +59,4 @@ public class DatabaseSystemCheckUtilTest extends TestCase {
         Mockito.when(mockedDatabaseFolder.exists()).thenReturn(false);
         Mockito.when(mockedDatabaseFolder.isDirectory()).thenReturn(false);
     }
-
 }
