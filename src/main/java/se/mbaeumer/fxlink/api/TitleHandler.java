@@ -14,7 +14,6 @@ public class TitleHandler {
         this.youtubeCrawler = youtubeCrawler;
     }
 
-    // TODO: Add test case for this method
     public String generateTitle(Link link){
         boolean youtubeSuccess = true;
         String title = null;
@@ -36,6 +35,7 @@ public class TitleHandler {
     }
 
     private boolean isYoutubeLink(Link link){
-        return link.getURL().startsWith("http://www.youtube.com") || link.getURL().startsWith("https://www.youtube.com");
+        return (link.getURL().startsWith("http://www.youtube.com") || link.getURL().startsWith("https://www.youtube.com"))
+                && link.getURL().contains("watch");
     }
 }
