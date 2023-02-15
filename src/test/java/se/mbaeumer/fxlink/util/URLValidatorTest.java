@@ -1,9 +1,11 @@
 package se.mbaeumer.fxlink.util;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
-public class URLValidatorTest extends TestCase {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class URLValidatorTest{
 	@Test
 	public void testValidURL(){
 		assertTrue(URLValidator.isValidURL("www.kicker.de"));
