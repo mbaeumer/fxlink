@@ -57,5 +57,6 @@ public class Link {
 		this.description.set(description);
 		this.created.setValue(new Date());
 		this.lastUpdated.setValue(new Date());
+		this.followUpRank.set(-1);
 	}
 }
