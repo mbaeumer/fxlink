@@ -86,15 +86,28 @@ public class FollowUpRankHandler {
             if (currentRank > 0){
                 linksOrderedByRank.remove(currentRank-1);
             }
+            linksOrderedByRank.add(0, link);
             updateRanks(link);
         }
     }
 
-    public void setLowestRank(final Link link){
+    public void setLowestRank(final Link link) throws SQLException{
+        if (linksOrderedByRank.size() == 0){
+            link.setFollowUpRank(1);
+            linksOrderedByRank.add(link);
+            linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
+        }else{
+            int currentRank = link.getFollowUpRank();
+            if (currentRank > 0){
+                linksOrderedByRank.remove(currentRank - 1);
+            }
+            //link.setFollowUpRank(linksOrderedByRank.size());
+            linksOrderedByRank.add(link);
+            updateRanks(link);
+        }
 
     }
     private void updateRanks(Link link) {
-        linksOrderedByRank.add(0, link);
         int rank = 1;
         for (Link aLink : linksOrderedByRank){
             try {

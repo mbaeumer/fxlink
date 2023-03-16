@@ -156,6 +156,52 @@ public class FollowUpRankHandlerTest {
         Mockito.verify(linkUpdateDBHandler, Mockito.times(1)).updateRank(any(), anyInt(), any());
     }
 
+    @Test
+    public void setLowestRank_noRanks() throws SQLException {
+        Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(new ArrayList<>());
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
 
+        Link link = new Link("test", "www.newlink.com", "");
+        link.setFollowUpRank(-1);
+        followUpRankHandler.setLowestRank(link);
+        List<Link> linksOrderedByRank = followUpRankHandler.getLinksOrderedByRank();
+        Link highestLink = linksOrderedByRank.get(0);
+        Assert.assertEquals(linksOrderedByRank.size(), 1);
+        Assert.assertEquals("www.newlink.com", highestLink.getURL());
+        Assert.assertEquals(1, highestLink.getFollowUpRank());
+        Mockito.verify(linkUpdateDBHandler, Mockito.times(1)).updateRank(any(), anyInt(), any());
+    }
 
+    @Test
+    public void setLowestRank_existingRanks() throws SQLException{
+        Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+
+        Link link = new Link("test2", "www.newlink.com", "");
+        link.setFollowUpRank(-1);
+        followUpRankHandler.setLowestRank(link);
+        List<Link> linksOrderedByRank = followUpRankHandler.getLinksOrderedByRank();
+        Link lowestLink = linksOrderedByRank.get(linksOrderedByRank.size() - 1);
+        Assert.assertEquals(linksOrderedByRank.size(), 3);
+        Assert.assertEquals("www.newlink.com", lowestLink.getURL());
+        Assert.assertEquals(3, lowestLink.getFollowUpRank());
+        Mockito.verify(linkUpdateDBHandler, Mockito.times(3)).updateRank(any(), anyInt(), any());
+
+    }
+
+    @Test
+    public void setLowestRank_existingRanks_switch() throws SQLException{
+        Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+
+        Link link = new Link("test", "www.test1.com", "");
+        link.setFollowUpRank(1);
+        followUpRankHandler.setLowestRank(link);
+        List<Link> linksOrderedByRank = followUpRankHandler.getLinksOrderedByRank();
+        Link lowestLink = linksOrderedByRank.get(linksOrderedByRank.size() - 1);
+        Assert.assertEquals(2, linksOrderedByRank.size());
+        Assert.assertEquals("www.test1.com", lowestLink.getURL());
+        Assert.assertEquals(2, lowestLink.getFollowUpRank());
+        Mockito.verify(linkUpdateDBHandler, Mockito.times(2)).updateRank(any(), anyInt(), any());
+    }
 }
