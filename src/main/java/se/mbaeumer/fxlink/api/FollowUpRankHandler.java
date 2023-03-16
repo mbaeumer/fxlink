@@ -75,4 +75,40 @@ public class FollowUpRankHandler {
             rank++;
         }
     }
+
+    public void setHighestRank(final Link link) throws SQLException{
+        if (linksOrderedByRank.size() == 0){
+            link.setFollowUpRank(1);
+            linksOrderedByRank.add(link);
+            linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
+        }else{
+            int currentRank = link.getFollowUpRank();
+            if (link.getFollowUpRank() <= 0){
+                linksOrderedByRank.add(0, link);
+                int rank = 1;
+                for (Link aLink : linksOrderedByRank){
+                    try {
+                        aLink.setFollowUpRank(rank);
+                        linkUpdateDBHandler.updateRank(aLink, rank, GenericDBHandler.getInstance());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    rank++;
+                }
+            }else{
+                linksOrderedByRank.remove(currentRank-1);
+                linksOrderedByRank.add(0, link);
+                int rank = 1;
+                for (Link aLink : linksOrderedByRank){
+                    try {
+                        aLink.setFollowUpRank(rank);
+                        linkUpdateDBHandler.updateRank(aLink, rank, GenericDBHandler.getInstance());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    rank++;
+                }
+            }
+        }
+    }
 }
