@@ -1292,6 +1292,28 @@ public class FXLink extends Application{
 			}
 		});
 
+		MenuItem miRankTop = new MenuItem("Rank top");
+		miRankTop.setOnAction(actionEvent -> {
+			try {
+				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank());
+				followUpRankHandler.setHighestRank(selectedLink);
+				refreshLinkTable();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		});
+
+		MenuItem miRankLow = new MenuItem("Rank bottom");
+		miRankLow.setOnAction(actionEvent -> {
+			try {
+				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank());
+				followUpRankHandler.setLowestRank(selectedLink);
+				refreshLinkTable();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		});
+
 		// delete
 		MenuItem miDelete = new MenuItem("Delete link");
 		miDelete.setOnAction(actionEvent ->  {
@@ -1307,7 +1329,7 @@ public class FXLink extends Application{
 			}
 		});
 
-		this.contLinks.getItems().addAll(miEdit, miOpenURL, miDelete);
+		this.contLinks.getItems().addAll(miEdit, miOpenURL, miRankTop, miRankLow, miDelete);
 	}
 
 	private void createTagContextMenu(){
