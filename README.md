@@ -29,6 +29,10 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.8.9 - 2023-04-08
+* Support for ranking links through a context menu
+* Bug fixes
+
 ## 0.8.8 - 2023-02-23
 * Bug fix regarding import of youtube channel links
 * Various minor code improvements
