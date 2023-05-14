@@ -13,7 +13,7 @@ public class LinkCreationDBHandler {
 			"DESCRIPTION_PLACEHOLDER, ";
 	public static final String DEFAULT_CATEGORY = "DEFAULT, ";
 	public static final String CATEGORY_SET = "CATEGORY_PLACEHOLDER, ";
-	public static final String QUERY_PART_DATE = "DEFAULT, DATE_PLACEHOLDER, RANK_PLACEHOLDER)";
+	public static final String QUERY_PART_DATE = "DEFAULT, DATE_PLACEHOLDER, RANK_PLACEHOLDER, FOLLOWUPSTATUS_PLACEHOLDER)";
 
 	public String constructSqlString(Link link){
 		String sql = BASE_INSERT;
@@ -45,7 +45,7 @@ public class LinkCreationDBHandler {
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
 		sql = sql.replaceFirst(Pattern.quote("DATE_PLACEHOLDER"), "'" + tsLastUpdated + "'");
 		sql = sql.replaceFirst(Pattern.quote("RANK_PLACEHOLDER"), rankValue);
-
+		sql = sql.replaceFirst(Pattern.quote("FOLLOWUPSTATUS_PLACEHOLDER"), Integer.valueOf(link.getFollowUpStatus().getId()).toString());
 		return sql;
 	}
 

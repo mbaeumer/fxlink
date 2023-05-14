@@ -51,6 +51,11 @@ public class Link {
 	public int getFollowUpRank(){return this.followUpRank.get();}
 	public void setFollowUpRank(int followUpRank){this.followUpRank.set(followUpRank);}
 
+	protected Property<FollowUpStatus> followUpStatus = new SimpleObjectProperty<FollowUpStatus>();
+	public Property<FollowUpStatus> followUpStatusProperty(){return this.followUpStatus;}
+	public FollowUpStatus getFollowUpStatus(){return this.followUpStatus.getValue();}
+	public void setFollowUpStatus(FollowUpStatus followUpStatus){this.followUpStatus.setValue(followUpStatus);}
+
 	public Link(String title, String url, String description){
 		this.title.set(title);
 		this.url.set(url);

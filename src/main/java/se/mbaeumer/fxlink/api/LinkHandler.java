@@ -2,6 +2,7 @@ package se.mbaeumer.fxlink.api;
 
 import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
+import se.mbaeumer.fxlink.models.FollowUpStatus;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
@@ -20,12 +21,15 @@ public class LinkHandler {
 	private final LinkUpdateDBHandler linkUpdateDBHandler;
 	private final LinkDeletionDBHandler linkDeletionDBHandler;
 
-	public LinkHandler(LinkReadDBHandler linkReadDBHandler, LinkTagReadDBHandler linkTagReadDBHandler, LinkCreationDBHandler linkCreationDBHandler, LinkUpdateDBHandler linkUpdateDBHandler, LinkDeletionDBHandler linkDeletionDBHandler) {
+	private final FollowUpStatusReadDBHandler followUpStatusReadDBHandler;
+
+	public LinkHandler(LinkReadDBHandler linkReadDBHandler, LinkTagReadDBHandler linkTagReadDBHandler, LinkCreationDBHandler linkCreationDBHandler, LinkUpdateDBHandler linkUpdateDBHandler, LinkDeletionDBHandler linkDeletionDBHandler, FollowUpStatusReadDBHandler followUpStatusReadDBHandler) {
 		this.linkReadDBHandler = linkReadDBHandler;
 		this.linkTagReadDBHandler = linkTagReadDBHandler;
 		this.linkCreationDBHandler = linkCreationDBHandler;
 		this.linkUpdateDBHandler = linkUpdateDBHandler;
 		this.linkDeletionDBHandler = linkDeletionDBHandler;
+		this.followUpStatusReadDBHandler = followUpStatusReadDBHandler;
 	}
 
 	public List<Link> getLinks(){
@@ -42,11 +46,13 @@ public class LinkHandler {
 	}
 	
 	public void createLink(Link link) throws SQLException{
+		setDefaultFollowUpStatus(link);
 		String sql = linkCreationDBHandler.constructSqlString(link);
 		linkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
 	}
 	
 	public void updateLink(Link link) throws SQLException{
+		setDefaultFollowUpStatus(link);
 		String sql = linkUpdateDBHandler.constructSqlString(link);
 		linkUpdateDBHandler.updateLink(sql, GenericDBHandler.getInstance());
 	}
@@ -114,5 +120,14 @@ public class LinkHandler {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.HOUR_OF_DAY);
+	}
+
+	private void setDefaultFollowUpStatus(final Link link){
+		List<FollowUpStatus> followUpStatuses = followUpStatusReadDBHandler.getFollowUpStatuses(GenericDBHandler.getInstance());
+		FollowUpStatus followUpStatus = followUpStatuses
+				.stream()
+				.filter(s -> "NOT_NEEDED".equals(s.getName()))
+				.findFirst().orElseThrow(IllegalArgumentException::new);
+		link.setFollowUpStatus(followUpStatus);
 	}
 }
