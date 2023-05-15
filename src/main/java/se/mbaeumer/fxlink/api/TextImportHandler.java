@@ -1,8 +1,10 @@
 package se.mbaeumer.fxlink.api;
 
+import se.mbaeumer.fxlink.handlers.FollowUpStatusReadDBHandler;
 import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkCreationDBHandler;
 import se.mbaeumer.fxlink.models.FailedLink;
+import se.mbaeumer.fxlink.models.FollowUpStatus;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.*;
 
@@ -20,6 +22,8 @@ public class TextImportHandler {
 	private final List<FailedLink> failedLinks = new ArrayList<>();
 	private LinkCreationDBHandler linkCreationDBHandler = new LinkCreationDBHandler();
 	private TitleHandler titleHandler;
+
+	private FollowUpStatusReadDBHandler followUpStatusReadDBHandler = new FollowUpStatusReadDBHandler();
 	
 	public List<Link> getImportedLinks() {
 		return importedLinks;
@@ -30,6 +34,7 @@ public class TextImportHandler {
 	}
 
 	public void importFromTextFile(File textFile) throws IOException{
+		FollowUpStatus followUpStatus = setDefaultFollowUpStatus();
 		String fileName = textFile.getCanonicalPath();
         String line;
 
@@ -41,14 +46,14 @@ public class TextImportHandler {
 
         while((line = bufferedReader.readLine()) != null) {
             if (line.length() > 0) {
-				createLink(line);
+				createLink(line, followUpStatus);
 			}
         }   
 
         bufferedReader.close();
 	}
 	
-	private void createLink(String line){
+	private void createLink(String line, FollowUpStatus followUpStatus){
 
 		Link link = new Link(createTitle(line), line, ValueConstants.VALUE_NEW);
 		link.setCategory(null);
@@ -61,6 +66,7 @@ public class TextImportHandler {
 		}
 		
 		try {
+			link.setFollowUpStatus(followUpStatus);
 			String sql = linkCreationDBHandler.constructSqlString(link);
 			int newId = linkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
 			link.setId(newId);
@@ -74,5 +80,13 @@ public class TextImportHandler {
 	private String createTitle(String url){
 		titleHandler = new TitleHandler(new LinkTitleUtilImpl(), new YoutubeCrawler());
 		return titleHandler.generateTitle(new Link("", url,""));
+	}
+
+	private FollowUpStatus setDefaultFollowUpStatus(){
+		List<FollowUpStatus> followUpStatuses = followUpStatusReadDBHandler.getFollowUpStatuses(GenericDBHandler.getInstance());
+		return followUpStatuses
+				.stream()
+				.filter(s -> "NOT_NEEDED".equals(s.getName()))
+				.findFirst().orElseThrow(IllegalArgumentException::new);
 	}
 }
