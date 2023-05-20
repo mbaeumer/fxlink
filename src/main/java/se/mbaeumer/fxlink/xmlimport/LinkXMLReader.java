@@ -40,9 +40,12 @@ public class LinkXMLReader {
 	private List<Tag> tags = new ArrayList<>();
 	private List<LinkTag> linkTags = new ArrayList<>();
 	private List<ImportItem> importItems = new ArrayList<>();
+
+	private List<FollowUpStatus> followUpStatuses;
 	
-	public LinkXMLReader(String fileName) throws FileNotFoundException, XMLStreamException {
+	public LinkXMLReader(final String fileName, final List<FollowUpStatus> followUpStatuses) throws FileNotFoundException, XMLStreamException {
 		this.configFile = fileName;
+		this.followUpStatuses = followUpStatuses;
 		this.init();
 	}
 	
@@ -87,6 +90,7 @@ public class LinkXMLReader {
 							new QName("description")).getValue();
 					Link link = new Link(title, url, description);
 					link.setFollowUpRank(getStringValue(startElement));
+					link.setFollowUpStatus(setFollowUpStatus(startElement));
 
 					link.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
@@ -209,5 +213,27 @@ public class LinkXMLReader {
 			attributeValue = -1;
 		}
 		return attributeValue;
+	}
+
+	private FollowUpStatus setFollowUpStatus(final StartElement startElement){
+		int id;
+		try {
+			String stringValue = startElement.getAttributeByName(
+					new QName("followUpStatus")).getValue();
+			id = Integer.parseInt(stringValue);
+		}catch (NullPointerException | NumberFormatException ex) {
+			id = -1;
+		}
+
+		int finalId = id;
+		return this.followUpStatuses.stream().filter(fus -> fus.getId() == finalId).findFirst().orElse(getDefaultStatus());
+	}
+
+	private FollowUpStatus getDefaultStatus(){
+		return this.followUpStatuses
+				.stream()
+				.filter(fus -> "NOT_NEEDED".equals(fus.getName()))
+				.findFirst()
+				.orElseThrow(IllegalArgumentException::new);
 	}
 }

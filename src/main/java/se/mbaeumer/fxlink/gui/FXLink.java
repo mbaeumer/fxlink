@@ -335,7 +335,7 @@ public class FXLink extends Application{
 
 			if (result.isPresent() && result.get() == ButtonType.YES){
 				try {
-					XMLImportHandler xmlImportHandler = new XMLImportHandler(categoryHandler);
+					XMLImportHandler xmlImportHandler = new XMLImportHandler(categoryHandler, new FollowUpStatusReadDBHandler());
 					xmlImportHandler.truncateDatabase();
 					loadCategoriesForFilter();
 					loadCategoriesForMove();
@@ -482,7 +482,7 @@ public class FXLink extends Application{
 		Alert alert = new Alert(Alert.AlertType.WARNING, THE_CURRENT_CONTENT_WILL_BE_OVERWRITTEN_CONTINUE, ButtonType.YES, ButtonType.NO);
 		Optional<ButtonType> result = alert.showAndWait();
 
-		XMLImportHandler xmlImportHandler = new XMLImportHandler(categoryHandler);
+		XMLImportHandler xmlImportHandler = new XMLImportHandler(categoryHandler, new FollowUpStatusReadDBHandler());
 		if (result.isPresent() && result.get() == ButtonType.YES) {
 			try {
 				xmlImportHandler.readData(importFile.getCanonicalPath());

@@ -7,18 +7,23 @@ import se.mbaeumer.fxlink.xmlimport.LinkXMLReader;
 import javax.xml.stream.XMLStreamException;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.List;
 
 public class XMLImportHandler {
 	
 	private LinkXMLReader reader;
 	private final CategoryHandler categoryHandler;
 
-	public XMLImportHandler(CategoryHandler categoryHandler) {
+	private final FollowUpStatusReadDBHandler followUpStatusReadDBHandler;
+
+	public XMLImportHandler(CategoryHandler categoryHandler, FollowUpStatusReadDBHandler followUpStatusReadDBHandler) {
 		this.categoryHandler = categoryHandler;
+		this.followUpStatusReadDBHandler = followUpStatusReadDBHandler;
 	}
 
 	public void readData(String filename) throws FileNotFoundException, XMLStreamException{
-		reader = new LinkXMLReader(filename);
+		List<FollowUpStatus> followUpStatuses = followUpStatusReadDBHandler.getFollowUpStatuses(GenericDBHandler.getInstance());
+		reader = new LinkXMLReader(filename, followUpStatuses);
 		reader.readDataFromFile();
 		reader.getCategories();		
 	}
