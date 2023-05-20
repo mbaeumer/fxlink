@@ -63,7 +63,7 @@ public class LinkXMLReader {
 			if (event.isStartElement()) {
 				StartElement startElement = event.asStartElement();
 				if (CATEGORIES.equals(startElement.getName().getLocalPart())) {
-					this.categories = new ArrayList();
+					this.categories = new ArrayList<>();
 				}else if (CATEGORY.equals(startElement.getName().getLocalPart())) {
 					Category category = new Category();
 					category.setId(Integer.parseInt(startElement.getAttributeByName(
@@ -80,7 +80,7 @@ public class LinkXMLReader {
 					this.categories.add(category);
 
 				}else if (LINKS.equals(startElement.getName().getLocalPart())) {
-					this.links = new ArrayList();
+					this.links = new ArrayList<>();
 				}else if (LINK.equals(startElement.getName().getLocalPart())) {
 					String title = startElement.getAttributeByName(
 							new QName("title")).getValue();
@@ -89,8 +89,8 @@ public class LinkXMLReader {
 					String description = startElement.getAttributeByName(
 							new QName("description")).getValue();
 					Link link = new Link(title, url, description);
-					link.setFollowUpRank(getStringValue(startElement));
-					link.setFollowUpStatus(setFollowUpStatus(startElement));
+					link.setFollowUpRank(getFollowUpRank(startElement));
+					link.setFollowUpStatus(getFollowUpStatus(startElement));
 
 					link.setId(Integer.parseInt(startElement.getAttributeByName(
 							new QName("id")).getValue()));
@@ -117,7 +117,7 @@ public class LinkXMLReader {
 					
 					this.links.add(link);
 				}else if (TAGS.equals(startElement.getName().getLocalPart())) {
-					this.tags = new ArrayList();
+					this.tags = new ArrayList<>();
 				}else if (TAG.equals(startElement.getName().getLocalPart())) {
 					Tag tag = new Tag();
 					tag.setId(Integer.parseInt(startElement.getAttributeByName(
@@ -132,7 +132,7 @@ public class LinkXMLReader {
 					tag.setLastUpdated(dateInfo.getLastUpdated());
 					this.tags.add(tag);
 				}else if (LINKTAGS.equals(startElement.getName().getLocalPart())) {
-					this.linkTags = new ArrayList();
+					this.linkTags = new ArrayList<>();
 				}else if (LINKTAG.equals(startElement.getName().getLocalPart())) {
 					LinkTag linkTag = new LinkTag();
 					linkTag.setId(Integer.parseInt(startElement.getAttributeByName(
@@ -203,7 +203,7 @@ public class LinkXMLReader {
 		return importItems;
 	}
 
-	private int getStringValue(final StartElement startElement){
+	private int getFollowUpRank(final StartElement startElement){
 		int attributeValue;
 		try {
 			String stringValue = startElement.getAttributeByName(
@@ -215,7 +215,7 @@ public class LinkXMLReader {
 		return attributeValue;
 	}
 
-	private FollowUpStatus setFollowUpStatus(final StartElement startElement){
+	private FollowUpStatus getFollowUpStatus(final StartElement startElement){
 		int id;
 		try {
 			String stringValue = startElement.getAttributeByName(
@@ -226,10 +226,10 @@ public class LinkXMLReader {
 		}
 
 		int finalId = id;
-		return this.followUpStatuses.stream().filter(fus -> fus.getId() == finalId).findFirst().orElse(getDefaultStatus());
+		return this.followUpStatuses.stream().filter(fus -> fus.getId() == finalId).findFirst().orElse(getDefaultFollowUpStatus());
 	}
 
-	private FollowUpStatus getDefaultStatus(){
+	private FollowUpStatus getDefaultFollowUpStatus(){
 		return this.followUpStatuses
 				.stream()
 				.filter(fus -> "NOT_NEEDED".equals(fus.getName()))
