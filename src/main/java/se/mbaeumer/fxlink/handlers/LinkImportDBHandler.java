@@ -6,7 +6,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 
 public class LinkImportDBHandler {
-	public static int importLinksIntoDatabase(GenericDBHandler dbh, Link link) throws SQLException{
+	public static int importLinks(GenericDBHandler dbh, Link link) throws SQLException{
 		Connection connection = dbh.getConnection();
 		
 		String sql = "INSERT INTO Link "
@@ -16,7 +16,7 @@ public class LinkImportDBHandler {
 		if (link.getCategory() != null){
 			categoryId = " ?,";
 		}
-		sql = sql + categoryId + " ?, ?, ?) ";
+		sql = sql + categoryId + " ?, ?, ?, ?) ";
 		
 		int linkId = -1;
 		
@@ -43,6 +43,8 @@ public class LinkImportDBHandler {
 		stmt.setTimestamp(parameterIndex, tsLastUpdated);
 		parameterIndex++;
 		stmt.setInt(parameterIndex, link.getFollowUpRank());
+		parameterIndex++;
+		stmt.setInt(parameterIndex, link.getFollowUpStatus().getId());
 		stmt.executeUpdate();
 		ResultSet rs = stmt.getGeneratedKeys();
 		

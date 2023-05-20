@@ -49,7 +49,7 @@ public class XMLImportHandler {
 	
 	private void importLinks() throws SQLException{
 		for (Link link : reader.getLinks()){
-			LinkImportDBHandler.importLinksIntoDatabase(GenericDBHandler.getInstance(), link);
+			LinkImportDBHandler.importLinks(GenericDBHandler.getInstance(), link);
 		}
 	}
 	
