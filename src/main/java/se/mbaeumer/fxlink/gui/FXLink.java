@@ -27,10 +27,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import se.mbaeumer.fxlink.api.*;
 import se.mbaeumer.fxlink.handlers.*;
-import se.mbaeumer.fxlink.models.Category;
-import se.mbaeumer.fxlink.models.ImportResultReport;
-import se.mbaeumer.fxlink.models.Link;
-import se.mbaeumer.fxlink.models.Tag;
+import se.mbaeumer.fxlink.models.*;
 import se.mbaeumer.fxlink.util.*;
 
 import javax.xml.stream.XMLStreamException;
@@ -1003,6 +1000,29 @@ public class FXLink extends Application{
 		TableColumn followUpRankCol = new TableColumn("Rank");
 		followUpRankCol.setCellValueFactory(new PropertyValueFactory("followUpRank"));
 
+		TableColumn followUpStatusCol = new TableColumn("Followup Status");
+		followUpStatusCol.setCellValueFactory(new PropertyValueFactory<Link, FollowUpStatus>("followUpStatus"));
+
+		followUpStatusCol.setCellFactory(new Callback<TableColumn<Link, FollowUpStatus>, TableCell<Link, FollowUpStatus>>(){
+
+			@Override
+			public TableCell<Link, FollowUpStatus> call(TableColumn<Link, FollowUpStatus> param) {
+
+				TableCell<Link, FollowUpStatus> categoryCell = new TableCell<Link, FollowUpStatus>(){
+
+					@Override
+					protected void updateItem(FollowUpStatus item, boolean empty) {
+						if (item != null) {
+							setText(item.getName());
+						}else{
+							setText(null);
+						}
+					}
+				};
+				return categoryCell;
+			}
+		});
+
 		// create the created column
 		TableColumn createdCol = new TableColumn("Created");
 		createdCol.setCellValueFactory(new PropertyValueFactory("created"));
@@ -1031,7 +1051,7 @@ public class FXLink extends Application{
 					   });
 
 		// add all columns to the table view
-		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, followUpRankCol, categoryCol, createdCol, lastUpdatedCol);
+		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, followUpRankCol, followUpStatusCol, categoryCol, createdCol, lastUpdatedCol);
 	}
 	
 	@SuppressWarnings("rawtypes")

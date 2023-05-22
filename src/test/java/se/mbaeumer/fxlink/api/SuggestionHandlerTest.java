@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import se.mbaeumer.fxlink.handlers.FollowUpStatusReadDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.models.Category;
 import se.mbaeumer.fxlink.models.CategoryCount;
@@ -27,6 +28,9 @@ public class SuggestionHandlerTest {
     @Mock
     private SuggestionDataHandler suggestionDataHandler;
 
+    @Mock
+    private FollowUpStatusReadDBHandler followUpStatusReadDBHandler;
+
     private URLHelper urlHelper = new URLHelper();
 
     @Mock
@@ -36,11 +40,11 @@ public class SuggestionHandlerTest {
     public void getSuggestions() {
         Link link = new Link("", "https://www.baeldung.com/jackson-kotlin", "");
         LinkSplitter linkSplitter = new LinkSplitter(this.urlHelper);
-        suggestionHandler = new SuggestionHandler(suggestionDataHandler, linkSplitter, linkReadDBHandler);
+        suggestionHandler = new SuggestionHandler(suggestionDataHandler, linkSplitter, linkReadDBHandler, followUpStatusReadDBHandler);
 
         Map<String, List<CategoryCount>> originalSuggestionMap = createMap();
         List<Link> linksWithCategories = createLinkList();
-        Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any())).thenReturn(linksWithCategories);
+        Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any(), any())).thenReturn(linksWithCategories);
 
         Mockito.when(suggestionDataHandler.prepareData(linksWithCategories)).thenReturn(originalSuggestionMap);
         Mockito.when(suggestionDataHandler.removeStopWords(originalSuggestionMap)).thenReturn(removeStopWords(originalSuggestionMap));
@@ -55,11 +59,11 @@ public class SuggestionHandlerTest {
     public void testCaseInsensitive(){
         Link link = new Link("", "http://www.java2s.com/Code/Java/JavaFX/GridPanewherecolumnstake255025ofitswidth.htm", "");
         LinkSplitter linkSplitter = new LinkSplitter(this.urlHelper);
-        suggestionHandler = new SuggestionHandler(suggestionDataHandler, linkSplitter, linkReadDBHandler);
+        suggestionHandler = new SuggestionHandler(suggestionDataHandler, linkSplitter, linkReadDBHandler, followUpStatusReadDBHandler);
 
         Map<String, List<CategoryCount>> originalSuggestionMap = createMap();
         List<Link> linksWithCategories = createLinkList();
-        Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any())).thenReturn(linksWithCategories);
+        Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any(), any())).thenReturn(linksWithCategories);
 
         Mockito.when(suggestionDataHandler.prepareData(linksWithCategories)).thenReturn(originalSuggestionMap);
         Mockito.when(suggestionDataHandler.removeStopWords(originalSuggestionMap)).thenReturn(removeStopWords(originalSuggestionMap));

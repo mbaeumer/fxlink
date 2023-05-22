@@ -33,7 +33,12 @@ public class LinkHandler {
 	}
 
 	public List<Link> getLinks(){
-		return this.linkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance());
+		List<FollowUpStatus> followUpStatuses = followUpStatusReadDBHandler.getFollowUpStatuses(GenericDBHandler.getInstance());
+		FollowUpStatus followUpStatus = followUpStatuses
+				.stream()
+				.filter(s -> "NOT_NEEDED".equals(s.getName()))
+				.findFirst().orElseThrow(IllegalArgumentException::new);
+		return this.linkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance(), followUpStatus);
 	}
 	
 	public List<Link> getLinksByCategory(Category category){

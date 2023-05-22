@@ -38,4 +38,13 @@ public class FollowUpStatusReadDBHandler {
 
 
     }
+
+    public FollowUpStatus getDefaultStatus(){
+        List<FollowUpStatus> followUpStatuses = this.getFollowUpStatuses(GenericDBHandler.getInstance());
+
+        return followUpStatuses
+                .stream()
+                .filter(fus -> "NOT_NEEDED".equals(fus.getName()))
+                .findFirst().orElseThrow(IllegalArgumentException::new);
+    }
 }

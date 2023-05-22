@@ -1,5 +1,6 @@
 package se.mbaeumer.fxlink.api;
 
+import se.mbaeumer.fxlink.handlers.FollowUpStatusReadDBHandler;
 import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.models.CategoryCount;
@@ -16,14 +17,17 @@ public class SuggestionHandler {
     private final LinkSplitter linkSplitter;
     private final LinkReadDBHandler linkReadDBHandler;
 
-    public SuggestionHandler(SuggestionDataHandler suggestionDataHandler, LinkSplitter linkSplitter, LinkReadDBHandler linkReadDBHandler) {
+    private final FollowUpStatusReadDBHandler followUpStatusReadDBHandler;
+
+    public SuggestionHandler(SuggestionDataHandler suggestionDataHandler, LinkSplitter linkSplitter, LinkReadDBHandler linkReadDBHandler, FollowUpStatusReadDBHandler followUpStatusReadDBHandler) {
         this.suggestionDataHandler = suggestionDataHandler;
         this.linkSplitter = linkSplitter;
         this.linkReadDBHandler = linkReadDBHandler;
+        this.followUpStatusReadDBHandler = followUpStatusReadDBHandler;
     }
 
     public List<Suggestion> getSuggestions(Link link){
-        List<Link> allLinks = linkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance());
+        List<Link> allLinks = linkReadDBHandler.getAllLinksWithCategories(GenericDBHandler.getInstance(), followUpStatusReadDBHandler.getDefaultStatus());
         List<Link> linksWithCategories = allLinks.stream().filter(l -> l.getCategory()!=null)
                 .collect(Collectors.toList());
         Map<String, List<CategoryCount>> map = suggestionDataHandler.prepareData(linksWithCategories);

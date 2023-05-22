@@ -49,7 +49,8 @@ public class LinkHandlerTest {
 
     @Test
     public void testGetAllLinks(){
-        Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any())).thenReturn(new ArrayList<>());
+        Mockito.when(linkReadDBHandler.getAllLinksWithCategories(any(), any())).thenReturn(new ArrayList<>());
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(List.of(createFollowUpStatus()));
         List<Link> links = linkHandler.getLinks();
         assertEquals(0, links.size());
     }
@@ -218,5 +219,13 @@ public class LinkHandlerTest {
         Assert.assertEquals(3, hourCount.entrySet().size());
         Long aLong = hourCount.get(22);
         Assert.assertEquals(2, aLong.longValue());
+    }
+
+    private FollowUpStatus createFollowUpStatus(){
+        FollowUpStatus followUpStatus = new FollowUpStatus();
+        followUpStatus.setId(1);
+        followUpStatus.setName("NOT_NEEDED");
+
+        return followUpStatus;
     }
 }
