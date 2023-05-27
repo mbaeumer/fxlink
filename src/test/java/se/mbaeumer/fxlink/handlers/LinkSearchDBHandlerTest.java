@@ -46,7 +46,7 @@ public class LinkSearchDBHandlerTest{
 		searchTerm = "test";
 		isUrl = true;
 		String expectedSqlString =
-				LinkSearchDBHandler.BASE_QUERY + "where LCASE(url) LIKE '%test%' OR LCASE(url) LIKE 'test%' ";
+				LinkSearchDBHandler.BASE_QUERY + "where (LCASE(url) LIKE '%test%' OR LCASE(url) LIKE 'test%' )";
 		String actual = linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL));
 		System.out.println(expectedSqlString);
 		System.out.println(actual);
@@ -58,7 +58,7 @@ public class LinkSearchDBHandlerTest{
 		searchTerm = "test";
 		isTitle = true;
 		String expectedSqlString =
-				LinkSearchDBHandler.BASE_QUERY + "where LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' ";
+				LinkSearchDBHandler.BASE_QUERY + "where (LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' )";
 		String actual = linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL));
 		System.out.println(expectedSqlString);
 		System.out.println(actual);
@@ -70,7 +70,7 @@ public class LinkSearchDBHandlerTest{
 		searchTerm = "test";
 		isDescription = true;
 		String expectedSqlString =
-				LinkSearchDBHandler.BASE_QUERY + "where LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' ";
+				LinkSearchDBHandler.BASE_QUERY + "where (LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' )";
 		String actual = linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL));
 		System.out.println(expectedSqlString);
 		System.out.println(actual);
@@ -86,9 +86,9 @@ public class LinkSearchDBHandlerTest{
 		isDescription = true;
 
 		String expectedSqlString =
-				LinkSearchDBHandler.BASE_QUERY + "where LCASE(url) LIKE '%test%' OR LCASE(url) LIKE 'test%' "
+				LinkSearchDBHandler.BASE_QUERY + "where (LCASE(url) LIKE '%test%' OR LCASE(url) LIKE 'test%' "
 						+ "OR LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' "
-				+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' ";
+				+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' )";
 
 		/*
 		String expectedSqlString = LinkSearchDBHandler.BASE_QUERY + LinkSearchDBHandler.WHERE + "("
@@ -109,8 +109,8 @@ public class LinkSearchDBHandlerTest{
 		isTitle = true;
 
 		String expectedSqlString =
-				LinkSearchDBHandler.BASE_QUERY + "where LCASE(url) LIKE '%test%' OR LCASE(url) LIKE 'test%' "
-				+ "OR LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' ";
+				LinkSearchDBHandler.BASE_QUERY + "where (LCASE(url) LIKE '%test%' OR LCASE(url) LIKE 'test%' "
+				+ "OR LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' )";
 		// LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%'
 		String actual = linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL));
 		System.out.println(expectedSqlString);
@@ -126,8 +126,8 @@ public class LinkSearchDBHandlerTest{
 		isDescription = true;
 
 		String expectedSqlString =
-				LinkSearchDBHandler.BASE_QUERY + "where LCASE(url) LIKE '%test%' OR LCASE(url) LIKE 'test%' "
-						+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' ";
+				LinkSearchDBHandler.BASE_QUERY + "where (LCASE(url) LIKE '%test%' OR LCASE(url) LIKE 'test%' "
+						+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' )";
 
 		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
@@ -139,8 +139,8 @@ public class LinkSearchDBHandlerTest{
 		isDescription = true;
 
 		String expectedSqlString =
-				LinkSearchDBHandler.BASE_QUERY + "where LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' "
-						+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' ";
+				LinkSearchDBHandler.BASE_QUERY + "where (LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' "
+						+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' )";
 		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 
@@ -151,8 +151,8 @@ public class LinkSearchDBHandlerTest{
 		isDescription = true;
 
 		String expectedSqlString =
-				LinkSearchDBHandler.BASE_QUERY + "where LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' "
-						+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' "
+				LinkSearchDBHandler.BASE_QUERY + "where (LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' "
+						+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' )"
 				+ "AND categoryId IS NULL";
 
 		String actual = linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_N_A));
@@ -176,8 +176,8 @@ public class LinkSearchDBHandlerTest{
 		isDescription = true;
 
 		String expectedSqlString =
-				LinkSearchDBHandler.BASE_QUERY + "where LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' "
-						+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' "
+				LinkSearchDBHandler.BASE_QUERY + "where (LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' "
+						+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' )"
 						+ "AND categoryId = ?";
 
 		String actual = linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, createCategoryWithNameJava());

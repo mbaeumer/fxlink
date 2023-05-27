@@ -48,25 +48,21 @@ public class LinkSearchDBHandler {
 
 		String criteria = "";
 		if (isUrl){
-			criteria += buildWhereClause("url", lowerCaseSearchTerm);
+			criteria += "(" + buildWhereClause("url", lowerCaseSearchTerm);
 		}
 
 		if (isTitle){
-			if (!"".equals(criteria)){
-				criteria += OR;
-			}
+			criteria += buildCriteriaStart(criteria);
 			criteria += buildWhereClause("title", lowerCaseSearchTerm);
 		}
 
 		if (isDescription){
-			if (!"".equals(criteria)){
-				criteria += OR;
-			}
+			criteria += buildCriteriaStart(criteria);
 			criteria += buildWhereClause("description", lowerCaseSearchTerm);
 		}
 
 		if (!"".equals(criteria)) {
-			sql += criteria;
+			sql += criteria + ")";
 		}
 
 		if (ValueConstants.VALUE_N_A.equals(category.getName())){
@@ -87,6 +83,10 @@ public class LinkSearchDBHandler {
 				.append(LIKE_STARTS_WITH).append(searchTerm).append(LIKE_END);
 
 		return stringBuilder.toString();
+	}
+
+	public String buildCriteriaStart(String criteria){
+		return !"".equals(criteria) ? OR : "(";
 	}
 
 	public List<Link> findAllMatchingLinks(GenericDBHandler dbh, String sql, Category category) throws SQLException{
