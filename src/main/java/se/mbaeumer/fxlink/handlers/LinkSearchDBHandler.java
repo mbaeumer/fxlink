@@ -31,7 +31,7 @@ public class LinkSearchDBHandler {
 	public static String IS_NULL = "IS NULL";
 	public static String EQUALS = "= ";
 
-	public String constructSearchString(String searchTerm, boolean isUrl, boolean isTitle, boolean isDescription, Category category){
+	public String buildSearchString(String searchTerm, boolean isUrl, boolean isTitle, boolean isDescription, Category category){
 		String sql = "";
 		if (searchTerm == null || "".equals(searchTerm)){
 			return null;

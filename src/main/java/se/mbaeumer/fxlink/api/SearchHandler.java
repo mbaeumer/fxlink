@@ -16,7 +16,7 @@ public class SearchHandler {
 	}
 
 	public List<Link> findLinks(String searchTerm, boolean isUrl, boolean isTitle, boolean isDescription, Category category) throws SQLException{
-		String sql = linkSearchDBHandler.constructSearchString(searchTerm, isUrl, isTitle, isDescription, category);
+		String sql = linkSearchDBHandler.buildSearchString(searchTerm, isUrl, isTitle, isDescription, category);
 		return linkSearchDBHandler.findAllMatchingLinks(GenericDBHandler.getInstance(), sql, category);
 	}
 }

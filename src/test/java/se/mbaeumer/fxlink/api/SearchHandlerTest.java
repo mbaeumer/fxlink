@@ -33,7 +33,7 @@ public class SearchHandlerTest {
     public void findLinks() throws SQLException {
         Category category = new Category();
         category.setId(-1);
-        Mockito.when(linkSearchDBHandler.constructSearchString("searchterm", true, true, true, category)).thenReturn("sql-string");
+        Mockito.when(linkSearchDBHandler.buildSearchString("searchterm", true, true, true, category)).thenReturn("sql-string");
         Mockito.when(linkSearchDBHandler.findAllMatchingLinks(any(), any(), any())).thenReturn(createLinks());
 
         List<Link> actual = searchHandler.findLinks("searchterm", true, true, true, category);
