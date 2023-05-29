@@ -5,6 +5,7 @@ import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkUpdateDBHandler;
 import se.mbaeumer.fxlink.models.Link;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -105,7 +106,11 @@ public class FollowUpRankHandler {
             linksOrderedByRank.add(link);
             updateRanks(link);
         }
+    }
 
+    public BigDecimal getLowestPossibleRank() throws SQLException {
+        linksOrderedByRank = linkReadDBHandler.getLinksOrderedByRank(GenericDBHandler.getInstance());
+        return BigDecimal.valueOf(linksOrderedByRank.size());
     }
     private void updateRanks(Link link) {
         int rank = 1;

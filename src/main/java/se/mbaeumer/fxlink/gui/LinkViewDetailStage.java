@@ -49,7 +49,12 @@ public class LinkViewDetailStage extends Stage {
 	private final Label lblCategories = new Label("Categories");
 	private ComboBox<Category> cmbCategories;
 	private final Label lblRank = new Label("Rank");
+
+	private FlowPane flowRank;
 	private NumberSpinner ntRank;
+	private Button btnRankTop = new Button("Rank top");
+
+	private Button btnRankLow = new Button("Rank bottom");
 	private final Label lblSuggestions = new Label("Suggestions");
 	private FlowPane flowSuggestions;
 	private final Label lblCreated = new Label("Created");
@@ -235,12 +240,50 @@ public class LinkViewDetailStage extends Stage {
 		this.gridData.add(this.cmbCategories, 1,3);		
 	}
 
+
 	private void initRank(){
 		this.gridData.add(this.lblRank, 0, 4);
 
 		this.ntRank = new NumberSpinner(this.followUpRankHandler.getHighestRank(), this.followUpRankHandler.getLowestRank());
 		this.ntRank.setNumber(BigDecimal.valueOf(this.link.getFollowUpRank()));
-		this.gridData.add(this.ntRank, 1,4);
+
+		this.initRankFlowPane();
+		this.flowRank.getChildren().add(this.ntRank);
+		this.initRankButtons();
+		//this.gridData.add(this.ntRank, 1,4);
+
+	}
+
+	private void initRankFlowPane(){
+		this.flowRank = new FlowPane(Orientation.HORIZONTAL);
+		this.flowRank.setHgap(5);
+		this.gridData.add(this.flowRank, 1, 4);
+	}
+
+	private void initRankButtons(){
+		this.btnRankTop.setOnAction(this::handleTopRank);
+		this.btnRankLow.setOnAction(this::handleBottomRank);
+		this.flowRank.getChildren().add(this.btnRankTop);
+		this.flowRank.getChildren().add(this.btnRankLow);
+	}
+
+	private void handleTopRank(ActionEvent actionEvent){
+		try {
+			followUpRankHandler.setHighestRank(this.link);
+			ntRank.setNumber(BigDecimal.ONE);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void handleBottomRank(ActionEvent actionEvent){
+		try {
+			followUpRankHandler.setLowestRank(this.link);
+			ntRank.setNumber(followUpRankHandler.getLowestPossibleRank());
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	private void setCategory() {
