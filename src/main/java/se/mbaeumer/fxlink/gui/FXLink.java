@@ -1051,7 +1051,7 @@ public class FXLink extends Application{
 					   });
 
 		// add all columns to the table view
-		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, followUpRankCol, followUpStatusCol, categoryCol, createdCol, lastUpdatedCol);
+		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, followUpRankCol, categoryCol, createdCol, lastUpdatedCol);
 	}
 	
 	@SuppressWarnings("rawtypes")
