@@ -29,6 +29,11 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.9.0 - 2023-05-29
+* Prepared for follow-up status
+* Added support for quickly setting the highest and lowest follow-up rank for links
+* Made the search case-insensitive
+
 ## 0.8.9 - 2023-04-08
 * Support for ranking links through a context menu
 * Bug fixes
