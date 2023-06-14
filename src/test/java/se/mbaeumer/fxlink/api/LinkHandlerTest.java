@@ -57,24 +57,28 @@ public class LinkHandlerTest {
 
     @Test
     public void testGetLinksByCategory_all(){
-        Mockito.when(linkReadDBHandler.getAllLinks(any())).thenReturn(new ArrayList<>());
+        Mockito.when(linkReadDBHandler.getAllLinks(any(), any())).thenReturn(new ArrayList<>());
+        List<FollowUpStatus> followUpStatuses = createStatuses();
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(followUpStatuses);
         Category category = new Category();
         category.setName(ValueConstants.VALUE_ALL);
         List<Link> links = linkHandler.getLinksByCategory(category);
         assertEquals(0,links.size());
-        Mockito.verify(linkReadDBHandler, Mockito.times(0)).getAllLinksByCategoryId(GenericDBHandler.getInstance(), 0);
-        Mockito.verify(linkReadDBHandler, Mockito.times(1)).getAllLinks(GenericDBHandler.getInstance());
+        Mockito.verify(linkReadDBHandler, Mockito.times(0)).getAllLinksByCategoryId(GenericDBHandler.getInstance(), 0, createStatuses().get(0));
+        Mockito.verify(linkReadDBHandler, Mockito.times(1)).getAllLinks(GenericDBHandler.getInstance(), followUpStatuses.get(0));
     }
 
     @Test
     public void testGetLinksByCategory_null(){
-        Mockito.when(linkReadDBHandler.getAllLinksWithNoCategory(any())).thenReturn(new ArrayList<>());
+        Mockito.when(linkReadDBHandler.getAllLinksWithNoCategory(any(), any())).thenReturn(new ArrayList<>());
+        List<FollowUpStatus> followUpStatuses = createStatuses();
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(followUpStatuses);
         Category category = new Category();
         category.setName(ValueConstants.VALUE_N_A);
         List<Link> links = linkHandler.getLinksByCategory(category);
         assertEquals(0,links.size());
-        Mockito.verify(linkReadDBHandler, Mockito.times(0)).getAllLinksByCategoryId(GenericDBHandler.getInstance(), 0);
-        Mockito.verify(linkReadDBHandler, Mockito.times(1)).getAllLinksWithNoCategory(GenericDBHandler.getInstance());
+        Mockito.verify(linkReadDBHandler, Mockito.times(0)).getAllLinksByCategoryId(GenericDBHandler.getInstance(), 0, followUpStatuses.get(0));
+        Mockito.verify(linkReadDBHandler, Mockito.times(1)).getAllLinksWithNoCategory(GenericDBHandler.getInstance(), followUpStatuses.get(0));
     }
 
     @Test
@@ -142,8 +146,10 @@ public class LinkHandlerTest {
 
     @Test
     public void getWeekDayCount(){
-        Mockito.when(linkReadDBHandler.getAllLinks(any()))
+        Mockito.when(linkReadDBHandler.getAllLinks(any(), any()))
                 .thenReturn(createListOfLinksWithDifferentCreationDates());
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any()))
+                .thenReturn(createStatuses());
         Map<Object, Long> weekDayCounts = linkHandler.getWeekdayCount();
         Long actualCount = weekDayCounts.get(1);
         assertEquals(2, actualCount.longValue());
@@ -212,8 +218,10 @@ public class LinkHandlerTest {
 
     @Test
     public void getHourCount() {
-        Mockito.when(linkReadDBHandler.getAllLinks(any()))
+        Mockito.when(linkReadDBHandler.getAllLinks(any(), any()))
                 .thenReturn(createListOfLinksWithDifferentTimestamps());
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any()))
+                .thenReturn(createStatuses());
 
         Map<Object, Long> hourCount = linkHandler.getHourCount();
         Assert.assertEquals(3, hourCount.entrySet().size());

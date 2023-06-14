@@ -30,7 +30,7 @@ public class CsvExportHandler {
     public void getData(final String filename, List<Category> categories){
         List<Link> links = new ArrayList<>();
         for (Category category : categories){
-            links.addAll(linkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(), category.getId()));
+            links.addAll(linkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(), category.getId(), null));
         }
 
         File csvOutputFile = new File(filename);

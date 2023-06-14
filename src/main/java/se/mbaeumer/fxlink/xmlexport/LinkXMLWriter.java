@@ -56,7 +56,7 @@ public class LinkXMLWriter {
 	private void getDataForExport() throws SQLException {
 		// get all categories
 		this.categories = this.categoryReadDBHandler.getAllCategories(GenericDBHandler.getInstance());
-		this.links = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
+		this.links = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance(), null);
 		TagDBHandler tagDBHandler = new TagDBHandler();
 
 		this.tags = tagDBHandler.getAllTags(tagDBHandler.constructSqlString(null), new HsqldbConnectionHandler());

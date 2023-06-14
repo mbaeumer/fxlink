@@ -43,11 +43,12 @@ public class LinkHandler {
 	
 	public List<Link> getLinksByCategory(Category category){
 		if (ValueConstants.VALUE_ALL.equals(category.getName())){
-			return this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
+			return this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
 		}else if (ValueConstants.VALUE_N_A.equals(category.getName())){
-			return this.linkReadDBHandler.getAllLinksWithNoCategory(GenericDBHandler.getInstance());
+			return this.linkReadDBHandler.getAllLinksWithNoCategory(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
 		}
-		return this.linkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(), category.getId());
+		return this.linkReadDBHandler.getAllLinksByCategoryId(GenericDBHandler.getInstance(),
+				category.getId(), getDefaultFFollowUpStatus());
 	}
 	
 	public void createLink(Link link) throws SQLException{
@@ -90,14 +91,14 @@ public class LinkHandler {
 
 		Map<String, Long> categoryCounts = categoryNames.stream().collect(Collectors.groupingBy(c -> c, Collectors.counting()));
 
-		Long linkCountWithoutCategory = this.linkReadDBHandler.getAllLinksWithNoCategory(GenericDBHandler.getInstance()).stream().count();
+		Long linkCountWithoutCategory = this.linkReadDBHandler.getAllLinksWithNoCategory(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus()).stream().count();
 		categoryCounts.put("N/A", linkCountWithoutCategory);
 
 		return categoryCounts;
 	}
 
 	public Map<Object, Long> getWeekdayCount(){
-		List<Link> allLinks = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
+		List<Link> allLinks = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
 		List<Date> dates = allLinks.stream().map(link -> link.getCreated()).collect(Collectors.toList());
 		return dates.stream()
 				.map(date -> getWeekDayOfDate(date))
@@ -105,7 +106,7 @@ public class LinkHandler {
 	}
 
 	public Map<Object, Long> getHourCount(){
-		List<Link> allLinks = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
+		List<Link> allLinks = this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
 		List<Date> dates = allLinks.stream().map(link -> link.getLastUpdated()).collect(Collectors.toList());
 
 		List<Integer> hours = dates.stream()
@@ -134,5 +135,13 @@ public class LinkHandler {
 				.filter(s -> "NOT_NEEDED".equals(s.getName()))
 				.findFirst().orElseThrow(IllegalArgumentException::new);
 		link.setFollowUpStatus(followUpStatus);
+	}
+
+	private FollowUpStatus getDefaultFFollowUpStatus(){
+		List<FollowUpStatus> followUpStatuses = followUpStatusReadDBHandler.getFollowUpStatuses(GenericDBHandler.getInstance());
+		return followUpStatuses
+				.stream()
+				.filter(s -> "NOT_NEEDED".equals(s.getName()))
+				.findFirst().orElseThrow(IllegalArgumentException::new);
 	}
 }

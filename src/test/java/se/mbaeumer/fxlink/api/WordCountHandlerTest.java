@@ -42,7 +42,7 @@ public class WordCountHandlerTest {
     public void getWordCount() {
         linkSplitter = new LinkSplitter(new URLHelper());
         wordCountHandler = new WordCountHandler(linkReadDBHandler, linkSplitter);
-        Mockito.when(linkReadDBHandler.getAllLinks(any())).thenReturn(createLinkList());
+        Mockito.when(linkReadDBHandler.getAllLinks(any(), any())).thenReturn(createLinkList());
         Map<String, Integer> wordCount = wordCountHandler.getWordCount();
         Optional<String> keyFacebook = wordCount.keySet().stream()
                 .filter( k -> "facebook".equals(k))

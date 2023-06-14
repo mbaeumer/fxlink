@@ -876,8 +876,8 @@ public class FXLink extends Application{
 	private void createLinkTableView(){
 		this.tblLinks = new TableView();
 
-		this.tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinks()));
-		this.tblLinks.getItems().add(LinkHandler.createPseudoLink());
+		this.tblLinks.getItems().addAll(FXCollections.observableList(this.linkHandler.getLinks()));
+		this.tblLinks.getItems().addAll(FXCollections.observableList(List.of(LinkHandler.createPseudoLink())));
 
 		this.createLinkTableColumns();
 		this.tblLinks.setEditable(true);

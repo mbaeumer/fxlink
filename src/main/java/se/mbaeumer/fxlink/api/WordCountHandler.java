@@ -20,7 +20,7 @@ public class WordCountHandler {
 
     public Map<String, Integer> getWordCount(){
         // read all links
-        List<Link> allLinks = linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance());
+        List<Link> allLinks = linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance(), null);
         List<String> wordList = new ArrayList<>();
         for (Link link : allLinks){
             String[] urlParts = linkSplitter.splitToData(link);
