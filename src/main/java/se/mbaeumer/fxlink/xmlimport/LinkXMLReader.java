@@ -222,7 +222,11 @@ public class LinkXMLReader {
 					new QName("followUpStatus")).getValue();
 			id = Integer.parseInt(stringValue);
 		}catch (NullPointerException | NumberFormatException ex) {
-			id = -1;
+			FollowUpStatus defaultFollowUpStatus = this.followUpStatuses
+					.stream()
+					.filter(fus -> "NOT_NEEDED".equals(fus.getName()))
+					.findFirst().orElseThrow(IllegalArgumentException::new);
+			id = defaultFollowUpStatus.getId();
 		}
 
 		int finalId = id;

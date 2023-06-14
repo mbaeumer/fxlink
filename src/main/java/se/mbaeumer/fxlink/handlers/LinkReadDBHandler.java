@@ -44,7 +44,7 @@ public class LinkReadDBHandler {
 
 			int followUpStatusId = rs.getInt("followupstatus");
 			String followUpName = rs.getString("followUpName");
-			if (followUpStatusId > 1){
+			if (followUpStatusId >= 1){
 				FollowUpStatus followUpStatus = new FollowUpStatus();
 				followUpStatus.setId(followUpStatusId);
 				followUpStatus.setName(followUpName);
