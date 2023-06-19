@@ -49,8 +49,9 @@ public class LinkViewDetailStage extends Stage {
 	private final Label lblCategories = new Label("Categories");
 	private ComboBox<Category> cmbCategories;
 	private final Label lblRank = new Label("Rank");
-
 	private FlowPane flowRank;
+	private final Label lblFollowUpStatus = new Label("Follow-up status");
+	private ComboBox<FollowUpStatus> cmbFollowUpStatus;
 	private NumberSpinner ntRank;
 	private Button btnRankTop = new Button("Rank top");
 
@@ -79,6 +80,8 @@ public class LinkViewDetailStage extends Stage {
 	private final NaiveBayesClassifier naiveBayesClassifier;
 	private final FollowUpRankHandler followUpRankHandler;
 
+	private final FollowUpStatusReadDBHandler followUpStatusReadDBHandler;
+
 	private List<Probability> suggestions;
 
 	public LinkViewDetailStage(Link link){
@@ -94,6 +97,7 @@ public class LinkViewDetailStage extends Stage {
 		this.naiveBayesClassifier = new NaiveBayesClassifier(new LinkSplitter(new URLHelper()), new LinkReadDBHandler(),
 				this.linkHandler, new StopWordHandler());
 		this.followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), this.link.getFollowUpRank());
+		this.followUpStatusReadDBHandler = new FollowUpStatusReadDBHandler();
 		
 		this.initScene();
 		this.makeModal();
@@ -157,6 +161,7 @@ public class LinkViewDetailStage extends Stage {
 		this.initDescription();
 		this.initCategory();
 		this.initRank();
+		this.initFollowUpStatus();
 		this.initSuggestions();
 		this.initCreationDate();
 		this.initLastUpdated();
@@ -250,16 +255,68 @@ public class LinkViewDetailStage extends Stage {
 		this.initRankFlowPane();
 		this.flowRank.getChildren().add(this.ntRank);
 		this.initRankButtons();
-		//this.gridData.add(this.ntRank, 1,4);
-
 	}
 
+	private void initFollowUpStatus(){
+		this.gridData.add(this.lblFollowUpStatus, 0, 5);
+
+		this.cmbFollowUpStatus = new ComboBox<>();
+
+		ObservableList<FollowUpStatus> followUpStatuses =
+				FXCollections.observableArrayList(this.followUpStatusReadDBHandler.getFollowUpStatuses(GenericDBHandler.getInstance()));
+		this.cmbFollowUpStatus.setItems(followUpStatuses);
+
+		this.cmbFollowUpStatus.setCellFactory(new Callback<ListView<FollowUpStatus>,ListCell<FollowUpStatus>>(){
+
+			@Override
+			public ListCell<FollowUpStatus> call(ListView<FollowUpStatus> p) {
+
+				final ListCell<FollowUpStatus> cell = new ListCell<FollowUpStatus>(){
+
+					@Override
+					protected void updateItem(FollowUpStatus t, boolean bln) {
+						super.updateItem(t, bln);
+						if(t != null){
+							setText(t.getName());
+						}else{
+							setText(null);
+						}
+					}
+				};
+
+				return cell;
+			}
+		});
+
+		this.cmbFollowUpStatus.setButtonCell(new ListCell<FollowUpStatus>() {
+			@Override
+			protected void updateItem(FollowUpStatus t, boolean bln) {
+				super.updateItem(t, bln);
+				if (t != null) {
+					setText(t.nameProperty().getValue());
+				} else {
+					setText(null);
+				}
+			}
+		});
+
+		this.gridData.add(this.cmbFollowUpStatus, 1, 5);
+
+		int index = 0;
+		for (FollowUpStatus c : this.cmbFollowUpStatus.getItems()){
+			if (c.getName().equalsIgnoreCase(this.link.getFollowUpStatus().getName())){
+				break;
+			}
+			index++;
+		}
+		this.cmbFollowUpStatus.getSelectionModel().select(index);
+		this.cmbFollowUpStatus.setDisable(true);
+	}
 	private void initRankFlowPane(){
 		this.flowRank = new FlowPane(Orientation.HORIZONTAL);
 		this.flowRank.setHgap(5);
 		this.gridData.add(this.flowRank, 1, 4);
 	}
-
 	private void initRankButtons(){
 		this.btnRankTop.setOnAction(this::handleTopRank);
 		this.btnRankLow.setOnAction(this::handleBottomRank);
@@ -300,7 +357,7 @@ public class LinkViewDetailStage extends Stage {
 	}
 
 	private void initSuggestions(){
-		this.gridData.add(this.lblSuggestions, 0, 5);
+		this.gridData.add(this.lblSuggestions, 0, 6);
 
 		this.flowSuggestions = new FlowPane(Orientation.HORIZONTAL);
 		this.flowSuggestions.setPadding(new Insets(5, 5, 0, 5));
@@ -313,7 +370,7 @@ public class LinkViewDetailStage extends Stage {
 			this.flowSuggestions.getChildren().add(button);
 		}
 
-		this.gridData.add(this.flowSuggestions, 1, 5);
+		this.gridData.add(this.flowSuggestions, 1, 6);
 	}
 
 	private void setSuggestedCategory(ActionEvent actionEvent){
@@ -352,17 +409,17 @@ public class LinkViewDetailStage extends Stage {
 	}
 	
 	private void initCreationDate(){
-		this.gridData.add(this.lblCreated, 0, 6);
+		this.gridData.add(this.lblCreated, 0, 7);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		this.lblCreatedDate = new Label(df.format(this.link.getCreated()));
-		this.gridData.add(this.lblCreatedDate, 1, 6);
+		this.gridData.add(this.lblCreatedDate, 1, 7);
 	}
 	
 	private void initLastUpdated(){
-		this.gridData.add(this.lblLastUpdated, 0, 7);
+		this.gridData.add(this.lblLastUpdated, 0, 8);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		this.lblLastUpdatedDate = new Label(df.format(this.link.getLastUpdated()));
-		this.gridData.add(this.lblLastUpdatedDate, 1, 7);
+		this.gridData.add(this.lblLastUpdatedDate, 1, 8);
 	}
 	
 	private void initTagging(){
