@@ -89,10 +89,11 @@ public class LinkUpdateDBHandler {
 	public void updateRank(Link link, int rank, GenericDBHandler dbh) throws SQLException {
 
 		Connection connection = dbh.getConnection();
-		String sql = "UPDATE Link SET followuprank=RANK_PLACEHOLDER " + SQL_UPDATE_WHERE_CLAUSE;
+		String sql = "UPDATE Link SET followuprank=RANK_PLACEHOLDER, followupstatus=FOLLOWUPSTATUS_PLACEHOLDER " + SQL_UPDATE_WHERE_CLAUSE;
 
 		sql = sql.replaceFirst(Pattern.quote("RANK_PLACEHOLDER"), Integer.valueOf(rank).toString());
-		sql = sql.replaceFirst(Pattern.quote("ID_PLACEHOLDER"), Integer.valueOf(link.getId()).toString() );
+		sql = sql.replaceFirst(Pattern.quote("FOLLOWUPSTATUS_PLACEHOLDER"), Integer.valueOf(link.getFollowUpStatus().getId()).toString());
+		sql = sql.replaceFirst(Pattern.quote("ID_PLACEHOLDER"), Integer.valueOf(link.getId()).toString());
 
 		PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 		stmt.executeUpdate();

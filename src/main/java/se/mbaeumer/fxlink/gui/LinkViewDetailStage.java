@@ -96,7 +96,7 @@ public class LinkViewDetailStage extends Stage {
 		this.titleHandler = new TitleHandler(new LinkTitleUtilImpl(), new YoutubeCrawler());
 		this.naiveBayesClassifier = new NaiveBayesClassifier(new LinkSplitter(new URLHelper()), new LinkReadDBHandler(),
 				this.linkHandler, new StopWordHandler());
-		this.followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), this.link.getFollowUpRank());
+		this.followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), this.link.getFollowUpRank(), new FollowUpStatusReadDBHandler());
 		this.followUpStatusReadDBHandler = new FollowUpStatusReadDBHandler();
 		
 		this.initScene();

@@ -1316,7 +1316,7 @@ public class FXLink extends Application{
 		MenuItem miRankTop = new MenuItem("Rank top");
 		miRankTop.setOnAction(actionEvent -> {
 			try {
-				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank());
+				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank(), new FollowUpStatusReadDBHandler());
 				followUpRankHandler.setHighestRank(selectedLink);
 				refreshLinkTable();
 			} catch (SQLException e) {
@@ -1327,7 +1327,7 @@ public class FXLink extends Application{
 		MenuItem miRankLow = new MenuItem("Rank bottom");
 		miRankLow.setOnAction(actionEvent -> {
 			try {
-				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank());
+				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank(), new FollowUpStatusReadDBHandler());
 				followUpRankHandler.setLowestRank(selectedLink);
 				refreshLinkTable();
 			} catch (SQLException e) {

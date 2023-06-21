@@ -1,8 +1,10 @@
 package se.mbaeumer.fxlink.api;
 
+import se.mbaeumer.fxlink.handlers.FollowUpStatusReadDBHandler;
 import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkUpdateDBHandler;
+import se.mbaeumer.fxlink.models.FollowUpStatus;
 import se.mbaeumer.fxlink.models.Link;
 
 import java.math.BigDecimal;
@@ -12,13 +14,20 @@ import java.util.List;
 public class FollowUpRankHandler {
     private final LinkReadDBHandler linkReadDBHandler;
     private final LinkUpdateDBHandler linkUpdateDBHandler;
+
+    private final FollowUpStatusReadDBHandler followUpStatusReadDBHandler;
+
     private int lowestRank;
     private int highestRank;
     List<Link> linksOrderedByRank;
 
-    public FollowUpRankHandler(LinkReadDBHandler linkReadDBHandler, LinkUpdateDBHandler linkUpdateDBHandler, int currentRank) {
+    private List<FollowUpStatus> followUpStatuses;
+
+    public FollowUpRankHandler(LinkReadDBHandler linkReadDBHandler, LinkUpdateDBHandler linkUpdateDBHandler, int currentRank, FollowUpStatusReadDBHandler followUpStatusReadDBHandler) {
         this.linkReadDBHandler = linkReadDBHandler;
         this.linkUpdateDBHandler = linkUpdateDBHandler;
+        this.followUpStatusReadDBHandler = followUpStatusReadDBHandler;
+        followUpStatuses = followUpStatusReadDBHandler.getFollowUpStatuses(GenericDBHandler.getInstance());
         try {
             this.init(currentRank);
         } catch (SQLException e) {
@@ -45,11 +54,10 @@ public class FollowUpRankHandler {
         if (currentRank == -1) {
             lowestRank = linksOrderedByRank.size() + 1;
         }
-
     }
 
     public void updateRanks(final Link link, final int oldRank){
-        if (oldRank != link.getFollowUpRank() && link.getFollowUpRank() >= 1){
+        if (isStillRanked(link, oldRank)){
             if (oldRank > 0) {
                 linksOrderedByRank.remove(oldRank - 1);
             }
@@ -57,6 +65,7 @@ public class FollowUpRankHandler {
             linksOrderedByRank.add(link.getFollowUpRank()-1, link);
         }else if (oldRank != link.getFollowUpRank() && link.getFollowUpRank() == -1){
             linksOrderedByRank.remove(oldRank - 1);
+            link.setFollowUpStatus(getFollowUpStatus("NOT_NEEDED"));
             try {
                 linkUpdateDBHandler.updateRank(link, -1, GenericDBHandler.getInstance());
             } catch (SQLException e) {
@@ -68,6 +77,7 @@ public class FollowUpRankHandler {
 
         int rank = 1;
         for (Link aLink : linksOrderedByRank){
+            aLink.setFollowUpStatus(getFollowUpStatus("NEEDED"));
             try {
                 linkUpdateDBHandler.updateRank(aLink, rank, GenericDBHandler.getInstance());
             } catch (SQLException e) {
@@ -76,10 +86,13 @@ public class FollowUpRankHandler {
             rank++;
         }
     }
-
+    private static boolean isStillRanked(Link link, int oldRank) {
+        return oldRank != link.getFollowUpRank() && link.getFollowUpRank() >= 1;
+    }
     public void setHighestRank(final Link link) throws SQLException{
         if (linksOrderedByRank.size() == 0){
             link.setFollowUpRank(1);
+            link.setFollowUpStatus(getFollowUpStatus("NEEDED"));
             linksOrderedByRank.add(link);
             linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
         }else{
@@ -88,13 +101,13 @@ public class FollowUpRankHandler {
                 linksOrderedByRank.remove(currentRank-1);
             }
             linksOrderedByRank.add(0, link);
-            updateRanks(link);
+            updateRanks();
         }
     }
-
     public void setLowestRank(final Link link) throws SQLException{
         if (linksOrderedByRank.size() == 0){
             link.setFollowUpRank(1);
+            link.setFollowUpStatus(getFollowUpStatus("NEEDED"));
             linksOrderedByRank.add(link);
             linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
         }else{
@@ -102,17 +115,15 @@ public class FollowUpRankHandler {
             if (currentRank > 0){
                 linksOrderedByRank.remove(currentRank - 1);
             }
-            //link.setFollowUpRank(linksOrderedByRank.size());
             linksOrderedByRank.add(link);
-            updateRanks(link);
+            updateRanks();
         }
     }
-
     public BigDecimal getLowestPossibleRank() throws SQLException {
         linksOrderedByRank = linkReadDBHandler.getLinksOrderedByRank(GenericDBHandler.getInstance());
         return BigDecimal.valueOf(linksOrderedByRank.size());
     }
-    private void updateRanks(Link link) {
+    private void updateRanks() {
         int rank = 1;
         for (Link aLink : linksOrderedByRank){
             try {
@@ -123,5 +134,11 @@ public class FollowUpRankHandler {
             }
             rank++;
         }
+    }
+    private FollowUpStatus getFollowUpStatus(final String statusName){
+        return followUpStatuses
+                .stream()
+                .filter(s -> statusName.equals(s.getName()))
+                .findFirst().orElseThrow(IllegalArgumentException::new);
     }
 }

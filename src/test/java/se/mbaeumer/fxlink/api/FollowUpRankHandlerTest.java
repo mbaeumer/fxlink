@@ -6,8 +6,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import se.mbaeumer.fxlink.handlers.FollowUpStatusReadDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkUpdateDBHandler;
+import se.mbaeumer.fxlink.models.FollowUpStatus;
 import se.mbaeumer.fxlink.models.Link;
 
 import java.sql.SQLException;
@@ -24,10 +26,13 @@ public class FollowUpRankHandlerTest {
     @Mock
     private LinkUpdateDBHandler linkUpdateDBHandler;
 
+    @Mock
+    private FollowUpStatusReadDBHandler followUpStatusReadDBHandler;
+
     @Test
     public void initRanksWhenNoLinkRanked() throws SQLException {
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(new ArrayList<>());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
         Assert.assertEquals(1, followUpRankHandler.getHighestRank());
         Assert.assertEquals(1, followUpRankHandler.getLowestRank());
     }
@@ -35,7 +40,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void initRanksWhenTwoLinksRankedCurrentLinkNotRanked() throws SQLException {
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Assert.assertEquals(1, followUpRankHandler.getHighestRank());
         Assert.assertEquals(3, followUpRankHandler.getLowestRank());
@@ -44,7 +49,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void initRanksWhenTwoLinksRankedCurrentLinkRanked() throws SQLException {
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, 1);
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, 1, followUpStatusReadDBHandler);
         Assert.assertEquals(1, followUpRankHandler.getHighestRank());
         Assert.assertEquals(2, followUpRankHandler.getLowestRank());
     }
@@ -66,7 +71,8 @@ public class FollowUpRankHandlerTest {
     @Test
     public void testUpdateRanksHigherRank() throws SQLException {
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, 1);
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, 1, followUpStatusReadDBHandler);
 
         Link link = new Link("test", "www.test2.com", "");
         link.setFollowUpRank(1);
@@ -80,7 +86,8 @@ public class FollowUpRankHandlerTest {
     @Test
     public void testUnrankFirst() throws SQLException {
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, 1);
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, 1, followUpStatusReadDBHandler);
 
         Link link = new Link("test", "www.test1.com", "");
         link.setFollowUpRank(-1);
@@ -95,7 +102,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void testRankUnchanged() throws SQLException {
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, 1);
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, 1, followUpStatusReadDBHandler);
 
         Link link = new Link("test", "www.test1.com", "");
         link.setFollowUpRank(1);
@@ -110,7 +117,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setHighestRank_existingRanks() throws SQLException{
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test2", "www.newlink.com", "");
         link.setFollowUpRank(-1);
@@ -127,7 +134,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setHighestRank_existingRanks_switch() throws SQLException{
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test2", "www.test2.com", "");
         link.setFollowUpRank(2);
@@ -143,7 +150,8 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setHighestRank_noRanks() throws SQLException{
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(new ArrayList<>());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test", "www.newlink.com", "");
         link.setFollowUpRank(-1);
@@ -159,7 +167,8 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setLowestRank_noRanks() throws SQLException {
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(new ArrayList<>());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test", "www.newlink.com", "");
         link.setFollowUpRank(-1);
@@ -175,7 +184,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setLowestRank_existingRanks() throws SQLException{
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test2", "www.newlink.com", "");
         link.setFollowUpRank(-1);
@@ -192,7 +201,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setLowestRank_existingRanks_switch() throws SQLException{
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
-        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1);
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test", "www.test1.com", "");
         link.setFollowUpRank(1);
@@ -203,5 +212,13 @@ public class FollowUpRankHandlerTest {
         Assert.assertEquals("www.test1.com", lowestLink.getURL());
         Assert.assertEquals(2, lowestLink.getFollowUpRank());
         Mockito.verify(linkUpdateDBHandler, Mockito.times(2)).updateRank(any(), anyInt(), any());
+    }
+
+    private List<FollowUpStatus> createStatuses(){
+        FollowUpStatus statusNotNeeded = new FollowUpStatus();
+        statusNotNeeded.setName("NOT_NEEDED");
+        FollowUpStatus statusNeeded = new FollowUpStatus();
+        statusNeeded.setName("NEEDED");
+        return List.of(statusNotNeeded, statusNeeded);
     }
 }
