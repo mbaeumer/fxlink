@@ -1,6 +1,7 @@
 package se.mbaeumer.fxlink.handlers;
 
 import se.mbaeumer.fxlink.models.Category;
+import se.mbaeumer.fxlink.models.FollowUpStatus;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.ValueConstants;
 
@@ -10,9 +11,10 @@ import java.util.List;
 
 public class LinkSearchDBHandler {
 	public static String BASE_QUERY = "SELECT l.id AS linkId, l.title AS linkTitle, l.url AS URL, l.description AS linkDescription, l.created AS linkCreated," +
-			" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, c.id as categoryId, c.name as category," +
+			" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, l.followuprank, l.followupstatus, fus.name as followUpName, c.id as categoryId, c.name as category," +
 			" c.description as categoryDescription, c.created as categoryCreated, c.lastUpdated as categoryLastUpdated" +
-			" from link l left join category c on c.id = l.categoryId ";
+			" from link l left join category c on c.id = l.categoryId" +
+			" left join followupstatus fus on fus.id = l.followupstatus ";
 
 	public static String WHERE = "where ";
 
@@ -89,7 +91,7 @@ public class LinkSearchDBHandler {
 		return !"".equals(criteria) ? OR : "(";
 	}
 
-	public List<Link> findAllMatchingLinks(GenericDBHandler dbh, String sql, Category category) throws SQLException{
+	public List<Link> findAllMatchingLinks(GenericDBHandler dbh, String sql, Category category, FollowUpStatus defaultFollowUpStatus) throws SQLException{
 		Connection connection = dbh.getConnection();
 		List<Link> links = new ArrayList<>();
 
@@ -105,6 +107,17 @@ public class LinkSearchDBHandler {
 			link.setId(rs.getInt("linkId"));
 			link.setCreated(rs.getTimestamp("linkCreated"));
 			link.setLastUpdated(rs.getTimestamp("linkLastUpdated"));
+			link.setFollowUpRank(rs.getInt("followuprank"));
+			int followUpStatusId = rs.getInt("followupstatus");
+			String followUpName = rs.getString("followUpName");
+			if (followUpStatusId >= 1){
+				FollowUpStatus followUpStatus = new FollowUpStatus();
+				followUpStatus.setId(followUpStatusId);
+				followUpStatus.setName(followUpName);
+				link.setFollowUpStatus(followUpStatus);
+			}else{
+				link.setFollowUpStatus(defaultFollowUpStatus);
+			}
 			int categoryId = rs.getInt("categoryId");
 			if (categoryId > 0) {
 				Category cat = new Category();
