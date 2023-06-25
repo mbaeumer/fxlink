@@ -70,13 +70,10 @@ public class XMLImportHandler {
 		}
 	}
 
-	private void importImportItems(){
+	private void importImportItems() throws SQLException {
 		ImportItemImportDBandler importItemImportDBandler = new ImportItemImportDBandler();
 		for (ImportItem linkTag : reader.getImportItems()){
-			try {
-				importItemImportDBandler.importImportItem(linkTag, new HsqldbConnectionHandler());
-			} catch (SQLException e) {
-			}
+			importItemImportDBandler.importImportItem(linkTag, new HsqldbConnectionHandler());
 		}
 	}
 
