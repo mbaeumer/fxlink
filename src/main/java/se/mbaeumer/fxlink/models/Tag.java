@@ -20,12 +20,12 @@ public class Tag {
 	public String getDescription(){return this.description.get();}
 	public void setDescription(String description){this.description.set(description);}
 
-	private Property<Date> created = new SimpleObjectProperty<Date>();
+	private Property<Date> created = new SimpleObjectProperty<>();
 	public Property<Date> createdProperty(){return this.created;}
 	public Date getCreated(){return this.created.getValue();}
 	public void setCreated(Date created){this.created.setValue(created);}
 	
-	private Property<Date> lastUpdated = new SimpleObjectProperty<Date>();
+	private Property<Date> lastUpdated = new SimpleObjectProperty<>();
 	public Property<Date> lastUpdatedProperty(){return this.lastUpdated;}
 	public Date getLastUpdated(){return this.lastUpdated.getValue();}
 	public void setLastUpdated(Date lastUpdated){this.lastUpdated.setValue(lastUpdated);}

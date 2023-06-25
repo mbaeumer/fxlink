@@ -6,7 +6,7 @@ public class LinkTitleUtilImpl implements LinkTitleUtil {
 
     @Override
     public String generateTitle(Link link) {
-        String url = "";
+        String url;
         String description = null;
         url = removeTheProtocol(link);
 

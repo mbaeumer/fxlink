@@ -14,7 +14,7 @@ import java.util.List;
 public class LinkTagReadDBHandler {
 	public List<Link> getAllLinksByTagId(GenericDBHandler dbh, int tagId) throws SQLException{
 		Connection connection = dbh.getConnection();				
-		List<Link> links = new ArrayList<Link>();
+		List<Link> links = new ArrayList<>();
 		
 		String sql = "select l.id as linkId, l.title l.url, l.description as linkDescription, l.created as linkCreated, l.lastUpdated as linklLastUpdated, lt.tagid as tagid" +
 		" from linktag lt" + 
@@ -65,7 +65,7 @@ public class LinkTagReadDBHandler {
 	}
 	
 	public static List<LinkTag> getAllLinkTagEntries(GenericDBHandler dbh) throws SQLException{
-		List<LinkTag> linkTags = new ArrayList<LinkTag>();
+		List<LinkTag> linkTags = new ArrayList<>();
 		
 		Connection connection = dbh.getConnection();				
 		

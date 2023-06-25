@@ -26,17 +26,17 @@ public class Link {
 	public String getDescription(){return this.description.get();}
 	public void setDescription(String description){this.description.set(description);}
 
-	protected Property<Date> created = new SimpleObjectProperty<Date>();
+	protected Property<Date> created = new SimpleObjectProperty<>();
 	public Property<Date> createdProperty(){return this.created;}
 	public Date getCreated(){return this.created.getValue();}
 	public void setCreated(Date created){this.created.setValue(created);}
 	
-	protected Property<Date> lastUpdated = new SimpleObjectProperty<Date>();
+	protected Property<Date> lastUpdated = new SimpleObjectProperty<>();
 	public Property<Date> lastUpdatedProperty(){return this.lastUpdated;}
 	public Date getLastUpdated(){return this.lastUpdated.getValue();}
 	public void setLastUpdated(Date lastUpdated){this.lastUpdated.setValue(lastUpdated);}
 	
-	protected Property<Category> category = new SimpleObjectProperty<Category>();
+	protected Property<Category> category = new SimpleObjectProperty<>();
 	public Property<Category> categoryProperty(){return this.category;}
 	public Category getCategory(){return this.category.getValue();}
 	public void setCategory(Category category){this.category.setValue(category);}
@@ -51,7 +51,7 @@ public class Link {
 	public int getFollowUpRank(){return this.followUpRank.get();}
 	public void setFollowUpRank(int followUpRank){this.followUpRank.set(followUpRank);}
 
-	protected Property<FollowUpStatus> followUpStatus = new SimpleObjectProperty<FollowUpStatus>();
+	protected Property<FollowUpStatus> followUpStatus = new SimpleObjectProperty<>();
 	public Property<FollowUpStatus> followUpStatusProperty(){return this.followUpStatus;}
 	public FollowUpStatus getFollowUpStatus(){return this.followUpStatus.getValue();}
 	public void setFollowUpStatus(FollowUpStatus followUpStatus){this.followUpStatus.setValue(followUpStatus);}

@@ -86,13 +86,13 @@ public class ClassifyStage extends Stage {
     }
 
     public void initTableView(){
-        this.tvLinks = new TableView();
+        this.tvLinks = new TableView<>();
         this.tvLinks.setItems(FXCollections.observableList(this.allLinks));
         this.flowGeneral.getChildren().add(this.tvLinks);
     }
 
     public void createTableViewColumns(){
-        TableColumn urlCol = new TableColumn("Url");
+        TableColumn urlCol = new TableColumn<>("Url");
         urlCol.setCellValueFactory(new PropertyValueFactory("url"));
         urlCol.setCellFactory(TextFieldTableCell.forTableColumn());
 

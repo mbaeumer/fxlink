@@ -15,7 +15,7 @@ public class ImportItem {
     public String getFilename(){return this.filename.get();}
     public void setFilename(String filename){this.filename.set(filename);}
 
-    protected Property<Date> created = new SimpleObjectProperty<Date>(this, "created");
+    protected Property<Date> created = new SimpleObjectProperty<>(this, "created");
     public Property<Date> createdProperty(){return this.created;}
     public Date getCreated(){return this.created.getValue();}
     public void setCreated(Date created){this.created.setValue(created);}

@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class CsvExportStage extends Stage {
     private Scene scene;
     private FlowPane flowGeneral;
-    private ListView listView;
+    private ListView<SelectableCategory> listView;
     private FlowPane flowActions;
     private Button btnExport;
     private Button btnClose;
