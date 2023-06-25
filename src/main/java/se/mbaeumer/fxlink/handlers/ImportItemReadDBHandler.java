@@ -13,7 +13,7 @@ public class ImportItemReadDBHandler {
 
     public List<ImportItem> getAllImportItems(String sql, DatabaseConnectionHandler databaseConnectionHandler) throws SQLException {
         Connection connection = databaseConnectionHandler.getConnection();
-        List<ImportItem> items = new ArrayList();
+        List<ImportItem> items = new ArrayList<>();
 
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery(sql);

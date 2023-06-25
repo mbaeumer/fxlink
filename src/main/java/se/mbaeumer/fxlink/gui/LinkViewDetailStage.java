@@ -429,8 +429,8 @@ public class LinkViewDetailStage extends Stage {
 	
 	private void populateDataLists(){
 		this.allTags = TagHandler.getTags();
-		this.existingTagsForLink = new ArrayList();
-		this.selectableTags = new ArrayList();
+		this.existingTagsForLink = new ArrayList<>();
+		this.selectableTags = new ArrayList<>();
 		try {
 			this.existingTagsForLink = TagHandler.getAllTagsForLink(this.link);
 		} catch (SQLException e) {
@@ -585,7 +585,6 @@ public class LinkViewDetailStage extends Stage {
 
 		setCategory(updatedLink);
 		if (this.link.getId() <= 0) {
-			//updatedLink.setFollowUpRank(-1);
 			linkHandler.createLink(updatedLink);
 			followUpRankHandler.updateRanks(updatedLink, -1);
 		}else {

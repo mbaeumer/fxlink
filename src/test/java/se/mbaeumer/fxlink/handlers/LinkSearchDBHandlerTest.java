@@ -90,15 +90,6 @@ public class LinkSearchDBHandlerTest{
 						+ "OR LCASE(title) LIKE '%test%' OR LCASE(title) LIKE 'test%' "
 				+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' )";
 
-		/*
-		String expectedSqlString = LinkSearchDBHandler.BASE_QUERY + LinkSearchDBHandler.WHERE + "("
-				+ LinkSearchDBHandler.URL_CRITERIA_START + searchTerm + LinkSearchDBHandler.URL_CRITERIA_END
-				+ LinkSearchDBHandler.OR
-				+ LinkSearchDBHandler.TITLE_CRITERIA_START + searchTerm + LinkSearchDBHandler.TITLE_CRITERIA_END
-				+ LinkSearchDBHandler.OR
-				+ LinkSearchDBHandler.DESCRIPTION_CRITERIA_START + searchTerm + LinkSearchDBHandler.DESCRIPTION_CRITERIA_END + ")";
-
-		 */
 		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.buildSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_ALL)));
 	}
 
@@ -156,16 +147,7 @@ public class LinkSearchDBHandlerTest{
 				+ "AND categoryId IS NULL";
 
 		String actual = linkSearchDBHandler.buildSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_N_A));
-		System.out.println(expectedSqlString);
-		System.out.println(actual);
 
-		/*
-		String expectedSqlString = LinkSearchDBHandler.BASE_QUERY + LinkSearchDBHandler.WHERE + "("
-				+ LinkSearchDBHandler.TITLE_CRITERIA_START + searchTerm + LinkSearchDBHandler.TITLE_CRITERIA_END
-				+ LinkSearchDBHandler.OR
-				+ LinkSearchDBHandler.DESCRIPTION_CRITERIA_START + searchTerm + LinkSearchDBHandler.DESCRIPTION_CRITERIA_END + ")"
-				+ LinkSearchDBHandler.AND + LinkSearchDBHandler.CATEGORY_ID + LinkSearchDBHandler.IS_NULL;
-		*/
 		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.buildSearchString(searchTerm, isUrl, isTitle, isDescription, createPseudoCategory(ValueConstants.VALUE_N_A)));
 	}
 
@@ -180,17 +162,6 @@ public class LinkSearchDBHandlerTest{
 						+ "OR LCASE(description) LIKE '%test%' OR LCASE(description) LIKE 'test%' )"
 						+ "AND categoryId = ?";
 
-		String actual = linkSearchDBHandler.buildSearchString(searchTerm, isUrl, isTitle, isDescription, createCategoryWithNameJava());
-		System.out.println(expectedSqlString);
-		System.out.println(actual);
-
-		/*
-		String expectedSqlString = LinkSearchDBHandler.BASE_QUERY + LinkSearchDBHandler.WHERE + "("
-				+ LinkSearchDBHandler.TITLE_CRITERIA_START + searchTerm + LinkSearchDBHandler.TITLE_CRITERIA_END
-				+ LinkSearchDBHandler.OR
-				+ LinkSearchDBHandler.DESCRIPTION_CRITERIA_START + searchTerm + LinkSearchDBHandler.DESCRIPTION_CRITERIA_END + ")"
-				+ LinkSearchDBHandler.AND + LinkSearchDBHandler.CATEGORY_ID + LinkSearchDBHandler.EQUALS + "?";
-		*/
 		Assert.assertEquals(expectedSqlString, linkSearchDBHandler.buildSearchString(searchTerm, isUrl, isTitle, isDescription, createCategoryWithNameJava()));
 	}
 

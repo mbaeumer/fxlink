@@ -147,8 +147,7 @@ public class SuggestionHandlerTest {
     }
 
     private CategoryCount createCategoryCount(final String category){
-        CategoryCount categoryCount = new CategoryCount(category, 1);
-        return categoryCount;
+        return new CategoryCount(category, 1);
     }
 
     public Map<String, List<CategoryCount>> removeStopWords(final Map<String, List<CategoryCount>> map){

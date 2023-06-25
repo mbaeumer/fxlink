@@ -25,7 +25,7 @@ public class StopWordHandler {
         return words;
     }
 
-    public Map removeStopWordsFromMap(Map<String, List<CategoryCount>> aMap){
+    public Map<String, List<CategoryCount>> removeStopWordsFromMap(Map<String, List<CategoryCount>> aMap){
         aMap.keySet().removeAll(STOP_WORDS_SET);
         Set<String> toExclude = aMap.keySet().stream()
                 .filter(word -> word.matches(".*\\d.*"))

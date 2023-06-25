@@ -18,7 +18,7 @@ public class SuggestionDataHandler {
     }
 
     public Map<String, List<CategoryCount>> prepareData(final List<Link> links){
-        Map<String, List<CategoryCount>> hash = new HashMap();
+        Map<String, List<CategoryCount>> hash = new HashMap<>();
         for (Link link : links){
             String[] urlParts = linkSplitter.splitToData(link);
             for (String word : urlParts){

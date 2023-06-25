@@ -50,7 +50,7 @@ public class ImportResultReportStage extends Stage {
 	private Tab tabSuccess;
 	private Tab tabFailed;
 	private TableView<Link> tvSuccessfulLinks;
-	private TableView tvFailedLinks;
+	private TableView<FailedLink> tvFailedLinks;
 	private Button btnClose;
 	private ImportResultReport importReport;
 
@@ -319,19 +319,19 @@ public class ImportResultReportStage extends Stage {
 		selectedCol.setCellValueFactory(c -> c.getValue().selectedProperty());
 		selectedCol.setCellFactory( tc -> new CheckBoxTableCell<>());
 
-		TableColumn urlCol = new TableColumn<>("Url");
-		urlCol.setCellValueFactory(new PropertyValueFactory("url"));
+		TableColumn<Link, String> urlCol = new TableColumn<>("Url");
+		urlCol.setCellValueFactory(new PropertyValueFactory<>("url"));
 		urlCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		urlCol.setEditable(false);
 
 		// create title column
-		TableColumn titleCol = new TableColumn<>("Title");
-		titleCol.setCellValueFactory(new PropertyValueFactory("title"));
+		TableColumn<Link, String> titleCol = new TableColumn<>("Title");
+		titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
 		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		titleCol.setEditable(false);
 
-		TableColumn descriptionCol = new TableColumn<>("Description");
-		descriptionCol.setCellValueFactory(new PropertyValueFactory("description"));
+		TableColumn<Link, String> descriptionCol = new TableColumn<>("Description");
+		descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
 		descriptionCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		descriptionCol.setOnEditCommit(
 				new EventHandler<TableColumn.CellEditEvent<Link, String>>() {
@@ -344,8 +344,8 @@ public class ImportResultReportStage extends Stage {
 				}
 		);
 
-		TableColumn categoryCol = new TableColumn<>("Category");
-		categoryCol.setCellValueFactory(new PropertyValueFactory<Link, Category>("category"));
+		TableColumn<Link, Category> categoryCol = new TableColumn<>("Category");
+		categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
 		categoryCol.setCellFactory(new Callback<TableColumn<Link, Category>, TableCell<Link, Category>>(){
 
 			@Override
@@ -366,8 +366,8 @@ public class ImportResultReportStage extends Stage {
 			}
 		});
 
-		TableColumn createdCol = new TableColumn<>("Created");
-		createdCol.setCellValueFactory(new PropertyValueFactory("created"));
+		TableColumn<Link, String> createdCol = new TableColumn<>("Created");
+		createdCol.setCellValueFactory(new PropertyValueFactory<>("created"));
 		createdCol.setCellValueFactory(
 				new Callback<TableColumn.CellDataFeatures<Link, String>, ObservableValue<String>>() {
 					@Override
@@ -405,16 +405,14 @@ public class ImportResultReportStage extends Stage {
 		this.tabFailed.setContent(this.tvFailedLinks);
 	}
 	
-	@SuppressWarnings({ "unchecked" })
 	private void createFailedLinksTableView(){
-		this.tvFailedLinks = new TableView<FailedLink>();
+		this.tvFailedLinks = new TableView<>();
 		this.tvFailedLinks.setItems(FXCollections.observableList(this.importReport.getFailedLinks()));
 		this.tvFailedLinks.setEditable(false);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createFailedLinksTableViewColumns(){
-		TableColumn urlCol = new TableColumn("Url");
+		TableColumn urlCol = new TableColumn<>("Url");
 		urlCol.setCellValueFactory(new PropertyValueFactory<FailedLink, Link>("link"));
 		urlCol.setCellFactory(new Callback<TableColumn<FailedLink, Link>, TableCell<FailedLink, Link>>(){
 
@@ -490,7 +488,6 @@ public class ImportResultReportStage extends Stage {
 			Category category = categoryHandler.getCategoryByName(categoryName);
 			link.setCategory(category);
 			linkHandler.updateLink(link);
-			//setCategory(actionEvent, link);
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}

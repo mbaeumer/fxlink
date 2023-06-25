@@ -26,7 +26,7 @@ import java.util.Optional;
 public class ImportHistoryStage extends Stage {
     private Scene scene;
     private FlowPane flowGeneral;
-    private TableView tvImportItems;
+    private TableView<ImportItem> tvImportItems;
     private Button btnClose;
     private Button btnClearHistory;
 
@@ -76,16 +76,16 @@ public class ImportHistoryStage extends Stage {
 
         this.flowGeneral.getChildren().add(this.tvImportItems);
         this.tvImportItems.setPrefWidth(480);
-        ((TableColumn)this.tvImportItems.getColumns().get(0)).setPrefWidth(this.tvImportItems.getPrefWidth() * 75/100);
-        ((TableColumn)this.tvImportItems.getColumns().get(1)).setPrefWidth(this.tvImportItems.getPrefWidth() * 25/100);
+        this.tvImportItems.getColumns().get(0).setPrefWidth(this.tvImportItems.getPrefWidth() * 75/100);
+        this.tvImportItems.getColumns().get(1).setPrefWidth(this.tvImportItems.getPrefWidth() * 25/100);
     }
 
     private void createTableViewColumns(){
-        TableColumn filenameCol = new TableColumn("Filename");
-        filenameCol.setCellValueFactory(new PropertyValueFactory("filename"));
+        TableColumn<ImportItem, String> filenameCol = new TableColumn<>("Filename");
+        filenameCol.setCellValueFactory(new PropertyValueFactory<>("filename"));
 
-        TableColumn createdCol = new TableColumn("Created");
-        createdCol.setCellValueFactory(new PropertyValueFactory("created"));
+        TableColumn<ImportItem, String> createdCol = new TableColumn<>("Created");
+        createdCol.setCellValueFactory(new PropertyValueFactory<>("created"));
         createdCol.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<ImportItem, String>, ObservableValue<String>>() {
                     @Override
