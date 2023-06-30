@@ -14,9 +14,7 @@ import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class LinkXMLReader {
 	public static final String CATEGORIES = "categories";
@@ -39,7 +37,7 @@ public class LinkXMLReader {
 	private List<Link> links = new ArrayList<>();
 	private List<Tag> tags = new ArrayList<>();
 	private List<LinkTag> linkTags = new ArrayList<>();
-	private List<ImportItem> importItems = new ArrayList<>();
+	private Set<ImportItem> importItems = new HashSet<>();
 
 	private List<FollowUpStatus> followUpStatuses;
 	
@@ -143,7 +141,7 @@ public class LinkXMLReader {
 							new QName("tagid")).getValue()));
 					this.linkTags.add(linkTag);
 				}else if (IMPORTITEMS.equals(startElement.getName().getLocalPart())) {
-					this.importItems = new ArrayList<>();
+					this.importItems = new HashSet<>();
 				}else if (IMPORTITEM.equals(startElement.getName().getLocalPart())) {
 					ImportItem importItem = new ImportItem();
 					importItem.setId(Integer.parseInt(startElement.getAttributeByName(
@@ -199,7 +197,7 @@ public class LinkXMLReader {
 		return linkTags;
 	}
 
-	public List<ImportItem> getImportItems() {
+	public Set<ImportItem> getImportItems() {
 		return importItems;
 	}
 
