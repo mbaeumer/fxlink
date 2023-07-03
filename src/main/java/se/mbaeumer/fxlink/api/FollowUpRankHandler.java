@@ -57,13 +57,16 @@ public class FollowUpRankHandler {
     }
 
     public void updateRanks(final Link link, final int oldRank){
+        /*
+        TODO: Change to remove the printStackTrace further down
+         */
         if (isStillRanked(link, oldRank)){
             if (oldRank > 0) {
                 linksOrderedByRank.remove(oldRank - 1);
             }
 
             linksOrderedByRank.add(link.getFollowUpRank()-1, link);
-        }else if (oldRank != link.getFollowUpRank() && link.getFollowUpRank() == -1){
+        }else if (isUnranked(link, oldRank)){
             linksOrderedByRank.remove(oldRank - 1);
             link.setFollowUpStatus(getFollowUpStatus("NOT_NEEDED"));
             try {
@@ -71,7 +74,16 @@ public class FollowUpRankHandler {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }else if (oldRank == link.getFollowUpRank()){
+        }else if (oldRank == link.getFollowUpRank()
+                && link.getFollowUpRank() > 0
+                && "NOT_NEEDED".equals(link.getFollowUpStatus().getName())){
+            link.setFollowUpStatus(getFollowUpStatus("NEEDED"));
+            try {
+                linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }else{
             return;
         }
 
@@ -86,6 +98,11 @@ public class FollowUpRankHandler {
             rank++;
         }
     }
+
+    private static boolean isUnranked(Link link, int oldRank) {
+        return oldRank != link.getFollowUpRank() && link.getFollowUpRank() == -1;
+    }
+
     private static boolean isStillRanked(Link link, int oldRank) {
         return oldRank != link.getFollowUpRank() && link.getFollowUpRank() >= 1;
     }
