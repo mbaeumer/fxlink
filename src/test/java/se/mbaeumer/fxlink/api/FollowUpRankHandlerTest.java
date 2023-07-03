@@ -106,6 +106,10 @@ public class FollowUpRankHandlerTest {
 
         Link link = new Link("test", "www.test1.com", "");
         link.setFollowUpRank(1);
+        FollowUpStatus followUpStatus = new FollowUpStatus();
+        followUpStatus.setId(1);
+        followUpStatus.setName("NEEDED");
+        link.setFollowUpStatus(followUpStatus);
         followUpRankHandler.updateRanks(link, 1);
 
         List<Link> linksOrderedByRank = followUpRankHandler.getLinksOrderedByRank();

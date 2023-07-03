@@ -25,7 +25,10 @@ import se.mbaeumer.fxlink.util.URLHelper;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.Collectors;//
+
+// TODO: Remove warnings regarding "Raw use of parameterized..."
+
 
 public class VisualizationStage extends Stage {
     private Scene scene;
