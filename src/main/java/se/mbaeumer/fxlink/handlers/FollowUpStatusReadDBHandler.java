@@ -14,7 +14,7 @@ public class FollowUpStatusReadDBHandler {
 
     public List<FollowUpStatus> getFollowUpStatuses(GenericDBHandler dbh){
         Connection connection = dbh.getConnection();
-        List<FollowUpStatus> followUpStatuses = new ArrayList();
+        List<FollowUpStatus> followUpStatuses = new ArrayList<>();
 
         String sql = "select id, name, description" +
                 " from followupstatus fus";

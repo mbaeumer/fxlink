@@ -94,7 +94,7 @@ public class MoveCategoryStage extends Stage{
     }
 
     private void initSourceCategories(){
-        this.cmbSourceCategories = new ComboBox<Category>();
+        this.cmbSourceCategories = new ComboBox<>();
         // get the categories
         ObservableList<Category> categoryList =
                 FXCollections.observableArrayList(categoryHandler.getCategories());
@@ -103,7 +103,7 @@ public class MoveCategoryStage extends Stage{
         this.cmbSourceCategories.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
             @Override
             public ListCell<Category> call(ListView<Category> p) {
-                final ListCell<Category> cell = new ListCell<Category>(){
+                final ListCell<Category> cell = new ListCell<>(){
                     @Override
                     protected void updateItem(Category t, boolean bln) {
                         super.updateItem(t, bln);
@@ -118,7 +118,7 @@ public class MoveCategoryStage extends Stage{
             }
         });
 
-        this.cmbSourceCategories.setButtonCell(new ListCell<Category>() {
+        this.cmbSourceCategories.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Category t, boolean bln) {
                 super.updateItem(t, bln);
@@ -147,7 +147,7 @@ public class MoveCategoryStage extends Stage{
     }
 
     private void initTargetCategories(){
-        this.cmbTargetCategories = new ComboBox<Category>();
+        this.cmbTargetCategories = new ComboBox<>();
         ObservableList<Category> categoryList =
                 FXCollections.observableArrayList(categoryHandler.getCategories());
         this.cmbTargetCategories.setItems(categoryList);
@@ -155,7 +155,7 @@ public class MoveCategoryStage extends Stage{
         this.cmbTargetCategories.setCellFactory(new Callback<ListView<Category>,ListCell<Category>>(){
             @Override
             public ListCell<Category> call(ListView<Category> p) {
-                final ListCell<Category> cell = new ListCell<Category>(){
+                final ListCell<Category> cell = new ListCell<>(){
                     @Override
                     protected void updateItem(Category t, boolean bln) {
                         super.updateItem(t, bln);
@@ -170,7 +170,7 @@ public class MoveCategoryStage extends Stage{
             }
         });
 
-        this.cmbTargetCategories.setButtonCell(new ListCell<Category>() {
+        this.cmbTargetCategories.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Category t, boolean bln) {
                 super.updateItem(t, bln);

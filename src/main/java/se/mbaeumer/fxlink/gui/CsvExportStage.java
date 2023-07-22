@@ -74,7 +74,7 @@ public class CsvExportStage extends Stage {
     }
 
     private void initListView(){
-        this.listView = new ListView<SelectableCategory>();
+        this.listView = new ListView<>();
         this.listView.setCellFactory(CheckBoxListCell.forListView(SelectableCategory::selectedProperty, new StringConverter<SelectableCategory>() {
 
                     @Override

@@ -13,9 +13,10 @@ public class CategoryReadDBHandler {
 		return SELECT_BY_NAME  + categoryName + "'";
 	}
 
+	// TODO: Get rid of printStackTrace
 	public List<Category> getAllCategories(GenericDBHandler dbh){
 		Connection connection = dbh.getConnection();				
-		List<Category> categories = new ArrayList<Category>();
+		List<Category> categories = new ArrayList<>();
 		
 		String sql = "select c.id as categoryId, c.name, c.description, c.created, c.lastUpdated " +
 					"from category c order by c.name asc";

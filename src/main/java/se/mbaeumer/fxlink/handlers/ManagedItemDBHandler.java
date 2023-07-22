@@ -17,7 +17,7 @@ public class ManagedItemDBHandler implements ManagedItemDBOperationHandler{
 	@Override
 	public List<String> getAllManagedItems(String sql, DatabaseConnectionHandler databaseConnectionHandler) {
 		Connection connection = databaseConnectionHandler.getConnection();
-		List<String> items = new ArrayList<String>();
+		List<String> items = new ArrayList<>();
 
 		try {
 			Statement stmt = connection.createStatement();

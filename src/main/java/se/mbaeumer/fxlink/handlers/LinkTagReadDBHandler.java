@@ -40,7 +40,7 @@ public class LinkTagReadDBHandler {
 	
 	public static List<Tag> getAllTagsForLink(GenericDBHandler dbh, Link link) throws SQLException{
 		Connection connection = dbh.getConnection();				
-		List<Tag> tags = new ArrayList<Tag>();
+		List<Tag> tags = new ArrayList<>();
 		
 		String sql = "select lt.id as ltId, l.id as linkId, l.url, l.description, lt.linkid, lt.tagid as tagId, t.name as tagname" + 
 					" from linktag lt" +

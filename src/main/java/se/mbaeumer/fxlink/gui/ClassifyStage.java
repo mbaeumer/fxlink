@@ -107,7 +107,7 @@ public class ClassifyStage extends Stage {
             @Override
             public TableCell<Link, Category> call(TableColumn<Link, Category> param) {
 
-                TableCell<Link, Category> categoryCell = new TableCell<Link, Category>(){
+                TableCell<Link, Category> categoryCell = new TableCell<>(){
 
                     @Override
                     protected void updateItem(Category item, boolean empty) {

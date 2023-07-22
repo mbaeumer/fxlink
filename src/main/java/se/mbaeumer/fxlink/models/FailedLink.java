@@ -11,7 +11,7 @@ public class FailedLink {
 	public String getCause(){return this.cause.get();}
 	public void setCause(String cause){this.cause.set(cause);}
 
-	protected Property<Link> link = new SimpleObjectProperty<Link>();
+	protected Property<Link> link = new SimpleObjectProperty<>();
 	public Property<Link> linkProperty(){return this.link;}
 	public Link getLink(){return this.link.getValue();}
 	public void setLink(Link link){this.link.setValue(link);}
