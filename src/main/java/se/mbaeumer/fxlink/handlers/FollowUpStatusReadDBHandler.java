@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Reduce warnings, move exception handling
 public class FollowUpStatusReadDBHandler {
 
     public List<FollowUpStatus> getFollowUpStatuses(GenericDBHandler dbh){

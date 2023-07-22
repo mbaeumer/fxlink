@@ -6,6 +6,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -95,8 +97,29 @@ public class CreateCategoryStage extends Stage {
 
         this.tfCategoryName = new TextField();
         this.tfCategoryName.textProperty().addListener(this::changed);
+        this.tfCategoryName.setOnKeyPressed(this::handleOnKeyPressed);
 
         this.gridPane.add(tfCategoryName, 1, 0);
+    }
+
+    private void handleOnKeyPressed(KeyEvent keyEvent){
+        final KeyCode keyCode = keyEvent.getCode();
+
+        if (keyCode.getCode() == KeyCode.ENTER.getCode()){
+
+            String categoryName = this.tfCategoryName.getText();
+
+            Category category;
+            try {
+                category = categoryHandler.getCategoryByName(categoryName);
+                if (category == null){
+                    saveCategory();
+                }
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, DATABASE_ERROR_OCCURRED, ButtonType.OK);
+                alert.showAndWait();
+            }
+        }
     }
 
     private void initRowForDescription(){
@@ -135,6 +158,10 @@ public class CreateCategoryStage extends Stage {
     }
 
     private void handleSaveCategory(ActionEvent event) {
+        saveCategory();
+    }
+
+    private void saveCategory() {
         Category category = new Category();
         category.setName(tfCategoryName.getText());
         category.setDescription(taCategoryDescription.getText());
