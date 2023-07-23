@@ -161,7 +161,7 @@ public class ImportResultReportStage extends Stage {
 			@Override
 			public ListCell<Category> call(ListView<Category> p) {
 
-				final ListCell<Category> cell = new ListCell<Category>(){
+				final ListCell<Category> cell = new ListCell<>(){
 
 					@Override
 					protected void updateItem(Category t, boolean bln) {
@@ -179,7 +179,7 @@ public class ImportResultReportStage extends Stage {
 			}
 		});
 
-		this.cmbMoveToCategory.setButtonCell(new ListCell<Category>() {
+		this.cmbMoveToCategory.setButtonCell(new ListCell<>() {
 			@Override
 			protected void updateItem(Category t, boolean bln) {
 				super.updateItem(t, bln);
@@ -309,7 +309,7 @@ public class ImportResultReportStage extends Stage {
 	}
 
 	private void createSuccessLinksTableView(){
-		this.tvSuccessfulLinks = new TableView<Link>();
+		this.tvSuccessfulLinks = new TableView<>();
 		this.tvSuccessfulLinks.setItems(FXCollections.observableList(this.importReport.getSuccessfulLinks()));
 		this.tvSuccessfulLinks.setEditable(true);
 	}
@@ -351,7 +351,7 @@ public class ImportResultReportStage extends Stage {
 			@Override
 			public TableCell<Link, Category> call(TableColumn<Link, Category> param) {
 
-				TableCell<Link, Category> categoryCell = new TableCell<Link, Category>(){
+				TableCell<Link, Category> categoryCell = new TableCell<>(){
 
 					@Override
 					protected void updateItem(Category item, boolean empty) {

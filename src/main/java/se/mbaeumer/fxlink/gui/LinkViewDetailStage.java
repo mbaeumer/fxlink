@@ -212,7 +212,7 @@ public class LinkViewDetailStage extends Stage {
             @Override
             public ListCell<Category> call(ListView<Category> p) {
                  
-                final ListCell<Category> cell = new ListCell<Category>(){
+                final ListCell<Category> cell = new ListCell<>(){
  
                     @Override
                     protected void updateItem(Category t, boolean bln) {
@@ -271,7 +271,7 @@ public class LinkViewDetailStage extends Stage {
 			@Override
 			public ListCell<FollowUpStatus> call(ListView<FollowUpStatus> p) {
 
-				final ListCell<FollowUpStatus> cell = new ListCell<FollowUpStatus>(){
+				final ListCell<FollowUpStatus> cell = new ListCell<>(){
 
 					@Override
 					protected void updateItem(FollowUpStatus t, boolean bln) {
@@ -288,7 +288,7 @@ public class LinkViewDetailStage extends Stage {
 			}
 		});
 
-		this.cmbFollowUpStatus.setButtonCell(new ListCell<FollowUpStatus>() {
+		this.cmbFollowUpStatus.setButtonCell(new ListCell<>() {
 			@Override
 			protected void updateItem(FollowUpStatus t, boolean bln) {
 				super.updateItem(t, bln);
@@ -310,8 +310,6 @@ public class LinkViewDetailStage extends Stage {
 			index++;
 		}
 		this.cmbFollowUpStatus.getSelectionModel().select(index);
-		/* TODO: Enable the ComboBox */
-		this.cmbFollowUpStatus.setDisable(false);
 	}
 	private void initRankFlowPane(){
 		this.flowRank = new FlowPane(Orientation.HORIZONTAL);
@@ -341,7 +339,6 @@ public class LinkViewDetailStage extends Stage {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 
 	private void setCategory() {
@@ -460,7 +457,7 @@ public class LinkViewDetailStage extends Stage {
 		this.listAllSelectableTags = new ListView<>();
 		
 		for (final SelectableTag t : this.observableSelectableTags){
-			t.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			t.selectedProperty().addListener(new ChangeListener<>() {
 
 				@Override
 				public void changed(ObservableValue<? extends Boolean> arg0,

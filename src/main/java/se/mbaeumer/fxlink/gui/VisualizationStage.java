@@ -23,9 +23,8 @@ import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.util.LinkSplitter;
 import se.mbaeumer.fxlink.util.URLHelper;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;//
+import java.util.stream.Collectors;
 
 // TODO: Remove warnings regarding "Raw use of parameterized..."
 
@@ -103,7 +102,6 @@ public class VisualizationStage extends Stage {
         this.initLinkLabel();
         this.initCategoryLabel();
         this.initCategoryCountFlowPane();
-        //this.initComboBox();
         this.initSlider();
         this.initCategoryBarChart(0);
         this.initWordCountFlowPane();
@@ -160,20 +158,6 @@ public class VisualizationStage extends Stage {
         this.flowCategoryCount.setEffect(this.createShadow());
         this.flowCategoryCount.setBackground(createBackground());
         this.flowGeneral.getChildren().add(this.flowCategoryCount);
-    }
-
-    private void initComboBox(){
-        this.cmbMinCategoryCount = new ComboBox<>();
-
-        List<String> alternatives = List.of("All", ">5", ">20", ">50", ">75", ">100");
-        this.cmbMinCategoryCount.setItems(FXCollections.observableList(alternatives));
-
-        this.cmbMinCategoryCount.valueProperty().addListener((observable, oldValue, newValue) -> {
-            handleComboBoxChange(newValue);
-        });
-        this.cmbMinCategoryCount.getSelectionModel().selectFirst();
-
-        this.flowCategoryCount.getChildren().add(this.cmbMinCategoryCount);
     }
 
     private void initSlider(){
@@ -257,7 +241,7 @@ public class VisualizationStage extends Stage {
     }
 
     private XYChart.Series<String, Number> getCategoryCountSeries(int minValue) {
-        XYChart.Series<String, Number> series1 = new XYChart.Series();
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
 
         Map<String, Long> allCategoryCounts = this.linkHandler.getCategoryCounts();
         Map<String, Long> filteredValues = allCategoryCounts.entrySet()
@@ -265,7 +249,7 @@ public class VisualizationStage extends Stage {
                 .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
         filteredValues.entrySet().stream()
-                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
+                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data<>(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
 
         series1.setName("Number of links per category");
         return series1;
@@ -322,8 +306,8 @@ public class VisualizationStage extends Stage {
         this.flowWordCount.getChildren().add(bcWordCount);
     }
 
-    private XYChart.Series createWordCountSeries(int min){
-        XYChart.Series series1 = new XYChart.Series();
+    private XYChart.Series<String, Number> createWordCountSeries(int min){
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
 
         Map<String, Integer> allCategoryCounts = this.wordCountHandler.getWordCount();
         Map<String, Integer> filteredWordCount = allCategoryCounts.entrySet().stream()
@@ -334,7 +318,7 @@ public class VisualizationStage extends Stage {
                         ));
 
         filteredWordCount.entrySet().stream()
-                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
+                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data<>(stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
         series1.setName("Word count");
 
         return series1;
@@ -360,12 +344,12 @@ public class VisualizationStage extends Stage {
         final NumberAxis yAxis = new NumberAxis();
         this.bcHour = new BarChart(xAxis,yAxis);
 
-        XYChart.Series series1 = new XYChart.Series();
+        XYChart.Series series1 = new XYChart.Series<>();
 
         Map<Object, Long> values = this.linkHandler.getHourCount();
 
         values.entrySet().stream()
-                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data(stringIntegerEntry.getKey().toString(), stringIntegerEntry.getValue())));
+                .forEach(stringIntegerEntry -> series1.getData().add(new XYChart.Data<>(stringIntegerEntry.getKey().toString(), stringIntegerEntry.getValue())));
 
         series1.setName("Hours");
         this.bcHour.getData().addAll(series1);
