@@ -56,6 +56,21 @@ public class FollowUpRankHandler {
         }
     }
 
+    public void validateFollowUpData(Link oldLink, Link newLink) throws IllegalArgumentException{
+        if (oldLink.getFollowUpStatus() != newLink.getFollowUpStatus()
+                && "NEEDED".equals(newLink.getFollowUpStatus().getName())){
+            if (newLink.getFollowUpRank() == -1){
+                throw new IllegalArgumentException();
+            }
+        }else if (oldLink.getFollowUpStatus() != newLink.getFollowUpStatus()
+                && "NOT_NEEDED".equals(newLink.getFollowUpStatus().getName())){
+            newLink.setFollowUpRank(-1);
+        }else if (oldLink.getFollowUpStatus() != newLink.getFollowUpStatus()
+                && "FOLLOWED_UP".equals(newLink.getFollowUpStatus().getName())){
+            newLink.setFollowUpRank(-1);
+        }
+    }
+
     public void updateRanks(final Link link, final int oldRank){
         /*
         TODO: Change to remove the printStackTrace further down

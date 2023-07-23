@@ -92,7 +92,6 @@ public class LinkHandlerTest {
     @Test
     public void testCreateLink_success() throws SQLException {
         Link link = new Link("", "www.spiegel.de", "Der Spiegel");
-        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
         Mockito.when(linkCreationDBHandler.constructSqlString(link)).thenReturn("insert into something");
         Mockito.when(linkCreationDBHandler.createLink(any(), any())).thenReturn(1);
         try {
@@ -105,7 +104,6 @@ public class LinkHandlerTest {
     @Test(expected = SQLException.class)
     public void testCreateLink_failure() throws SQLException {
         Link link = new Link("", "www.spiegel.de", "Der Spiegel");
-        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
         Mockito.when(linkCreationDBHandler.constructSqlString(link)).thenReturn("insert into something");
         Mockito.when(linkCreationDBHandler.createLink(any(), any())).thenThrow(SQLException.class);
         linkHandler.createLink(link);
@@ -120,7 +118,6 @@ public class LinkHandlerTest {
     @Test
     public void testUpdateLink_success() throws SQLException{
         Link link = new Link("", "www.spiegel.de", "Der Spiegel");
-        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
         Mockito.when(linkUpdateDBHandler.constructSqlString(link)).thenReturn("insert into something");
         Mockito.doNothing().when(linkUpdateDBHandler).updateLink(any(), any());
         linkHandler.updateLink(link);
@@ -129,7 +126,6 @@ public class LinkHandlerTest {
     @Test(expected = SQLException.class)
     public void testUpdateLink_failure() throws SQLException{
         Link link = new Link("", "www.spiegel.de", "Der Spiegel");
-        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
         Mockito.when(linkUpdateDBHandler.constructSqlString(link)).thenReturn("insert into something");
         Mockito.doThrow(SQLException.class).when(linkUpdateDBHandler).updateLink(any(), any());
         linkHandler.updateLink(link);

@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.mbaeumer.fxlink.models.Category;
+import se.mbaeumer.fxlink.models.FollowUpStatus;
 import se.mbaeumer.fxlink.models.Link;
 
 import java.sql.Timestamp;
@@ -30,7 +31,7 @@ public class LinkUpdateDBHandlerTest{
     @Test
     public void testConstructSqlStringWithCategory(){
         Link link = createLink();
-        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1,";
+        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1, followupstatus=1,";
         expected += "categoryId=5,lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
         String actual = linkUpdateDBHandler.constructSqlString(link);
         Assert.assertEquals(actual, expected);
@@ -61,7 +62,7 @@ public class LinkUpdateDBHandlerTest{
     public void testConstructSqlStringWithoutCategory(){
         Link link = createLink();
         link.setCategory(null);
-        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1,categoryId=null,";
+        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1, followupstatus=1,categoryId=null,";
         expected += "lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
         String actual = linkUpdateDBHandler.constructSqlString(link);
         System.out.println(expected);
@@ -75,8 +76,17 @@ public class LinkUpdateDBHandlerTest{
         link.setCategory(createCategory());
         link.setLastUpdated(createTimestamp());
         link.setFollowUpRank(1);
+        link.setFollowUpStatus(createFollowUpStatus());
 
         return link;
+    }
+
+    private FollowUpStatus createFollowUpStatus(){
+        FollowUpStatus followUpStatus = new FollowUpStatus();
+        followUpStatus.setId(1);
+        followUpStatus.setName("NOT_NEEDED");
+
+        return followUpStatus;
     }
 
     private Category createCategory(){

@@ -310,7 +310,8 @@ public class LinkViewDetailStage extends Stage {
 			index++;
 		}
 		this.cmbFollowUpStatus.getSelectionModel().select(index);
-		this.cmbFollowUpStatus.setDisable(true);
+		/* TODO: Enable the ComboBox */
+		this.cmbFollowUpStatus.setDisable(false);
 	}
 	private void initRankFlowPane(){
 		this.flowRank = new FlowPane(Orientation.HORIZONTAL);
@@ -582,6 +583,15 @@ public class LinkViewDetailStage extends Stage {
 		updatedLink.setCreated(this.link.getCreated());		
 		updatedLink.setId(this.link.getId());
 		updatedLink.setFollowUpRank(this.ntRank.getNumber().intValue());
+
+		updatedLink.setFollowUpStatus(this.cmbFollowUpStatus.getSelectionModel().getSelectedItem());
+		try {
+			followUpRankHandler.validateFollowUpData(this.link, updatedLink);
+		}catch(IllegalArgumentException ex){
+			showAlert("The follow-up status and rank do not match!");
+			isValidationError = true;
+			return false;
+		}
 
 		setCategory(updatedLink);
 		if (this.link.getId() <= 0) {

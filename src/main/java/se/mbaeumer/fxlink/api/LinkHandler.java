@@ -52,13 +52,13 @@ public class LinkHandler {
 	}
 	
 	public void createLink(Link link) throws SQLException{
-		setDefaultFollowUpStatus(link);
+		//setDefaultFollowUpStatus(link);
 		String sql = linkCreationDBHandler.constructSqlString(link);
 		linkCreationDBHandler.createLink(sql, GenericDBHandler.getInstance());
 	}
 	
 	public void updateLink(Link link) throws SQLException{
-		setDefaultFollowUpStatus(link);
+		//setDefaultFollowUpStatus(link);
 		String sql = linkUpdateDBHandler.constructSqlString(link);
 		linkUpdateDBHandler.updateLink(sql, GenericDBHandler.getInstance());
 	}
@@ -73,6 +73,9 @@ public class LinkHandler {
 		link.setId(-1);
 		link.setCategory(null);
 		link.setFollowUpRank(-1);
+		FollowUpStatus followUpStatus = new FollowUpStatus();
+		followUpStatus.setName("NOT_NEEDED");
+		link.setFollowUpStatus(followUpStatus);
 		return link;
 	}
 	

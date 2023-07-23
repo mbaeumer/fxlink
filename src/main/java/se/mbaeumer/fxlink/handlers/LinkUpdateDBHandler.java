@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class LinkUpdateDBHandler {
 	public static String SQL_BASE_UPDATE = "UPDATE Link SET title=TITLE_PLACEHOLDER, url=URL_PLACEHOLDER, description=DESCRIPTION_PLACEHOLDER, " +
-			"followuprank=RANK_PLACEHOLDER,";
+			"followuprank=RANK_PLACEHOLDER, followupstatus=FOLLOWUPSTATUS_PLACEHOLDER,";
 	public static String SQL_UPDATE_CATEGORY = "categoryId=CATEGORY_ID_PLACEHOLDER,";
 	public static String SQL_UPDATE_DATE = "lastUpdated=DATE_PLACEHOLDER ";
 	public static String SQL_UPDATE_WHERE_CLAUSE = "WHERE id=ID_PLACEHOLDER";
@@ -41,6 +41,7 @@ public class LinkUpdateDBHandler {
 		sql = sql.replaceFirst(Pattern.quote("URL_PLACEHOLDER"), "'" + link.getURL() + "'");
 		sql = sql.replaceFirst(Pattern.quote("DESCRIPTION_PLACEHOLDER"), "'" + link.getDescription() + "'");
 		sql = sql.replaceFirst(Pattern.quote("RANK_PLACEHOLDER"), Integer.valueOf(link.getFollowUpRank()).toString());
+		sql = sql.replaceFirst(Pattern.quote("FOLLOWUPSTATUS_PLACEHOLDER"), Integer.valueOf(link.getFollowUpStatus().getId()).toString());
 
 		if (link.getCategory() != null){
 			sql = sql.replaceFirst(Pattern.quote("CATEGORY_ID_PLACEHOLDER"), Integer.valueOf(link.getCategory().getId()).toString() );
