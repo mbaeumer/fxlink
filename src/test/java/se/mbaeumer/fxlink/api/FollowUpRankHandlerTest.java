@@ -218,6 +218,48 @@ public class FollowUpRankHandlerTest {
         Mockito.verify(linkUpdateDBHandler, Mockito.times(2)).updateRank(any(), anyInt(), any());
     }
 
+    @Test
+    public void validateFollowUpData_switched_to_not_needed() {
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
+        Link oldLink = new Link("some-title", "www.url.com", "some-description");
+        oldLink.setFollowUpStatus(createFollowUpStatus("NEEDED"));
+        Link newLink = new Link("some-title", "www.url.com", "some-description");
+        newLink.setFollowUpStatus(createFollowUpStatus("NOT_NEEDED"));
+        newLink.setFollowUpRank(1);
+        followUpRankHandler.validateFollowUpData(oldLink, newLink);
+        Assert.assertEquals(-1, newLink.getFollowUpRank());
+    }
+
+    @Test
+    public void validateFollowUpData_switched_to_followed_up() {
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
+        Link oldLink = new Link("some-title", "www.url.com", "some-description");
+        oldLink.setFollowUpStatus(createFollowUpStatus("NEEDED"));
+        Link newLink = new Link("some-title", "www.url.com", "some-description");
+        newLink.setFollowUpStatus(createFollowUpStatus("FOLLOWED_UP"));
+        newLink.setFollowUpRank(1);
+        followUpRankHandler.validateFollowUpData(oldLink, newLink);
+        Assert.assertEquals(-1, newLink.getFollowUpRank());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateFollowUpData_switched_to_needed_fail() {
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
+        Link oldLink = new Link("some-title", "www.url.com", "some-description");
+        oldLink.setFollowUpStatus(createFollowUpStatus("NOT_NEEDED"));
+        Link newLink = new Link("some-title", "www.url.com", "some-description");
+        newLink.setFollowUpStatus(createFollowUpStatus("NEEDED"));
+        newLink.setFollowUpRank(-1);
+        followUpRankHandler.validateFollowUpData(oldLink, newLink);
+    }
+    private FollowUpStatus createFollowUpStatus(String statusName){
+        FollowUpStatus followUpStatus = new FollowUpStatus();
+        followUpStatus.setId(1);
+        followUpStatus.setName(statusName);
+
+        return followUpStatus;
+    }
+
     private List<FollowUpStatus> createStatuses(){
         FollowUpStatus statusNotNeeded = new FollowUpStatus();
         statusNotNeeded.setName("NOT_NEEDED");
@@ -225,4 +267,6 @@ public class FollowUpRankHandlerTest {
         statusNeeded.setName("NEEDED");
         return List.of(statusNotNeeded, statusNeeded);
     }
+
+
 }
