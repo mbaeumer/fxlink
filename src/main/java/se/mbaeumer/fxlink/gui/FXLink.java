@@ -1518,8 +1518,11 @@ public class FXLink extends Application{
 		if (isCorrect){
 			tblCategories.setItems(FXCollections.observableList(categoryHandler.getCategories()));
 	    	tblCategories.getItems().add(CategoryHandler.createPseudoCategory(ValueConstants.VALUE_NEW));
-			this.updateStatusBar(false);
+
+			final Category selectedCategory = this.cmbCategories.getSelectionModel().getSelectedItem();
 			this.loadCategoriesForFilter();
+			this.cmbCategories.getSelectionModel().select(selectedCategory);
+			this.updateStatusBar(false);
 			this.loadCategoriesForMove();
 		}
 	}

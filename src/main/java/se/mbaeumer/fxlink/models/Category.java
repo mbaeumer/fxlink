@@ -3,6 +3,7 @@ package se.mbaeumer.fxlink.models;
 import javafx.beans.property.*;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Category {
 	private IntegerProperty id = new SimpleIntegerProperty(this, "id");
@@ -29,4 +30,17 @@ public class Category {
 	public Property<Date> lastUpdatedProperty(){return this.lastUpdated;}
 	public Date getLastUpdated(){return this.lastUpdated.getValue();}
 	public void setLastUpdated(Date lastUpdated){this.lastUpdated.setValue(lastUpdated);}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Category category = (Category) o;
+		return Objects.equals(id.get(), category.id.get());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id.get());
+	}
 }
