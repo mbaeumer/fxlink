@@ -606,7 +606,11 @@ public class FXLink extends Application{
 				alert.showAndWait();
 			}
 		}
-		filterCategories();
+		if (isSearchPaneVisible() && isSearchTermGiven()){
+			runSearch();
+		}else {
+			filterCategories();
+		}
 	}
 
 	private void createGenerateTitleButton(){
