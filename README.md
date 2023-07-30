@@ -29,6 +29,11 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.9.2 - 2023-07-31
+* Added support to actively change the follow-up status
+* Various UI-related bugs
+* Various minor code improvements
+
 ## 0.9.1 - 2023-07-06
 * Added the follow-up status to various views
 * Added support for passively changing the follow-up status 
