@@ -303,6 +303,7 @@ public class LinkViewDetailStage extends Stage {
 		this.gridData.add(this.cmbFollowUpStatus, 1, 5);
 
 		int index = 0;
+		// TODO: Override equals and hashCode to skip the following for-loop
 		for (FollowUpStatus c : this.cmbFollowUpStatus.getItems()){
 			if (c.getName().equalsIgnoreCase(this.link.getFollowUpStatus().getName())){
 				break;
@@ -342,6 +343,7 @@ public class LinkViewDetailStage extends Stage {
 	}
 
 	private void setCategory() {
+		// TODO: Override equals and hashCode to skip the following for-loop
 		int index = 0;
 		if (this.link.getCategory() != null){
 			for (Category c : this.cmbCategories.getItems()){
