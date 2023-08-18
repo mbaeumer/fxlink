@@ -31,16 +31,19 @@ public class Category {
 	public Date getLastUpdated(){return this.lastUpdated.getValue();}
 	public void setLastUpdated(Date lastUpdated){this.lastUpdated.setValue(lastUpdated);}
 
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Category category = (Category) o;
-		return Objects.equals(id.get(), category.id.get());
+		return Objects.equals(name.get(), category.name.get());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id.get());
+		return Objects.hash(name.get());
 	}
+
+
 }
