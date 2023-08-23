@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class FXLink extends Application{
 
@@ -1480,10 +1481,23 @@ public class FXLink extends Application{
 	
 	private void refreshLinkTable(){
 
+		// get current search order, so that we can use it after the table is refreshed
+		final ObservableList<TableColumn<Link, ?>> sortOrder = this.tblLinks.getSortOrder();
+		final List<TableColumn<Link, ?>> sortedColumns = sortOrder.stream().collect(Collectors.toList());
+		TableColumn.SortType sortType = null;
+		if (sortOrder.size() > 0) {
+			sortType = sortOrder.get(0).getSortType();
+		}
+
 		if (isSearchPaneVisible() && isSearchTermGiven()) {
 			runSearch();
 		}else{
 			tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinksByCategory(cmbCategories.getValue())));
+			tblLinks.getSortOrder().addAll(FXCollections.observableList(sortedColumns));
+			if (sortType != null) {
+				tblLinks.getSortOrder().get(0).setSortType(sortType);
+				tblLinks.sort();
+			}
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
 			this.updateStatusBar(false);
 		}
