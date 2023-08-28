@@ -1518,6 +1518,7 @@ public class FXLink extends Application{
 			tblLinks.getSortOrder().get(0).setSortType(sortSettings.getSortType());
 			tblLinks.sort();
 		}
+		tblLinks.getItems().add(LinkHandler.createPseudoLink());
 		this.updateStatusBar(true);
 	}
 	
