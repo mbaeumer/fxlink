@@ -1482,20 +1482,15 @@ public class FXLink extends Application{
 	private void refreshLinkTable(){
 
 		// get current search order, so that we can use it after the table is refreshed
-		final ObservableList<TableColumn<Link, ?>> sortOrder = this.tblLinks.getSortOrder();
-		final List<TableColumn<Link, ?>> sortedColumns = sortOrder.stream().collect(Collectors.toList());
-		TableColumn.SortType sortType = null;
-		if (sortOrder.size() > 0) {
-			sortType = sortOrder.get(0).getSortType();
-		}
 
+		final SortSettings sortSettings = createSortSettings();
 		if (isSearchPaneVisible() && isSearchTermGiven()) {
 			runSearch();
 		}else{
 			tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinksByCategory(cmbCategories.getValue())));
-			tblLinks.getSortOrder().addAll(FXCollections.observableList(sortedColumns));
-			if (sortType != null) {
-				tblLinks.getSortOrder().get(0).setSortType(sortType);
+			tblLinks.getSortOrder().addAll(FXCollections.observableList(sortSettings.getSortedColumns()));
+			if (sortSettings.getSortType() != null) {
+				tblLinks.getSortOrder().get(0).setSortType(sortSettings.getSortType());
 				tblLinks.sort();
 			}
 			tblLinks.getItems().add(LinkHandler.createPseudoLink());
@@ -1503,8 +1498,26 @@ public class FXLink extends Application{
 		}
 	}
 
+	private SortSettings createSortSettings(){
+		final ObservableList<TableColumn<Link, ?>> sortOrder = this.tblLinks.getSortOrder();
+		//final List<TableColumn<Link, ?>> sortedColumns = sortOrder.stream().collect(Collectors.toList());
+		TableColumn.SortType sortType = null;
+		if (sortOrder.size() > 0) {
+			sortType = sortOrder.get(0).getSortType();
+		}
+
+		return new SortSettings(sortOrder.stream().collect(Collectors.toList()), sortType);
+
+	}
+
 	private void refreshSearchResult(List<Link> links){
+		final SortSettings sortSettings = createSortSettings();
 		tblLinks.setItems(FXCollections.observableList(links));
+		tblLinks.getSortOrder().addAll(FXCollections.observableList(sortSettings.getSortedColumns()));
+		if (sortSettings.getSortType() != null) {
+			tblLinks.getSortOrder().get(0).setSortType(sortSettings.getSortType());
+			tblLinks.sort();
+		}
 		this.updateStatusBar(true);
 	}
 	
