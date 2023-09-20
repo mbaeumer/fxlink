@@ -57,15 +57,15 @@ public class FollowUpRankHandler {
     }
 
     public void validateFollowUpData(Link oldLink, Link newLink) throws IllegalArgumentException{
-        if (oldLink.getFollowUpStatus() != newLink.getFollowUpStatus()
+        if (!oldLink.getFollowUpStatus().equals(newLink.getFollowUpStatus())
                 && "NEEDED".equals(newLink.getFollowUpStatus().getName())){
             if (newLink.getFollowUpRank() == -1){
                 throw new IllegalArgumentException();
             }
-        }else if (oldLink.getFollowUpStatus() != newLink.getFollowUpStatus()
+        }else if (!oldLink.getFollowUpStatus().equals(newLink.getFollowUpStatus())
                 && "NOT_NEEDED".equals(newLink.getFollowUpStatus().getName())){
             newLink.setFollowUpRank(-1);
-        }else if (oldLink.getFollowUpStatus() != newLink.getFollowUpStatus()
+        }else if (!oldLink.getFollowUpStatus().equals(newLink.getFollowUpStatus())
                 && "FOLLOWED_UP".equals(newLink.getFollowUpStatus().getName())){
             newLink.setFollowUpRank(-1);
         }
