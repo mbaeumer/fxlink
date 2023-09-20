@@ -328,6 +328,7 @@ public class LinkViewDetailStage extends Stage {
 		try {
 			followUpRankHandler.setHighestRank(this.link);
 			ntRank.setNumber(BigDecimal.ONE);
+			this.cmbFollowUpStatus.getSelectionModel().select(followUpStatusReadDBHandler.getFollowUpStatus("NEEDED"));
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -337,6 +338,7 @@ public class LinkViewDetailStage extends Stage {
 		try {
 			followUpRankHandler.setLowestRank(this.link);
 			ntRank.setNumber(followUpRankHandler.getLowestPossibleRank());
+			this.cmbFollowUpStatus.getSelectionModel().select(followUpStatusReadDBHandler.getFollowUpStatus("NEEDED"));
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

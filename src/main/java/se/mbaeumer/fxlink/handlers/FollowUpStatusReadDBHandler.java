@@ -48,4 +48,13 @@ public class FollowUpStatusReadDBHandler {
                 .filter(fus -> "NOT_NEEDED".equals(fus.getName()))
                 .findFirst().orElseThrow(IllegalArgumentException::new);
     }
+
+    public FollowUpStatus getFollowUpStatus(final String status){
+        List<FollowUpStatus> followUpStatuses = this.getFollowUpStatuses(GenericDBHandler.getInstance());
+
+        return followUpStatuses
+                .stream()
+                .filter(fus -> status.equals(fus.getName()))
+                .findFirst().orElseThrow(IllegalArgumentException::new);
+    }
 }
