@@ -159,7 +159,7 @@ public class LinkReadDBHandler {
 		Connection connection = dbh.getConnection();
 		List<Link> links = new ArrayList<>();
 
-		String sql = "select l.id as linkId, l.followuprank as rank, l.title as title, l.url as url " +
+		String sql = "select l.id as linkId, l.followuprank as rank, l.title as title, l.url as url, l.followupstatus " +
 				"from link l where l.followuprank > 0 order by l.followuprank";
 
 		PreparedStatement stmt = connection.prepareStatement(sql);
@@ -168,6 +168,9 @@ public class LinkReadDBHandler {
 			Link link = new Link(rs.getString("title"), rs.getString("url"), null);
 			link.setId(rs.getInt("linkId"));
 			link.setFollowUpRank(rs.getInt("followuprank"));
+			FollowUpStatus followUpStatus = new FollowUpStatus();
+			followUpStatus.setId(rs.getInt("followupstatus"));
+			link.setFollowUpStatus(followUpStatus);
 			links.add(link);
 		}
 		stmt.close();
