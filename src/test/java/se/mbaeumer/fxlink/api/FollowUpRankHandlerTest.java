@@ -76,6 +76,10 @@ public class FollowUpRankHandlerTest {
 
         Link link = new Link("test", "www.test2.com", "");
         link.setFollowUpRank(1);
+        FollowUpStatus followUpStatus = new FollowUpStatus();
+        followUpStatus.setId(1);
+        followUpStatus.setName("NEEDED");
+        link.setFollowUpStatus(followUpStatus);
         followUpRankHandler.updateRanks(link, 2);
         List<Link> linksOrderedByRank = followUpRankHandler.getLinksOrderedByRank();
         Link firstLink = linksOrderedByRank.get(0);
@@ -91,6 +95,10 @@ public class FollowUpRankHandlerTest {
 
         Link link = new Link("test", "www.test1.com", "");
         link.setFollowUpRank(-1);
+        FollowUpStatus followUpStatus = new FollowUpStatus();
+        followUpStatus.setId(1);
+        followUpStatus.setName("NOT_NEEDED");
+        link.setFollowUpStatus(followUpStatus);
         followUpRankHandler.updateRanks(link, 1);
 
         List<Link> linksOrderedByRank = followUpRankHandler.getLinksOrderedByRank();
@@ -121,6 +129,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setHighestRank_existingRanks() throws SQLException{
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
         followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test2", "www.newlink.com", "");
@@ -138,6 +147,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setHighestRank_existingRanks_switch() throws SQLException{
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
         followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test2", "www.test2.com", "");
@@ -188,6 +198,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setLowestRank_existingRanks() throws SQLException{
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
         followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test2", "www.newlink.com", "");
@@ -205,6 +216,7 @@ public class FollowUpRankHandlerTest {
     @Test
     public void setLowestRank_existingRanks_switch() throws SQLException{
         Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
         followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
 
         Link link = new Link("test", "www.test1.com", "");

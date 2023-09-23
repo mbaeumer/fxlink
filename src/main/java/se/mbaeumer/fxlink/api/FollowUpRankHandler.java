@@ -75,11 +75,14 @@ public class FollowUpRankHandler {
         /*
         TODO: Change to remove the printStackTrace further down
          */
-        if (isStillRanked(link, oldRank)){
+        if ("FOLLOWED_UP".equals(link.getFollowUpStatus().getName())){
             if (oldRank > 0) {
                 linksOrderedByRank.remove(oldRank - 1);
             }
-
+        }else if (isStillRanked(link, oldRank)){
+            if (oldRank > 0) {
+                linksOrderedByRank.remove(oldRank - 1);
+            }
             linksOrderedByRank.add(link.getFollowUpRank()-1, link);
         }else if (isUnranked(link, oldRank)){
             linksOrderedByRank.remove(oldRank - 1);
