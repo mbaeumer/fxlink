@@ -122,9 +122,9 @@ public class FollowUpRankHandler {
         return oldRank != link.getFollowUpRank() && link.getFollowUpRank() >= 1;
     }
     public void setHighestRank(final Link link) throws SQLException{
+        link.setFollowUpStatus(getFollowUpStatus("NEEDED"));
         if (linksOrderedByRank.size() == 0){
             link.setFollowUpRank(1);
-            link.setFollowUpStatus(getFollowUpStatus("NEEDED"));
             linksOrderedByRank.add(link);
             linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
         }else{
@@ -137,9 +137,9 @@ public class FollowUpRankHandler {
         }
     }
     public void setLowestRank(final Link link) throws SQLException{
+        link.setFollowUpStatus(getFollowUpStatus("NEEDED"));
         if (linksOrderedByRank.size() == 0){
             link.setFollowUpRank(1);
-            link.setFollowUpStatus(getFollowUpStatus("NEEDED"));
             linksOrderedByRank.add(link);
             linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
         }else{
