@@ -302,15 +302,11 @@ public class LinkViewDetailStage extends Stage {
 
 		this.gridData.add(this.cmbFollowUpStatus, 1, 5);
 
-		int index = 0;
-		// TODO: Override equals and hashCode to skip the following for-loop
-		for (FollowUpStatus c : this.cmbFollowUpStatus.getItems()){
-			if (c.getName().equalsIgnoreCase(this.link.getFollowUpStatus().getName())){
-				break;
-			}
-			index++;
+		if (this.link.getId() == -1) {
+			this.cmbFollowUpStatus.getSelectionModel().select(this.followUpStatusReadDBHandler.getDefaultStatus());
+		}else{
+			this.cmbFollowUpStatus.getSelectionModel().select(this.link.getFollowUpStatus());
 		}
-		this.cmbFollowUpStatus.getSelectionModel().select(index);
 	}
 	private void initRankFlowPane(){
 		this.flowRank = new FlowPane(Orientation.HORIZONTAL);
@@ -345,17 +341,13 @@ public class LinkViewDetailStage extends Stage {
 	}
 
 	private void setCategory() {
-		// TODO: Override equals and hashCode to skip the following for-loop
-		int index = 0;
-		if (this.link.getCategory() != null){
-			for (Category c : this.cmbCategories.getItems()){
-				if (c.getName().equalsIgnoreCase(this.link.getCategory().getName())){
-					break;
-				}
-				index++;
-			}
+		if (this.link.getId() == -1){
+			this.cmbCategories.getSelectionModel().select(0);
+		}else if (this.link.getId() > 0 && this.link.getCategory() != null){
+			this.cmbCategories.getSelectionModel().select(this.link.getCategory());
+		}else {
+			this.cmbCategories.getSelectionModel().select(0);
 		}
-		this.cmbCategories.getSelectionModel().select(index);
 	}
 
 	private void initSuggestions(){
