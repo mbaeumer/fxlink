@@ -17,6 +17,8 @@ public class LinkReadDBHandler {
 			" from link l left join category c on c.id = l.categoryId" +
 			" left join followupstatus fus on fus.id = l.followupstatus";
 
+	private final static String WHERE_STATUS_NEEDED=" WHERE l.followupstatus=1 ORDER BY l.followuprank ASC";
+
 	public List<Link> getAllLinksWithCategories(GenericDBHandler dbh, FollowUpStatus defaultFollowUpStatus){
 		Connection connection = dbh.getConnection();				
 		List<Link> links = new ArrayList<>();
@@ -175,6 +177,25 @@ public class LinkReadDBHandler {
 		}
 		stmt.close();
 		rs.close();
+
+		return links;
+	}
+
+	public List<Link> getAllLinksToFollowUp(GenericDBHandler dbh, FollowUpStatus defaultFollowUpStatus){
+		Connection connection = dbh.getConnection();
+		List<Link> links = new ArrayList<>();
+
+		String sql = BASE_QUERY + WHERE_STATUS_NEEDED;
+
+		try {
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			links = getDataFromResultSet(rs, defaultFollowUpStatus);
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 		return links;
 	}

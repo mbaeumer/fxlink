@@ -2,6 +2,7 @@ package se.mbaeumer.fxlink.api;
 
 import se.mbaeumer.fxlink.handlers.*;
 import se.mbaeumer.fxlink.models.Category;
+import se.mbaeumer.fxlink.models.FollowUpOption;
 import se.mbaeumer.fxlink.models.FollowUpStatus;
 import se.mbaeumer.fxlink.models.Link;
 import se.mbaeumer.fxlink.util.ValueConstants;
@@ -85,6 +86,10 @@ public class LinkHandler {
 	
 	public static void deleteAllLinks() throws SQLException{
 		LinkDeletionDBHandler.deleteAllLinks(GenericDBHandler.getInstance());
+	}
+
+	public List<Link> getLinksByFollowUpOption(FollowUpOption followUpOption){
+		return linkReadDBHandler.getAllLinksToFollowUp(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
 	}
 
 	public Map<String, Long> getCategoryCounts(){

@@ -4,12 +4,15 @@ import se.mbaeumer.fxlink.handlers.FollowUpStatusReadDBHandler;
 import se.mbaeumer.fxlink.handlers.GenericDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkReadDBHandler;
 import se.mbaeumer.fxlink.handlers.LinkUpdateDBHandler;
+import se.mbaeumer.fxlink.models.FollowUpOption;
 import se.mbaeumer.fxlink.models.FollowUpStatus;
 import se.mbaeumer.fxlink.models.Link;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FollowUpRankHandler {
     private final LinkReadDBHandler linkReadDBHandler;
@@ -158,6 +161,8 @@ public class FollowUpRankHandler {
         linksOrderedByRank = linkReadDBHandler.getLinksOrderedByRank(GenericDBHandler.getInstance());
         return BigDecimal.valueOf(linksOrderedByRank.size());
     }
+
+
     private void updateRanks() {
         int rank = 1;
         for (Link aLink : linksOrderedByRank){

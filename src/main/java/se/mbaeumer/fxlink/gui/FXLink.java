@@ -79,6 +79,7 @@ public class FXLink extends Application{
 	private Button btnVisualize;
 	private Button btnImportTextFile;
 	private Button btnShowSearchPane;
+	private Button btnFollowUp;
 	private Button btnDeleteLinks;
 	private Button btnCreateItem;
 	private ComboBox<Category> cmbMoveToCategory;
@@ -94,6 +95,11 @@ public class FXLink extends Application{
 	private CheckBox chkSearchDescription;
 	private ComboBox<Category> cmbCategoriesSearch;
 	private Label lblSearchError;
+
+	private FlowPane flowFollowUp;
+
+	private ComboBox<FollowUpOption> cmbFollowUpStatus;
+
 
 	private TableView<Link> tblLinks;
 	private TableView<Category> tblCategories;
@@ -348,6 +354,7 @@ public class FXLink extends Application{
 		this.createNewItemButton();
 		this.createDeleteLinksButton();
 		this.createShowSearchPaneButton();
+		this.createFollowUpButton();
         this.createGenerateTitleButton();
 		this.createMoveToCategoryComboBox();
 		this.createMoveToCategoryButton();
@@ -502,6 +509,28 @@ public class FXLink extends Application{
 			createSearchFlowPane();
 		}
 		btnShowSearchPane.setText(getSearchPaneTitle());
+	}
+
+	private void createFollowUpButton(){
+		this.btnFollowUp = new Button("Follow up");
+
+		this.btnFollowUp.setOnAction(this::handleFollowUp);
+		this.flowActions.getChildren().add(this.btnFollowUp);
+	}
+
+	private void handleFollowUp(ActionEvent actionEvent){
+		if (isFollowUpPaneVisible()){
+			this.flowGeneral.getChildren().remove(2);
+		}else{
+			if (isSearchPaneVisible()){
+				removeSearchPane();
+			}
+			createFollowUpPane();
+		}
+	}
+
+	private boolean isFollowUpPaneVisible(){
+		return this.flowGeneral.getChildren().contains(this.flowFollowUp);
 	}
 
 	private void createDeleteLinksButton(){
@@ -823,6 +852,62 @@ public class FXLink extends Application{
 		this.flowSearch.getChildren().add(this.lblSearchError);
 		this.lblSearchError.setTextFill(Color.ORANGERED);
 		this.lblSearchError.setVisible(false);
+	}
+
+	private void createFollowUpPane(){
+		this.flowFollowUp = new FlowPane();
+		this.flowFollowUp.setOrientation(Orientation.HORIZONTAL);
+		this.flowFollowUp.setHgap(10);
+
+		FlowPane.setMargin(flowFollowUp, new Insets(5, 5, 0, 5));
+
+		// TODO: Use the following two lines to enable the follow up filter
+		//this.flowGeneral.getChildren().add(2, this.flowFollowUp);
+		//this.createFollowUpOptionBox();
+	}
+
+	private void createFollowUpOptionBox(){
+		FollowUpOptionHandler followUpOptionHandler = new FollowUpOptionHandler(new FollowUpStatusReadDBHandler());
+		this.cmbFollowUpStatus = new ComboBox<>();
+		this.cmbFollowUpStatus.setItems(FXCollections.observableList(followUpOptionHandler.getFollowUpOptions()));
+
+		this.cmbFollowUpStatus.setCellFactory(new Callback<ListView<FollowUpOption>,ListCell<FollowUpOption>>(){
+			@Override
+			public ListCell<FollowUpOption> call(ListView<FollowUpOption> p) {
+				final ListCell<FollowUpOption> cell = new ListCell<>(){
+					@Override
+					protected void updateItem(FollowUpOption t, boolean bln) {
+						super.updateItem(t, bln);
+						if(t != null){
+							setText(t.getName());
+						}else{
+							setText(null);
+						}
+					}
+				};
+				return cell;
+			}
+		});
+
+		this.cmbFollowUpStatus.setButtonCell(new ListCell<>() {
+			@Override
+			protected void updateItem(FollowUpOption t, boolean bln) {
+				super.updateItem(t, bln);
+				if (t != null) {
+					setText(t.nameProperty().getValue());
+				} else {
+					setText(null);
+				}
+			}
+		});
+
+		this.cmbFollowUpStatus.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+			final List<Link> linksByFollowUpOption = linkHandler.getLinksByFollowUpOption(newValue);
+		});
+
+		this.cmbFollowUpStatus.getSelectionModel().selectFirst();
+
+		this.flowFollowUp.getChildren().add(this.cmbFollowUpStatus);
 	}
 	
 	private boolean isSearchTermGiven(){
@@ -1520,6 +1605,10 @@ public class FXLink extends Application{
 		}
 		tblLinks.getItems().add(LinkHandler.createPseudoLink());
 		this.updateStatusBar(true);
+	}
+
+	private void refreshFollowUpResult(final List<Link> links){
+
 	}
 	
 	private void refreshCategoryTable(Category category){
