@@ -17,7 +17,13 @@ public class LinkReadDBHandler {
 			" from link l left join category c on c.id = l.categoryId" +
 			" left join followupstatus fus on fus.id = l.followupstatus";
 
-	private final static String WHERE_STATUS_NEEDED=" WHERE l.followupstatus=1 ORDER BY l.followuprank ASC";
+	private final static String WHERE_STATUS_NEEDED=" WHERE l.followupstatus=2 ORDER BY l.followuprank ASC";
+
+	private final static String WHERE_STATUS_NOT_NEEDED=" WHERE l.followupstatus=1";
+
+	private final static String WHERE_STATUS_FOLLOWED_UP=" WHERE l.followupstatus=3";
+
+	private final static String WHERE_STATUS_REFILL=" WHERE l.followupstatus=1 OR l.followupstatus=2 ORDER BY l.followupstatus DESC, l.followuprank ASC";
 
 	public List<Link> getAllLinksWithCategories(GenericDBHandler dbh, FollowUpStatus defaultFollowUpStatus){
 		Connection connection = dbh.getConnection();				
@@ -199,4 +205,62 @@ public class LinkReadDBHandler {
 
 		return links;
 	}
+
+	public List<Link> getAllLinksFollowedUp(GenericDBHandler dbh, FollowUpStatus defaultFollowUpStatus){
+		Connection connection = dbh.getConnection();
+		List<Link> links = new ArrayList<>();
+
+		String sql = BASE_QUERY + WHERE_STATUS_FOLLOWED_UP;
+
+		try {
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			links = getDataFromResultSet(rs, defaultFollowUpStatus);
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return links;
+	}
+
+	public List<Link> getAllLinksNoFollowUpNeeded(GenericDBHandler dbh, FollowUpStatus defaultFollowUpStatus){
+		Connection connection = dbh.getConnection();
+		List<Link> links = new ArrayList<>();
+
+		String sql = BASE_QUERY + WHERE_STATUS_NOT_NEEDED;
+
+		try {
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			links = getDataFromResultSet(rs, defaultFollowUpStatus);
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return links;
+	}
+
+	public List<Link> getAllLinksRefill(GenericDBHandler dbh, FollowUpStatus defaultFollowUpStatus){
+		Connection connection = dbh.getConnection();
+		List<Link> links = new ArrayList<>();
+
+		String sql = BASE_QUERY + WHERE_STATUS_REFILL;
+
+		try {
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			links = getDataFromResultSet(rs, defaultFollowUpStatus);
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return links;
+	}
+
 }

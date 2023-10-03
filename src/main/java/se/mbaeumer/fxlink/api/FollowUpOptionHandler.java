@@ -20,14 +20,10 @@ public class FollowUpOptionHandler {
     public List<FollowUpOption> getFollowUpOptions(){
         List<FollowUpOption> followUpOptions = new ArrayList<>();
 
-        followUpOptions.add(new FollowUpOption("ALL"));
-        followUpOptions.add(new FollowUpOption("NEXT"));
-        final List<FollowUpStatus> followUpStatuses = followUpStatusReadDBHandler.getFollowUpStatuses(GenericDBHandler.getInstance());
-
-        followUpOptions.addAll(followUpStatuses
-                .stream()
-                .map(s -> FollowUpOption.of(s))
-                .collect(Collectors.toList()));
+        followUpOptions.add(new FollowUpOption("NEXT_UP"));
+        followUpOptions.add(new FollowUpOption("REFILL"));
+        followUpOptions.add(new FollowUpOption("FOLLOWED_UP"));
+        followUpOptions.add(new FollowUpOption("NOT_NEEDED"));
 
         return followUpOptions;
     }

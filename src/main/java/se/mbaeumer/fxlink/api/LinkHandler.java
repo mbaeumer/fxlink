@@ -89,7 +89,17 @@ public class LinkHandler {
 	}
 
 	public List<Link> getLinksByFollowUpOption(FollowUpOption followUpOption){
-		return linkReadDBHandler.getAllLinksToFollowUp(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
+		List<Link> links = null;
+		if ("NEXT_UP".equals(followUpOption.getName())){
+			links = linkReadDBHandler.getAllLinksToFollowUp(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
+		}else if ("REFILL".equals(followUpOption.getName())){
+			links = linkReadDBHandler.getAllLinksRefill(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
+		}else if ("FOLLOWED_UP".equals(followUpOption.getName())){
+			links = linkReadDBHandler.getAllLinksFollowedUp(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
+		}else{
+			links = linkReadDBHandler.getAllLinksNoFollowUpNeeded(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
+		}
+		return links;
 	}
 
 	public Map<String, Long> getCategoryCounts(){

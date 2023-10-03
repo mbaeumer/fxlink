@@ -515,7 +515,8 @@ public class FXLink extends Application{
 		this.btnFollowUp = new Button("Follow up");
 
 		this.btnFollowUp.setOnAction(this::handleFollowUp);
-		this.flowActions.getChildren().add(this.btnFollowUp);
+		// TODO: Use the following line to make the follow-up button visible
+		//this.flowActions.getChildren().add(this.btnFollowUp);
 	}
 
 	private void handleFollowUp(ActionEvent actionEvent){
@@ -861,9 +862,8 @@ public class FXLink extends Application{
 
 		FlowPane.setMargin(flowFollowUp, new Insets(5, 5, 0, 5));
 
-		// TODO: Use the following two lines to enable the follow up filter
-		//this.flowGeneral.getChildren().add(2, this.flowFollowUp);
-		//this.createFollowUpOptionBox();
+		this.flowGeneral.getChildren().add(2, this.flowFollowUp);
+		this.createFollowUpOptionBox();
 	}
 
 	private void createFollowUpOptionBox(){
@@ -902,7 +902,8 @@ public class FXLink extends Application{
 		});
 
 		this.cmbFollowUpStatus.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-			final List<Link> linksByFollowUpOption = linkHandler.getLinksByFollowUpOption(newValue);
+
+			refreshLinkTable();
 		});
 
 		this.cmbFollowUpStatus.getSelectionModel().selectFirst();
@@ -1571,6 +1572,10 @@ public class FXLink extends Application{
 		final SortSettings sortSettings = createSortSettings();
 		if (isSearchPaneVisible() && isSearchTermGiven()) {
 			runSearch();
+		}else if (isFollowUpPaneVisible()){
+			final FollowUpOption selectedFollwUpOption = this.cmbFollowUpStatus.getSelectionModel().getSelectedItem();
+			final List<Link> linksByFollowUpOption = linkHandler.getLinksByFollowUpOption(selectedFollwUpOption);
+			refreshSearchResult(linksByFollowUpOption);
 		}else{
 			tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getSortOrder().addAll(FXCollections.observableList(sortSettings.getSortedColumns()));
