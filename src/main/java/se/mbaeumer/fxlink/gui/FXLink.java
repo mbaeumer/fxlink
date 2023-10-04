@@ -1709,6 +1709,7 @@ public class FXLink extends Application{
 		this.cmbCategories.setDisable(true);
 		this.btnSelectAll.setDisable(true);
 		this.btnDeselectAll.setDisable(true);
+		this.btnFollowUp.setDisable(true);
 		this.updateStatusBar(false);
 		if (item.equals("Links")){
 			this.flowGeneral.getChildren().remove(this.tblCategories);
@@ -1730,6 +1731,7 @@ public class FXLink extends Application{
 			this.cmbCategories.setDisable(false);
 			this.btnSelectAll.setDisable(false);
 			this.btnDeselectAll.setDisable(false);
+			this.btnFollowUp.setDisable(false);
 		}else if (item.equals("Categories")){
 			this.removeSearchPane();
 			this.flowGeneral.getChildren().remove(this.tblLinks);
