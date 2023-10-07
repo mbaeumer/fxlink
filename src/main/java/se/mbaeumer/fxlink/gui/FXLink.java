@@ -506,6 +506,7 @@ public class FXLink extends Application{
 			removeSearchPane();
 			refreshLinkTable();
 		}else{
+			removeFollowUpPane();
 			createSearchFlowPane();
 		}
 		btnShowSearchPane.setText(getSearchPaneTitle());
@@ -516,7 +517,7 @@ public class FXLink extends Application{
 
 		this.btnFollowUp.setOnAction(this::handleFollowUp);
 		// TODO: Use the following line to make the follow-up button visible
-		//this.flowActions.getChildren().add(this.btnFollowUp);
+		this.flowActions.getChildren().add(this.btnFollowUp);
 	}
 
 	private void handleFollowUp(ActionEvent actionEvent){
@@ -532,6 +533,12 @@ public class FXLink extends Application{
 
 	private boolean isFollowUpPaneVisible(){
 		return this.flowGeneral.getChildren().contains(this.flowFollowUp);
+	}
+
+	private void removeFollowUpPane(){
+		if (this.isFollowUpPaneVisible()){
+			this.flowGeneral.getChildren().remove(2);
+		}
 	}
 
 	private void createDeleteLinksButton(){
@@ -1734,6 +1741,7 @@ public class FXLink extends Application{
 			this.btnFollowUp.setDisable(false);
 		}else if (item.equals("Categories")){
 			this.removeSearchPane();
+			this.removeFollowUpPane();
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblTags);
 			this.flowGeneral.getChildren().add(3, this.tblCategories);
@@ -1744,6 +1752,7 @@ public class FXLink extends Application{
 			this.btnCreateItem.setDisable(false);
 		}else if (item.equals("Tags")){
 			this.removeSearchPane();
+			this.removeFollowUpPane();
 			this.flowGeneral.getChildren().remove(this.tblLinks);
 			this.flowGeneral.getChildren().remove(this.tblCategories);
 			this.flowGeneral.getChildren().add(3, this.tblTags);
