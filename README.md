@@ -29,6 +29,15 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.9.4 - 2023-10-09
+* Added a filter for follow-up data
+* Bug fixes related to follow-up ranks
+* Various minor code improvements
+
+## 0.9.3 - 2023-08-30
+* Keep the sorting order in the link table after editing a specific link
+* Bug fixes related to the category filter
+
 ## 0.9.2 - 2023-07-31
 * Added support to actively change the follow-up status
 * Various UI-related bugs
