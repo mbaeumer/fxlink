@@ -516,13 +516,13 @@ public class FXLink extends Application{
 		this.btnFollowUp = new Button("Follow up");
 
 		this.btnFollowUp.setOnAction(this::handleFollowUp);
-		// TODO: Use the following line to make the follow-up button visible
 		this.flowActions.getChildren().add(this.btnFollowUp);
 	}
 
 	private void handleFollowUp(ActionEvent actionEvent){
 		if (isFollowUpPaneVisible()){
 			this.flowGeneral.getChildren().remove(2);
+			this.refreshLinkTable();
 		}else{
 			if (isSearchPaneVisible()){
 				removeSearchPane();
