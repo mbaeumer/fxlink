@@ -251,7 +251,8 @@ public class FXLink extends Application{
 
 		this.cmbCategories.getSelectionModel().selectFirst(); //select the first element
 		this.cmbCategories.valueProperty().addListener((observable, oldValue, newValue) -> {
-			filterCategories();
+			//filterCategories();
+			refreshLinkTable();
 		});
 
 		this.flowFilter.getChildren().add(this.cmbCategories);
@@ -647,7 +648,7 @@ public class FXLink extends Application{
 		if (isSearchPaneVisible() && isSearchTermGiven()){
 			runSearch();
 		}else {
-			filterCategories();
+			refreshLinkTable();
 		}
 	}
 
@@ -667,7 +668,7 @@ public class FXLink extends Application{
 				alert.showAndWait();
 			}
 		}
-		filterCategories();
+		refreshLinkTable();
 	}
 
 	private void createSelectionFlowPane(){
@@ -1693,15 +1694,7 @@ public class FXLink extends Application{
 			this.updateStatusBar(false);
 		}
 	}
-	
-	private void filterCategories(){
-		if (!cmbCategories.isDisabled() && cmbCategories.getValue() != null) {
-			tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinksByCategory(cmbCategories.getValue())));
-			tblLinks.getItems().add(LinkHandler.createPseudoLink());
-			this.updateStatusBar(false);
-		}
-	}
-	
+
 	public void switchTableView(String item){
 		if (tblLinks == null &&  tblCategories == null){
 			return;
