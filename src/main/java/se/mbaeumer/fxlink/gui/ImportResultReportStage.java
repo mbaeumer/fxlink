@@ -54,10 +54,16 @@ public class ImportResultReportStage extends Stage {
 	private Button btnClose;
 	private ImportResultReport importReport;
 
+	private FlowPane flowActions;
+
+	private Button btnRankHighest;
+
+	private Button btnRankLowest;
 	private FlowPane flowSelection;
-	private FlowPane flowSuggestions;
+
 	private Button btnSelectAll;
 	private Button btnDeselectAll;
+	private FlowPane flowSuggestions;
 
 	private LinkHandler linkHandler;
 	private CategoryHandler categoryHandler;
@@ -117,8 +123,11 @@ public class ImportResultReportStage extends Stage {
 	
 	public void initLayout(){
 		this.initImportInfoLabels();
+		this.initActionFlowPane();
 		this.createMoveToCategoryComboBox();
 		this.createMoveToCategoryButton();
+		this.initHighRankButton();
+		this.initLowRankButton();
 		this.initSelectionPane();
 		this.initSelectAllButton();
 		this.initDeselectAllButton();
@@ -135,6 +144,7 @@ public class ImportResultReportStage extends Stage {
 		this.tvFailedLinks.prefWidthProperty().bind(this.tabPane.prefWidthProperty());
 		this.lblImportFileName.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 		this.flowSelection.prefWidthProperty().bind(this.flowGeneral.widthProperty());
+		this.flowActions.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 		this.flowSuggestions.prefWidthProperty().bind(this.flowGeneral.widthProperty());
 	}
 	
@@ -145,6 +155,13 @@ public class ImportResultReportStage extends Stage {
 		this.lblFailedImportsValue.setText(Integer.toString(this.importReport.getFailedLinks().size()));
 		this.flowGeneral.getChildren().addAll(this.lblImportFileName, this.lblSuccessfulImportsText,
 				this.lblSuccessfulImportsValue, this.lblFailedImportsText, this.lblFailedImportsValue);
+	}
+
+	private void initActionFlowPane(){
+		this.flowActions = new FlowPane(Orientation.HORIZONTAL);
+		this.flowActions.setHgap(10);
+
+		this.flowGeneral.getChildren().add(this.flowActions);
 	}
 
 	private void createMoveToCategoryComboBox(){
@@ -192,13 +209,13 @@ public class ImportResultReportStage extends Stage {
 		});
 
 		this.cmbMoveToCategory.getSelectionModel().selectFirst();
-		this.flowGeneral.getChildren().add(this.cmbMoveToCategory);
+		this.flowActions.getChildren().add(this.cmbMoveToCategory);
 	}
 
 	private void createMoveToCategoryButton(){
 		this.btnMoveToCategory = new Button("Move to category");
 		this.btnMoveToCategory.setOnAction(this::handleMoveToCategory);
-		this.flowGeneral.getChildren().add(this.btnMoveToCategory);
+		this.flowActions.getChildren().add(this.btnMoveToCategory);
 	}
 
 	private void handleMoveToCategory(ActionEvent actionEvent){
@@ -212,6 +229,26 @@ public class ImportResultReportStage extends Stage {
 				alert.showAndWait();
 			}
 		}
+	}
+
+	private void initHighRankButton(){
+		this.btnRankHighest = new Button("Rank top");
+		this.btnRankHighest.setOnAction(this::handleHighRank);
+		this.flowActions.getChildren().add(this.btnRankHighest);
+	}
+
+	private void handleHighRank(ActionEvent actionEvent){
+
+	}
+
+	private void initLowRankButton(){
+		this.btnRankLowest = new Button("Rank low");
+		this.btnRankLowest.setOnAction(this::handleLowRank);
+		this.flowActions.getChildren().add(this.btnRankLowest);
+	}
+
+	private void handleLowRank(ActionEvent actionEvent){
+
 	}
 
 	private List<Link> getSelectedLinks(){
@@ -366,6 +403,9 @@ public class ImportResultReportStage extends Stage {
 			}
 		});
 
+		TableColumn followUpRankCol = new TableColumn("Rank");
+		followUpRankCol.setCellValueFactory(new PropertyValueFactory("followUpRank"));
+
 		TableColumn<Link, String> createdCol = new TableColumn<>("Created");
 		createdCol.setCellValueFactory(new PropertyValueFactory<>("created"));
 		createdCol.setCellValueFactory(
@@ -380,7 +420,8 @@ public class ImportResultReportStage extends Stage {
 				});
 
 
-		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, categoryCol, createdCol);
+		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol,
+				followUpRankCol, categoryCol, createdCol);
 	}
 
 	private void updateLink(Link link){
