@@ -68,6 +68,8 @@ public class ImportResultReportStage extends Stage {
 	private LinkHandler linkHandler;
 	private CategoryHandler categoryHandler;
 	private NaiveBayesClassifier naiveBayesClassifier;
+
+	private FollowUpRankHandler followUpRankHandler;
 	private List<Probability> probabilities;
 
 	public ImportResultReportStage(ImportResultReport report){
@@ -82,6 +84,7 @@ public class ImportResultReportStage extends Stage {
 				new CategoryDeletionDBHandler(), new LinkUpdateDBHandler());
 		this.naiveBayesClassifier = new NaiveBayesClassifier(new LinkSplitter(new URLHelper()), new LinkReadDBHandler(),
 				this.linkHandler, new StopWordHandler());
+		this.followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), -1, new FollowUpStatusReadDBHandler());
 		this.importReport = report;
 		this.initLayout();
 		this.initSizes();
@@ -238,7 +241,13 @@ public class ImportResultReportStage extends Stage {
 	}
 
 	private void handleHighRank(ActionEvent actionEvent){
-
+		for (Link link : getSelectedLinks()){
+			try {
+				this.followUpRankHandler.setHighestRank(link);
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	private void initLowRankButton(){
@@ -248,7 +257,13 @@ public class ImportResultReportStage extends Stage {
 	}
 
 	private void handleLowRank(ActionEvent actionEvent){
-
+		for (Link link : getSelectedLinks()){
+			try {
+				this.followUpRankHandler.setLowestRank(link);
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	private List<Link> getSelectedLinks(){
