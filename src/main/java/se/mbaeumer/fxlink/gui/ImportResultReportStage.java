@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import se.mbaeumer.fxlink.api.*;
 import se.mbaeumer.fxlink.handlers.*;
@@ -64,6 +65,8 @@ public class ImportResultReportStage extends Stage {
 	private Button btnSelectAll;
 	private Button btnDeselectAll;
 	private FlowPane flowSuggestions;
+
+	private ContextMenu contextMenu;
 
 	private LinkHandler linkHandler;
 	private CategoryHandler categoryHandler;
@@ -364,6 +367,22 @@ public class ImportResultReportStage extends Stage {
 		this.tvSuccessfulLinks = new TableView<>();
 		this.tvSuccessfulLinks.setItems(FXCollections.observableList(this.importReport.getSuccessfulLinks()));
 		this.tvSuccessfulLinks.setEditable(true);
+
+		this.tvSuccessfulLinks.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent me) {
+				if (contextMenu != null){
+					contextMenu.hide();
+				}
+				if (me.getButton() == MouseButton.SECONDARY){
+					if (tvSuccessfulLinks.getSelectionModel().getSelectedItem() != null){
+						initContextMenu();
+						contextMenu.show(tvSuccessfulLinks, me.getScreenX(), me.getScreenY());
+					}
+				}
+			}
+		});
+
 	}
 
 	private void createSuccessLinksTableViewColumns(){
@@ -437,6 +456,33 @@ public class ImportResultReportStage extends Stage {
 
 		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol,
 				followUpRankCol, categoryCol, createdCol);
+	}
+
+	private void initContextMenu(){
+		this.contextMenu = new ContextMenu();
+
+
+		MenuItem menuItem = new MenuItem("Rank top");
+		menuItem.setOnAction(actionEvent ->  {
+			final Link link = tvSuccessfulLinks.getSelectionModel().getSelectedItem();
+			try {
+				followUpRankHandler.setHighestRank(link);
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+			//refreshLinkTable();
+		});
+		MenuItem miRankLow = new MenuItem("Rank low");
+		miRankLow.setOnAction(actionEvent -> {
+			final Link link = tvSuccessfulLinks.getSelectionModel().getSelectedItem();
+			try {
+				followUpRankHandler.setLowestRank(link);
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		});
+
+		this.contextMenu.getItems().addAll(miRankLow, menuItem);
 	}
 
 	private void updateLink(Link link){
