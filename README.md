@@ -29,6 +29,10 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.9.5 - 2023-11-21
+* Added support for ranking links directly in the import stage
+* various minor changes and simplifications
+
 ## 0.9.4 - 2023-10-09
 * Added a filter for follow-up data
 * Bug fixes related to follow-up ranks
