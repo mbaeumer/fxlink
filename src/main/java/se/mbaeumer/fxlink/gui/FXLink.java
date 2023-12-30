@@ -1550,9 +1550,9 @@ public class FXLink extends Application{
 						&& !category.getName().equalsIgnoreCase(ValueConstants.VALUE_N_A)) {
 					link.setCategory(category);
 				}
+				this.linkHandler.setDefaultFollowUpStatus(link);
 				this.linkHandler.createLink(link);
 			} catch (SQLException e) {
-				System.out.println(e.getMessage());
 				Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
 				alert.showAndWait();
 				isCorrect = false;

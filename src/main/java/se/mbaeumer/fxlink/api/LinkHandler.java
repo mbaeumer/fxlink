@@ -146,7 +146,7 @@ public class LinkHandler {
 		return calendar.get(Calendar.HOUR_OF_DAY);
 	}
 
-	private void setDefaultFollowUpStatus(final Link link){
+	public void setDefaultFollowUpStatus(final Link link){
 		List<FollowUpStatus> followUpStatuses = followUpStatusReadDBHandler.getFollowUpStatuses(GenericDBHandler.getInstance());
 		FollowUpStatus followUpStatus = followUpStatuses
 				.stream()
