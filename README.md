@@ -29,6 +29,11 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.9.6 - 2024-01-01
+* Added a counter for categorized links in the import stage
+* various minor changes in the import stage
+* bug fixes to prevent NullPointerExceptions
+
 ## 0.9.5 - 2023-11-21
 * Added support for ranking links directly in the import stage
 * various minor changes and simplifications
