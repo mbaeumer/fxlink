@@ -43,7 +43,7 @@ public class LinkHandler {
 	}
 	
 	public List<Link> getLinksByCategory(Category category){
-		if (ValueConstants.VALUE_ALL.equals(category.getName())){
+		if (category == null || ValueConstants.VALUE_ALL.equals(category.getName())){
 			return this.linkReadDBHandler.getAllLinks(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
 		}else if (ValueConstants.VALUE_N_A.equals(category.getName())){
 			return this.linkReadDBHandler.getAllLinksWithNoCategory(GenericDBHandler.getInstance(), getDefaultFFollowUpStatus());
