@@ -36,15 +36,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ImportResultReportStage extends Stage {
 	private Scene scene;
 	private FlowPane flowGeneral;
 	private final Label lblImportFileName = new Label();
-	private final Label lblSuccessfulImportsText = new Label("Successful imports");
+	private final Label lblSuccessfulImportsText = new Label("Successful imports: ");
 	private final Label lblSuccessfulImportsValue = new Label();
-	private final Label lblFailedImportsText = new Label("Failed imports");
+	private final Label lblFailedImportsText = new Label("Failed imports: ");
 	private final Label lblFailedImportsValue = new Label();
+
+	private final Label lblCategorizedImportsText = new Label("Categorized: ");
+
+	private final Label lblCategorizedImportsValue = new Label();
 	private ComboBox<Category> cmbMoveToCategory;
 	private Button btnMoveToCategory;
 	private TabPane tabPane;
@@ -102,8 +107,8 @@ public class ImportResultReportStage extends Stage {
 	}
 	
 	private void initScene(){
-		int width = 750;
-		int height = 800;
+		int width = 850;
+		int height = 750;
 		this.scene = new Scene(this.flowGeneral, width, height);
 		this.scene.setFill(Color.WHITESMOKE);
 		
@@ -160,7 +165,8 @@ public class ImportResultReportStage extends Stage {
 		this.lblSuccessfulImportsValue.setText(Integer.toString(this.importReport.getSuccessfulLinks().size()));
 		this.lblFailedImportsValue.setText(Integer.toString(this.importReport.getFailedLinks().size()));
 		this.flowGeneral.getChildren().addAll(this.lblImportFileName, this.lblSuccessfulImportsText,
-				this.lblSuccessfulImportsValue, this.lblFailedImportsText, this.lblFailedImportsValue);
+				this.lblSuccessfulImportsValue, this.lblFailedImportsText, this.lblFailedImportsValue,
+				this.lblCategorizedImportsText, this.lblCategorizedImportsValue);
 	}
 
 	private void initActionFlowPane(){
@@ -230,11 +236,20 @@ public class ImportResultReportStage extends Stage {
 			link.setCategory(category);
 			try {
 				linkHandler.updateLink(link);
+				updateCategorizedCount();
 			}catch(SQLException ex){
 				Alert alert = new Alert(Alert.AlertType.ERROR, "The link could not be updated", ButtonType.OK);
 				alert.showAndWait();
 			}
 		}
+
+	}
+
+	private void updateCategorizedCount(){
+		lblCategorizedImportsValue.setText(Integer.toString(this.importReport.getSuccessfulLinks()
+				.stream()
+				.filter(link -> link.getCategory()!=null)
+				.collect(Collectors.toList()).size()));
 	}
 
 	private void initHighRankButton(){
@@ -454,8 +469,8 @@ public class ImportResultReportStage extends Stage {
 				});
 
 
-		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol,
-				followUpRankCol, categoryCol, createdCol);
+		this.tvSuccessfulLinks.getColumns().addAll(selectedCol, urlCol, titleCol, followUpRankCol,
+				categoryCol, descriptionCol, createdCol);
 	}
 
 	private void initContextMenu(){
@@ -496,9 +511,11 @@ public class ImportResultReportStage extends Stage {
 	private void setSuccessLinksTableLayout(){
 		this.tvSuccessfulLinks.getColumns().get(0).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*10)/100);
 		this.tvSuccessfulLinks.getColumns().get(1).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*20)/100);
-		this.tvSuccessfulLinks.getColumns().get(2).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*40)/100);
-		this.tvSuccessfulLinks.getColumns().get(3).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*20)/100);
+		this.tvSuccessfulLinks.getColumns().get(2).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*20)/100);
+		this.tvSuccessfulLinks.getColumns().get(3).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*10)/100);
 		this.tvSuccessfulLinks.getColumns().get(4).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*10)/100);
+		this.tvSuccessfulLinks.getColumns().get(5).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*10)/100);
+		this.tvSuccessfulLinks.getColumns().get(6).setPrefWidth((this.tvSuccessfulLinks.getPrefWidth()*20)/100);
 	}
 
 	private void initFailedLinksTableView(){
@@ -590,7 +607,9 @@ public class ImportResultReportStage extends Stage {
 			Category category = categoryHandler.getCategoryByName(categoryName);
 			link.setCategory(category);
 			linkHandler.updateLink(link);
+			updateCategorizedCount();
 		} catch (SQLException throwables) {
+			// TODO: Show alert instead of stack trace
 			throwables.printStackTrace();
 		}
 	}
