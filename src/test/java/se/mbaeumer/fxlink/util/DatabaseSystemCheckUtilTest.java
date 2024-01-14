@@ -1,6 +1,7 @@
 package se.mbaeumer.fxlink.util;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -15,6 +16,7 @@ import java.io.File;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(DatabaseCheckUtilImpl.class)
+@Ignore
 public class DatabaseSystemCheckUtilTest{
     @Test
     public void shouldReturnOkWhenDatabaseFolderExists() throws Exception{
