@@ -1435,7 +1435,7 @@ public class FXLink extends Application{
 		});
 
 		MenuItem miRankDown = new MenuItem("Rank lower");
-		miRankUp.setOnAction(actionEvent -> {
+		miRankDown.setOnAction(actionEvent -> {
 			try {
 				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank(), new FollowUpStatusReadDBHandler());
 				followUpRankHandler.setLowerRank(selectedLink);

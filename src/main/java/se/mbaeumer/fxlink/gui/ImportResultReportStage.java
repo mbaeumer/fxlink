@@ -485,7 +485,6 @@ public class ImportResultReportStage extends Stage {
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}
-			//refreshLinkTable();
 		});
 		MenuItem miRankLow = new MenuItem("Rank low");
 		miRankLow.setOnAction(actionEvent -> {
@@ -496,8 +495,45 @@ public class ImportResultReportStage extends Stage {
 				throw new RuntimeException(e);
 			}
 		});
+		MenuItem miRankUp = new MenuItem("Rank higher");
+		miRankUp.setOnAction(actionEvent -> {
+			final Link link = tvSuccessfulLinks.getSelectionModel().getSelectedItem();
+			try {
+				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), link.getFollowUpRank(), new FollowUpStatusReadDBHandler());
+				followUpRankHandler.setHigherRank(link);
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		});
+		MenuItem miRankDown = new MenuItem("Rank lower");
+		miRankDown.setOnAction(actionEvent -> {
+			final Link link = tvSuccessfulLinks.getSelectionModel().getSelectedItem();
+			try {
+				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), link.getFollowUpRank(), new FollowUpStatusReadDBHandler());
+				followUpRankHandler.setLowerRank(link);
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		});
+
 
 		this.contextMenu.getItems().addAll(miRankLow, menuItem);
+
+		final Link link = tvSuccessfulLinks.getSelectionModel().getSelectedItem();
+		if (link != null){
+			FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), link.getFollowUpRank(), new FollowUpStatusReadDBHandler());
+			if (followUpRankHandler.isHigherRankPossible(link)){
+				this.contextMenu.getItems().add(miRankUp);
+			}
+
+			try {
+				if (followUpRankHandler.isLowerRankPossible(link)){
+					this.contextMenu.getItems().add(miRankDown);
+				}
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	private void updateLink(Link link){
