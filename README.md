@@ -6,15 +6,17 @@ Apart from that, FXLink provides import of data as text files, a search filter a
 ![](/docs/fxlink8.png) 
 
 # Running FXLink
-Depending on which version is used, FXLink can be started up in different ways:
-From version 0.8.1, FXLink is built on Java 11. There are two ways to start up:
+From version 0.8.1, FXLink is built on Java 11. <br/>
+From version 0.9.7, FXLink is built on Java 17. <br/>
+Depending on which version is used there are two ways to start up:
 Either you clone the repository and then run `mvn javafx:run` from the project root directory. This requires that you have maven installed. 
 Alternatively, you can do the following:
 
 * Download the latest tar.gz file
 * Unpack the file
 * Download and unpack javafx-sdk [here](https://gluonhq.com/products/javafx/)
-* Run the following command: `java --module-path <path-to-javafx-sdk>  --add-modules javafx.controls,java.sql,java.desktop -jar fxlink11-<version>-jar-with-dependencies.jar` 
+* From version 0.8.1 to 0.9.6: Run the following command: `java --module-path <path-to-javafx-sdk>  --add-modules javafx.controls,java.sql,java.desktop -jar fxlink11-<version>-jar-with-dependencies.jar`
+* From version 0.9.7: `java --module-path <path-to-javafx-sdk> --add-exports=java.desktop/com.apple.eio=ALL-UNNAMED --add-modules javafx.controls,java.sql,java.desktop -jar fxlink17-0.9.7-jar-with-dependencies.jar`
 
 Version 0.8.0 and earlier can be started as a usual jar file:
 ```bash 
@@ -23,11 +25,16 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
 
 # Development details
 
-* Java 11, JavaFX
+* Java 17, JavaFX
 * Maven
 * HSQLDB
          
 # Version/release history 
+
+## 0.9.7 - 2024-01-31
+* Added support for ranking links higher and lower
+* Migrated to Java 17
+
 
 ## 0.9.6 - 2024-01-01
 * Added a counter for categorized links in the import stage
