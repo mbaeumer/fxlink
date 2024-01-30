@@ -1423,6 +1423,28 @@ public class FXLink extends Application{
 			}
 		});
 
+		MenuItem miRankUp = new MenuItem("Rank higher");
+		miRankUp.setOnAction(actionEvent -> {
+			try {
+				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank(), new FollowUpStatusReadDBHandler());
+				followUpRankHandler.setHigherRank(selectedLink);
+				refreshLinkTable();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		});
+
+		MenuItem miRankDown = new MenuItem("Rank lower");
+		miRankUp.setOnAction(actionEvent -> {
+			try {
+				FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank(), new FollowUpStatusReadDBHandler());
+				followUpRankHandler.setLowerRank(selectedLink);
+				refreshLinkTable();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		});
+
 		// delete
 		MenuItem miDelete = new MenuItem("Delete link");
 		miDelete.setOnAction(actionEvent ->  {
@@ -1439,6 +1461,22 @@ public class FXLink extends Application{
 		});
 
 		this.contLinks.getItems().addAll(miEdit, miOpenURL, miRankTop, miRankLow, miDelete);
+
+		if (selectedLink != null){
+			FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank(), new FollowUpStatusReadDBHandler());
+			if (followUpRankHandler.isHigherRankPossible(selectedLink)){
+				this.contLinks.getItems().add(miRankUp);
+			}
+
+			try {
+				if (followUpRankHandler.isLowerRankPossible(selectedLink)){
+					this.contLinks.getItems().add(miRankDown);
+				}
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+
+		}
 	}
 
 	private void createTagContextMenu(){

@@ -127,6 +127,36 @@ public class FollowUpRankHandler {
     private static boolean isStillRanked(Link link, int oldRank) {
         return oldRank != link.getFollowUpRank() && link.getFollowUpRank() >= 1;
     }
+
+    public boolean isHigherRankPossible(final Link link){
+        return link.getFollowUpRank() > 1;
+    }
+
+    public void setHigherRank(final Link link) throws SQLException {
+        final List<Link> linksOrderedByRank1 = linkReadDBHandler.getLinksOrderedByRank(GenericDBHandler.getInstance());
+        Link linkToSwap = linksOrderedByRank1.get(link.getFollowUpRank() - 2);
+        int oldRank = link.getFollowUpRank();
+        link.setFollowUpRank(link.getFollowUpRank() - 1);
+        linkToSwap.setFollowUpRank(oldRank);
+        linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
+        linkUpdateDBHandler.updateRank(linkToSwap, linkToSwap.getFollowUpRank(), GenericDBHandler.getInstance());
+    }
+
+    public void setLowerRank(final Link link) throws SQLException {
+        final List<Link> linksOrderedByRank1 = linkReadDBHandler.getLinksOrderedByRank(GenericDBHandler.getInstance());
+        Link linkToSwap = linksOrderedByRank1.get(link.getFollowUpRank());
+        int oldRank = link.getFollowUpRank();
+        link.setFollowUpRank(link.getFollowUpRank() + 1);
+        linkToSwap.setFollowUpRank(oldRank);
+        linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
+        linkUpdateDBHandler.updateRank(linkToSwap, linkToSwap.getFollowUpRank(), GenericDBHandler.getInstance());
+    }
+
+    public boolean isLowerRankPossible(final Link link) throws SQLException {
+        return link.getFollowUpRank() > 0 &&
+                BigDecimal.valueOf(link.getFollowUpRank()).compareTo(getLowestPossibleRank()) == -1;
+    }
+
     public void setHighestRank(final Link link) throws SQLException{
         link.setFollowUpStatus(getFollowUpStatus("NEEDED"));
         if (linksOrderedByRank.size() == 0){
