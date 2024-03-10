@@ -6,7 +6,7 @@
 
     <groupId>se.mbaeumer.fxlink</groupId>
     <artifactId>fxlink17</artifactId>
-    <version>0.9.7</version>
+    <version>0.9.8</version>
     <packaging>jar</packaging>
 
     <properties>

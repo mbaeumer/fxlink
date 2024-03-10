@@ -31,6 +31,10 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 0.9.8 - 2024-03-10
+* Added possibility to search in the import history
+
+
 ## 0.9.7 - 2024-01-31
 * Added support for ranking links higher and lower
 * Migrated to Java 17
