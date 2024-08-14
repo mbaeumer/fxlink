@@ -964,6 +964,8 @@ public class FXLink extends Application{
 	private void createLinkTableView(){
 		this.tblLinks = new TableView();
 
+		// TODO: Add the following for debug purpose
+		List<Link> tempLiknks = this.linkHandler.getLinks();
 		this.tblLinks.getItems().addAll(FXCollections.observableList(this.linkHandler.getLinks()));
 		this.tblLinks.getItems().addAll(FXCollections.observableList(List.of(LinkHandler.createPseudoLink())));
 
@@ -1088,7 +1090,7 @@ public class FXLink extends Application{
 		TableColumn followUpRankCol = new TableColumn("Rank");
 		followUpRankCol.setCellValueFactory(new PropertyValueFactory("followUpRank"));
 
-		TableColumn followUpStatusCol = new TableColumn("Followup Status");
+		TableColumn followUpStatusCol = new TableColumn("Followup status");
 		followUpStatusCol.setCellValueFactory(new PropertyValueFactory<Link, FollowUpStatus>("followUpStatus"));
 
 		followUpStatusCol.setCellFactory(new Callback<TableColumn<Link, FollowUpStatus>, TableCell<Link, FollowUpStatus>>(){
@@ -1138,8 +1140,25 @@ public class FXLink extends Application{
 					      }
 					   });
 
+		TableColumn followUpDateCol = new TableColumn("Followup date");
+		followUpDateCol.setCellValueFactory(new PropertyValueFactory("followUpDate"));
+		followUpDateCol.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<Link, String>, ObservableValue<String>>() {
+					@Override
+					public ObservableValue<String> call(TableColumn.CellDataFeatures<Link, String> link) {
+						SimpleStringProperty property = new SimpleStringProperty();
+						if (link.getValue().getFollowUpDate() == null){
+							property.set("-");
+						}else {
+							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+							property.setValue(dateFormat.format(link.getValue().getFollowUpDate()));
+						}
+						return property;
+					}
+				});
+
 		// add all columns to the table view
-		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, followUpRankCol, followUpStatusCol, categoryCol, createdCol, lastUpdatedCol);
+		this.tblLinks.getColumns().addAll(selectedCol, urlCol, titleCol, descriptionCol, followUpRankCol, followUpStatusCol, categoryCol, followUpDateCol, createdCol, lastUpdatedCol);
 	}
 	
 	@SuppressWarnings("rawtypes")

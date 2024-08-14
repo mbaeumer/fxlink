@@ -96,6 +96,7 @@ public class LinkXMLReader {
 					DateInfo dateInfo = extractDateInfo(startElement);
 					link.setCreated(dateInfo.getCreated());
 					link.setLastUpdated(dateInfo.getLastUpdated());
+					link.setFollowUpDate(dateInfo.getFollowUpDate());
 					
 					Attribute attribute = startElement.getAttributeByName(
 							new QName("categoryid"));
@@ -174,6 +175,13 @@ public class LinkXMLReader {
 					new QName("created")).getValue()));
 			dateInfo.setLastUpdated(df.parse(startElement.getAttributeByName(
 					new QName("lastUpdated")).getValue()));
+			if (startElement.getAttributeByName(new QName("followUpDate")) != null){
+				dateInfo.setFollowUpDate(df.parse(startElement.getAttributeByName(
+						new QName("followUpDate")).getValue()));
+			}else{
+				dateInfo.setFollowUpDate(null);
+			}
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

@@ -32,7 +32,7 @@ public class LinkUpdateDBHandlerTest{
     public void testConstructSqlStringWithCategory(){
         Link link = createLink();
         String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1, followupstatus=1,";
-        expected += "categoryId=5,lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
+        expected += "categoryId=5,followupdate=null, lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
         String actual = linkUpdateDBHandler.constructSqlString(link);
         Assert.assertEquals(actual, expected);
     }
@@ -62,7 +62,21 @@ public class LinkUpdateDBHandlerTest{
     public void testConstructSqlStringWithoutCategory(){
         Link link = createLink();
         link.setCategory(null);
-        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1, followupstatus=1,categoryId=null,";
+        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1, followupstatus=1,categoryId=null,followupdate=null, ";
+        expected += "lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
+        String actual = linkUpdateDBHandler.constructSqlString(link);
+        System.out.println(expected);
+        System.out.println(actual);
+        Assert.assertEquals(actual, expected);
+    }
+
+    @Test
+    public void testConstructSqlStringWithFollowUpDateNotNull(){
+        Link link = createLink();
+        link.setCategory(null);
+        Date followUpDate = createTimestamp();
+        link.setFollowUpDate(followUpDate);
+        String expected = "UPDATE Link SET title='Der Kicker', url='www.kicker.de', description='German sports magazine', followuprank=1, followupstatus=1,categoryId=null,followupdate='"+followUpDate+"', ";
         expected += "lastUpdated='" + link.getLastUpdated() + "' WHERE id=1";
         String actual = linkUpdateDBHandler.constructSqlString(link);
         System.out.println(expected);

@@ -34,9 +34,9 @@ public class LinkCreationDBHandlerTest{
         Link link = createLinkWithoutCategory();
         link.setFollowUpStatus(doStiff());
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1)";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1, NULL)";
         String actual = linkCreationDBHandler.constructSqlString(link);
-        Assert.assertEquals(actual,expected);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -47,9 +47,9 @@ public class LinkCreationDBHandlerTest{
         link.setDescription("Some youtube link");
         link.setFollowUpStatus(doStiff());
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Some youtube link', 'https://www.youtube.com/watch?v=HZyRQ8Uhhmk', 'Some youtube link', DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1)";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1, NULL)";
         String actual = linkCreationDBHandler.constructSqlString(link);
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -58,9 +58,9 @@ public class LinkCreationDBHandlerTest{
         link.setCategory(createSportsCategory());
         link.setFollowUpStatus(doStiff());
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', 1, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1)";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1, NULL)";
         String actual = linkCreationDBHandler.constructSqlString(link);
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -69,9 +69,9 @@ public class LinkCreationDBHandlerTest{
         link.setCategory(createCategoryWithNA());
         link.setFollowUpStatus(doStiff());
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1)";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1, NULL)";
         String actual = linkCreationDBHandler.constructSqlString(link);
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -83,9 +83,9 @@ public class LinkCreationDBHandlerTest{
         link.setFollowUpStatus(status);
         link.setCategory(createCategoryWithNameAll());
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "', 5, 1)";
+        expected += " '" + link.getLastUpdated() + "', 5, 1, NULL)";
         String actual = linkCreationDBHandler.constructSqlString(link);
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -95,9 +95,9 @@ public class LinkCreationDBHandlerTest{
         link.setCategory(createCategoryWithNameAll());
         link.setFollowUpStatus(doStiff());
         String expected = "INSERT INTO Link VALUES(DEFAULT, 'Der Kicker', 'www.kicker.de', 'German sports magazin', DEFAULT, DEFAULT,";
-        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1)";
+        expected += " '" + link.getLastUpdated() + "', DEFAULT, 1, NULL)";
         String actual = linkCreationDBHandler.constructSqlString(link);
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test

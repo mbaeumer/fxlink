@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 public class LinkImportDBHandler {
 	public static int importLinks(GenericDBHandler dbh, Link link) throws SQLException{
 		Connection connection = dbh.getConnection();
-		
+
 		String sql = "INSERT INTO Link "
 				+ "VALUES(?, ?, ?, ?,";
 
@@ -16,10 +16,10 @@ public class LinkImportDBHandler {
 		if (link.getCategory() != null){
 			categoryId = " ?,";
 		}
-		sql = sql + categoryId + " ?, ?, ?, ?) ";
-		
+		sql = sql + categoryId + " ?, ?, ?, ?, ?) ";
+
 		int linkId = -1;
-		
+
 		PreparedStatement stmt = connection.prepareStatement(sql);
 		stmt.setInt(1, link.getId());
 		stmt.setString(2, link.getTitle());
@@ -33,7 +33,7 @@ public class LinkImportDBHandler {
 			parameterIndex++;
 		}
 
-		
+
 		// created and lastUpdated
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp tsCreated = Timestamp.valueOf(df.format(link.getCreated()));
@@ -45,9 +45,17 @@ public class LinkImportDBHandler {
 		stmt.setInt(parameterIndex, link.getFollowUpRank());
 		parameterIndex++;
 		stmt.setInt(parameterIndex, link.getFollowUpStatus().getId());
+		parameterIndex++;
+		if (link.getFollowUpDate() != null) {
+			Timestamp tsFollowUpDate = Timestamp.valueOf(df.format(link.getFollowUpDate()));
+			stmt.setTimestamp(parameterIndex, tsFollowUpDate);
+		}else{
+			stmt.setTimestamp(parameterIndex, null);
+		}
+
 		stmt.executeUpdate();
 		ResultSet rs = stmt.getGeneratedKeys();
-		
+
 		while (rs.next()){
 			linkId = rs.getInt("id");
 		}

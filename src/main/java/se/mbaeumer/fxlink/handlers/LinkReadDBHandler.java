@@ -12,7 +12,7 @@ import java.util.List;
 public class LinkReadDBHandler {
 
 	private final static String BASE_QUERY = "select l.id as linkId, l.title, l.url, l.description as linkDescription, l. created as linkCreated," +
-			" l.lastUpdated  as linkLastUpdated, l.categoryId as linkCategory, l.followuprank, l.followupstatus, fus.name as followUpName, c.id as categoryId, c.name as category," +
+			" l.lastUpdated  as linkLastUpdated, l.followUpDate as followUpDate, l.categoryId as linkCategory, l.followuprank, l.followupstatus, fus.name as followUpName, c.id as categoryId, c.name as category," +
 			" c.description as categoryDescription, c.created as categoryCreated, c.lastUpdated as categoryLastUpdated" +
 			" from link l left join category c on c.id = l.categoryId" +
 			" left join followupstatus fus on fus.id = l.followupstatus";
@@ -48,6 +48,7 @@ public class LinkReadDBHandler {
 			link.setId(rs.getInt("linkId"));
 			link.setCreated(rs.getTimestamp("linkCreated"));
 			link.setLastUpdated(rs.getTimestamp("linkLastUpdated"));
+			link.setFollowUpDate(rs.getTimestamp("followUpDate"));
 			link.setFollowUpRank(rs.getInt("followuprank"));
 
 			int followUpStatusId = rs.getInt("followupstatus");

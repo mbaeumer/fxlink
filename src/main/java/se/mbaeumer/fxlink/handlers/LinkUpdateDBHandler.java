@@ -19,6 +19,10 @@ public class LinkUpdateDBHandler {
 	public static String SQL_UPDATE_WHERE_CLAUSE = "WHERE id=ID_PLACEHOLDER";
 	public static final String DEFAULT_CATEGORY = "categoryId=null,";
 
+	public static final String DEFAULT_FOLLOWUP_DATE="followupdate=null, ";
+
+	public static final String SQL_UPDATE_FOLLOWUP_DATE="followupdate=FOLLOWUP_DATE_PLACEHOLDER, ";
+
 	public static String SQL_BASE_MOVE = "UPDATE Link SET categoryId=CATEGORY_ID_PLACEHOLDER WHERE categoryId=CATEGORY_ID_PLACEHOLDER";
 
 	public String constructSqlString(Link link){
@@ -32,6 +36,12 @@ public class LinkUpdateDBHandler {
 			sql += SQL_UPDATE_CATEGORY;
 		}else{
 			sql += DEFAULT_CATEGORY;
+		}
+
+		if (link.getFollowUpDate() != null){
+			sql += SQL_UPDATE_FOLLOWUP_DATE;
+		}else {
+			sql += DEFAULT_FOLLOWUP_DATE;
 		}
 
 		sql += SQL_UPDATE_DATE + SQL_UPDATE_WHERE_CLAUSE;
@@ -48,6 +58,12 @@ public class LinkUpdateDBHandler {
 		}
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		if (link.getFollowUpDate() != null) {
+			Timestamp tsFollowUpDate = Timestamp.valueOf(df.format(link.getFollowUpDate()));
+			sql = sql.replaceFirst(Pattern.quote("FOLLOWUP_DATE_PLACEHOLDER"), "'" + tsFollowUpDate + "'");
+		}
+
 		Timestamp tsLastUpdated = Timestamp.valueOf(df.format(new Date()));
 		sql = sql.replaceFirst(Pattern.quote("DATE_PLACEHOLDER"), "'" + tsLastUpdated + "'");
 

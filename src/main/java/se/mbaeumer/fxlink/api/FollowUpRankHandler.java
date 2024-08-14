@@ -11,6 +11,7 @@ import se.mbaeumer.fxlink.models.Link;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -190,6 +191,17 @@ public class FollowUpRankHandler {
     public BigDecimal getLowestPossibleRank() throws SQLException {
         linksOrderedByRank = linkReadDBHandler.getLinksOrderedByRank(GenericDBHandler.getInstance());
         return BigDecimal.valueOf(linksOrderedByRank.size());
+    }
+
+    public void updateFollowUpDate(final Link oldLink, final Link updatedLink){
+        if (oldLink.getFollowUpStatus() != updatedLink.getFollowUpStatus()
+                && "FOLLOWED_UP".equals(updatedLink.getFollowUpStatus().getName())){
+            updatedLink.setFollowUpDate(new Date());
+        }else if (oldLink.getFollowUpStatus() != updatedLink.getFollowUpStatus()
+                && "FOLLOWED_UP".equals(oldLink.getFollowUpStatus().getName())){
+            updatedLink.setFollowUpDate(null);
+        }
+
     }
 
 

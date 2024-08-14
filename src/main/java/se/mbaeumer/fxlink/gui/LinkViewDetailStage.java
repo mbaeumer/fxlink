@@ -51,7 +51,12 @@ public class LinkViewDetailStage extends Stage {
 	private final Label lblRank = new Label("Rank");
 	private FlowPane flowRank;
 	private final Label lblFollowUpStatus = new Label("Follow-up status");
+
+	private FlowPane flowFollowUpStatus;
+
 	private ComboBox<FollowUpStatus> cmbFollowUpStatus;
+
+	private Label lblFollowUpDate;
 	private NumberSpinner ntRank;
 	private Button btnRankTop = new Button("Rank top");
 
@@ -260,6 +265,8 @@ public class LinkViewDetailStage extends Stage {
 	private void initFollowUpStatus(){
 		this.gridData.add(this.lblFollowUpStatus, 0, 5);
 
+		// TODO: Create flow for followuuostatus
+		this.initFollowUpStatusFlowPane();
 		this.cmbFollowUpStatus = new ComboBox<>();
 
 		ObservableList<FollowUpStatus> followUpStatuses =
@@ -300,13 +307,26 @@ public class LinkViewDetailStage extends Stage {
 			}
 		});
 
-		this.gridData.add(this.cmbFollowUpStatus, 1, 5);
+		this.flowFollowUpStatus.getChildren().add(this.cmbFollowUpStatus);
+		// obsolete: remove
+		//this.gridData.add(this.cmbFollowUpStatus, 1, 5);
 
 		if (this.link.getId() == -1) {
 			this.cmbFollowUpStatus.getSelectionModel().select(this.followUpStatusReadDBHandler.getDefaultStatus());
 		}else{
 			this.cmbFollowUpStatus.getSelectionModel().select(this.link.getFollowUpStatus());
 		}
+
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String text = this.link.getFollowUpDate() == null ? "-" : df.format(this.link.getFollowUpDate());
+		this.lblFollowUpDate = new Label(text);
+		this.flowFollowUpStatus.getChildren().add(this.lblFollowUpDate);
+	}
+
+	private void initFollowUpStatusFlowPane(){
+		this.flowFollowUpStatus = new FlowPane(Orientation.HORIZONTAL);
+		this.flowFollowUpStatus.setHgap(5);
+		this.gridData.add(this.flowFollowUpStatus, 1, 5);
 	}
 	private void initRankFlowPane(){
 		this.flowRank = new FlowPane(Orientation.HORIZONTAL);
@@ -585,6 +605,8 @@ public class LinkViewDetailStage extends Stage {
 			isValidationError = true;
 			return false;
 		}
+
+		followUpRankHandler.updateFollowUpDate(this.link, updatedLink);
 
 		setCategory(updatedLink);
 		if (this.link.getId() <= 0) {

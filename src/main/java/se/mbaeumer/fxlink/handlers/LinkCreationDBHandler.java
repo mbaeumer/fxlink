@@ -13,7 +13,7 @@ public class LinkCreationDBHandler {
 			"DESCRIPTION_PLACEHOLDER, ";
 	public static final String DEFAULT_CATEGORY = "DEFAULT, ";
 	public static final String CATEGORY_SET = "CATEGORY_PLACEHOLDER, ";
-	public static final String QUERY_PART_DATE = "DEFAULT, DATE_PLACEHOLDER, RANK_PLACEHOLDER, FOLLOWUPSTATUS_PLACEHOLDER)";
+	public static final String QUERY_PART_DATE = "DEFAULT, DATE_PLACEHOLDER, RANK_PLACEHOLDER, FOLLOWUPSTATUS_PLACEHOLDER, NULL)";
 
 	public String constructSqlString(Link link){
 		String sql = BASE_INSERT;

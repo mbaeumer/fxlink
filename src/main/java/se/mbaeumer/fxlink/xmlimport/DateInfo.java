@@ -6,6 +6,8 @@ public class DateInfo {
     private Date created;
     private Date lastUpdated;
 
+    private Date followUpDate;
+
     public Date getCreated() {
         return created;
     }
@@ -20,5 +22,13 @@ public class DateInfo {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public Date getFollowUpDate() {
+        return followUpDate;
+    }
+
+    public void setFollowUpDate(Date followUpDate) {
+        this.followUpDate = followUpDate;
     }
 }

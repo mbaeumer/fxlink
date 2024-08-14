@@ -14,6 +14,7 @@ import javax.xml.stream.events.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 public class LinkXMLWriter {
@@ -225,6 +226,14 @@ public class LinkXMLWriter {
 
 		attribute = this.xmlEventFactory.createAttribute("followUpStatus", Integer.valueOf(link.getFollowUpStatus().getId()).toString());
 		this.xmlEventWriter.add(attribute);
+
+		if ("FOLLOWED_UP".equals(link.getFollowUpStatus().getName()) && link.getFollowUpDate() == null){
+			link.setFollowUpDate(new Date());
+		}
+		String followUpDateString = link.getFollowUpDate() != null ? link.getFollowUpDate().toString() : "";
+		attribute = this.xmlEventFactory.createAttribute("followUpDate", followUpDateString);
+		this.xmlEventWriter.add(attribute);
+
 	}
 
 	private void writeTags() throws XMLStreamException {

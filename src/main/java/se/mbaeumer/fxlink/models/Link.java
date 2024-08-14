@@ -35,6 +35,11 @@ public class Link {
 	public Property<Date> lastUpdatedProperty(){return this.lastUpdated;}
 	public Date getLastUpdated(){return this.lastUpdated.getValue();}
 	public void setLastUpdated(Date lastUpdated){this.lastUpdated.setValue(lastUpdated);}
+
+	protected Property<Date> followUpDate = new SimpleObjectProperty<>();
+	public Property<Date> followUpDateProperty(){return this.followUpDate;}
+	public Date getFollowUpDate(){return this.followUpDate.getValue();}
+	public void setFollowUpDate(Date followUpDate){this.followUpDate.setValue(followUpDate);}
 	
 	protected Property<Category> category = new SimpleObjectProperty<>();
 	public Property<Category> categoryProperty(){return this.category;}
@@ -62,6 +67,7 @@ public class Link {
 		this.description.set(description);
 		this.created.setValue(new Date());
 		this.lastUpdated.setValue(new Date());
+		this.followUpDate.setValue(null);
 		this.followUpRank.set(-1);
 	}
 }
