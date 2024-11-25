@@ -22,6 +22,8 @@ public class TitleHandler {
                 title = youtubeCrawler.getTitle(link.getURL());
             } catch (IOException e) {
                 youtubeSuccess = false;
+            } catch (IndexOutOfBoundsException e){
+                title = "Youtube (probably removed video)";
             }
         }else{
             title = linkTitleUtil.generateTitle(link);
