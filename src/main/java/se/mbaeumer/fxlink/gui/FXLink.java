@@ -124,6 +124,8 @@ public class FXLink extends Application{
 	private CategoryHandler categoryHandler;
 	private TitleHandler titleHandler;
 
+	private SortSettings sortSettings;
+
 	public void start(Stage stage) {
 		DatabaseCheckUtil dbCheckUtil = new DatabaseCheckUtilImpl();
 		if (dbCheckUtil.checkDatabaseFolder() == DatabaseCheckResult.OK
@@ -950,7 +952,7 @@ public class FXLink extends Application{
 			try {
 				List<Link> links = searchHandler.findLinks(tfSearchTerm.getText(), chkSearchURL.isSelected(),
 						chkSearchTitle.isSelected(), chkSearchDescription.isSelected(), cmbCategoriesSearch.getValue());
-				refreshSearchResult(links);
+				refreshSearchResult(links, true);
 			} catch (SQLException e) {
 				Alert alert = new Alert(Alert.AlertType.ERROR, DATABASE_ERROR_OCCURRED, ButtonType.OK);
 				alert.showAndWait();
@@ -964,13 +966,12 @@ public class FXLink extends Application{
 	private void createLinkTableView(){
 		this.tblLinks = new TableView();
 
-		// TODO: Add the following for debug purpose
-		List<Link> tempLiknks = this.linkHandler.getLinks();
 		this.tblLinks.getItems().addAll(FXCollections.observableList(this.linkHandler.getLinks()));
 		this.tblLinks.getItems().addAll(FXCollections.observableList(List.of(LinkHandler.createPseudoLink())));
 
 		this.createLinkTableColumns();
 		this.tblLinks.setEditable(true);
+		this.sortSettings = createSortSettings();
 
 		this.tblLinks.prefWidthProperty().bind(this.scene.widthProperty());
 		this.tblLinks.prefWidthProperty().addListener(new ChangeListener() {
@@ -1405,6 +1406,7 @@ public class FXLink extends Application{
 		// edit
 		MenuItem miEdit = new MenuItem("Edit link");
 		miEdit.setOnAction(actionEvent ->  {
+			sortSettings = createSortSettings();
 			LinkViewDetailStage linkDetail = new LinkViewDetailStage(selectedLink);
 			linkDetail.showAndWait();
 			refreshLinkTable();
@@ -1596,6 +1598,7 @@ public class FXLink extends Application{
 	}
 
 	private boolean insertOrUpdateLink(Link link){
+		this.sortSettings = createSortSettings();
 		boolean isCorrect = true;
 		
 		int id = link.getId(); 
@@ -1631,16 +1634,14 @@ public class FXLink extends Application{
 	}
 	
 	private void refreshLinkTable(){
-
-		// get current search order, so that we can use it after the table is refreshed
-
-		final SortSettings sortSettings = createSortSettings();
 		if (isSearchPaneVisible() && isSearchTermGiven()) {
+			sortSettings = createSortSettings();
 			runSearch();
 		}else if (isFollowUpPaneVisible()){
+			sortSettings = createSortSettings();
 			final FollowUpOption selectedFollwUpOption = this.cmbFollowUpStatus.getSelectionModel().getSelectedItem();
 			final List<Link> linksByFollowUpOption = linkHandler.getLinksByFollowUpOption(selectedFollwUpOption);
-			refreshSearchResult(linksByFollowUpOption);
+			refreshSearchResult(linksByFollowUpOption, false);
 		}else{
 			tblLinks.setItems(FXCollections.observableList(this.linkHandler.getLinksByCategory(cmbCategories.getValue())));
 			tblLinks.getSortOrder().addAll(FXCollections.observableList(sortSettings.getSortedColumns()));
@@ -1665,13 +1666,17 @@ public class FXLink extends Application{
 
 	}
 
-	private void refreshSearchResult(List<Link> links){
-		final SortSettings sortSettings = createSortSettings();
+	private void refreshSearchResult(List<Link> links, boolean isSorted){
+
 		tblLinks.setItems(FXCollections.observableList(links));
-		tblLinks.getSortOrder().addAll(FXCollections.observableList(sortSettings.getSortedColumns()));
-		if (sortSettings.getSortType() != null) {
-			tblLinks.getSortOrder().get(0).setSortType(sortSettings.getSortType());
-			tblLinks.sort();
+
+		if (isSorted) {
+			//sortSettings = createSortSettings();
+			tblLinks.getSortOrder().addAll(FXCollections.observableList(sortSettings.getSortedColumns()));
+			if (sortSettings.getSortType() != null) {
+				tblLinks.getSortOrder().get(0).setSortType(sortSettings.getSortType());
+				tblLinks.sort();
+			}
 		}
 		tblLinks.getItems().add(LinkHandler.createPseudoLink());
 		this.updateStatusBar(true);
