@@ -31,6 +31,10 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 1.0.0 - 2024-12-09
+* Bug fix: keep the follow-up ranking
+* Bug fix: handle exception when generating a title for a youtube-link
+
 ## 0.9.9 - 2024-08-15
 * Added a follow-up date to keep track on when a link has been followed up
 
