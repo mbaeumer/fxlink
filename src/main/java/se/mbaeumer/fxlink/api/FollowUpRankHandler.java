@@ -179,15 +179,26 @@ public class FollowUpRankHandler {
             link.setFollowUpRank(1);
             linksOrderedByRank.add(link);
             linkUpdateDBHandler.updateRank(link, link.getFollowUpRank(), GenericDBHandler.getInstance());
-        }else{
+        }else {
             int currentRank = link.getFollowUpRank();
-            if (currentRank > 0){
+            if (currentRank > 0) {
                 linksOrderedByRank.remove(currentRank - 1);
             }
             linksOrderedByRank.add(link);
             updateRanks();
         }
     }
+
+    public void resetRank(final Link link){
+        if (link.getFollowUpRank() == -1){
+            return;
+        }
+
+        int oldRank = link.getFollowUpRank();
+        link.setFollowUpRank(-1);
+        this.updateRanks(link, oldRank);
+    }
+
     public BigDecimal getLowestPossibleRank() throws SQLException {
         linksOrderedByRank = linkReadDBHandler.getLinksOrderedByRank(GenericDBHandler.getInstance());
         return BigDecimal.valueOf(linksOrderedByRank.size());

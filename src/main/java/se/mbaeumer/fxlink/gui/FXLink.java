@@ -1481,7 +1481,15 @@ public class FXLink extends Application{
 			}
 		});
 
-		this.contLinks.getItems().addAll(miEdit, miOpenURL, miRankTop, miRankLow, miDelete);
+		MenuItem miResetRank = new MenuItem("Reset rank");
+
+		miResetRank.setOnAction(actionEvent ->  {
+			FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank(), new FollowUpStatusReadDBHandler());
+			followUpRankHandler.resetRank(selectedLink);
+			refreshLinkTable();
+		});
+
+		this.contLinks.getItems().addAll(miEdit, miOpenURL, miRankTop, miResetRank, miRankLow, miDelete);
 
 		if (selectedLink != null){
 			FollowUpRankHandler followUpRankHandler = new FollowUpRankHandler(new LinkReadDBHandler(), new LinkUpdateDBHandler(), selectedLink.getFollowUpRank(), new FollowUpStatusReadDBHandler());

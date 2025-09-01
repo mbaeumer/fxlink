@@ -254,6 +254,20 @@ public class FollowUpRankHandlerTest {
         Assert.assertEquals(-1, newLink.getFollowUpRank());
     }
 
+    @Test
+    public void testResetRank() throws SQLException {
+        Mockito.when(linkReadDBHandler.getLinksOrderedByRank(any())).thenReturn(createRankedLinks());
+        Mockito.when(followUpStatusReadDBHandler.getFollowUpStatuses(any())).thenReturn(createStatuses());
+        followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
+        Link oldLink = new Link("some-title", "www.url.com", "some-description");
+        oldLink.setFollowUpStatus(createFollowUpStatus("NEEDED"));
+        oldLink.setFollowUpRank(2);
+
+        followUpRankHandler.resetRank(oldLink);
+        Assert.assertEquals(-1, oldLink.getFollowUpRank());
+        Mockito.verify(linkUpdateDBHandler, Mockito.times(2)).updateRank(any(), anyInt(), any());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void validateFollowUpData_switched_to_needed_fail() {
         followUpRankHandler = new FollowUpRankHandler(linkReadDBHandler, linkUpdateDBHandler, -1, followUpStatusReadDBHandler);
