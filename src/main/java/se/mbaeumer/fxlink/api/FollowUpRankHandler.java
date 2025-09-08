@@ -80,8 +80,17 @@ public class FollowUpRankHandler {
         TODO: Change to remove the printStackTrace further down
          */
         if ("FOLLOWED_UP".equals(link.getFollowUpStatus().getName())){
+            final String sql = linkUpdateDBHandler.constructSqlString(link);
+            try {
+                linkUpdateDBHandler.updateLink(sql, GenericDBHandler.getInstance() );
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
             if (oldRank > 0) {
                 linksOrderedByRank.remove(oldRank - 1);
+            }else{
+                return;
             }
         }else if (isStillRanked(link, oldRank)){
             if (oldRank > 0) {
@@ -194,6 +203,14 @@ public class FollowUpRankHandler {
             return;
         }
 
+        int oldRank = link.getFollowUpRank();
+        link.setFollowUpRank(-1);
+        this.updateRanks(link, oldRank);
+    }
+
+    public void setToFollowedUp(final Link link){
+        link.setFollowUpStatus(getFollowUpStatus("FOLLOWED_UP"));
+        link.setFollowUpDate(new Date());
         int oldRank = link.getFollowUpRank();
         link.setFollowUpRank(-1);
         this.updateRanks(link, oldRank);
