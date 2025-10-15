@@ -31,6 +31,9 @@ java -jar fxlink8-<version>-jar-with-dependencies.jar
          
 # Version/release history 
 
+## 1.0.1 - 2025-09-09
+* Added possibility to reset a follow-up rank
+
 ## 1.0.0 - 2024-12-09
 * Bug fix: keep the follow-up ranking
 * Bug fix: handle exception when generating a title for a youtube-link
